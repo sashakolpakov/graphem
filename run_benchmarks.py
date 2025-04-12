@@ -51,7 +51,7 @@ from graphem.influence import (
 class BenchmarkRunner:
     """Main class for running benchmarks and generating reports."""
     
-    def __init__(self, output_dir="results", formats=None):
+    def __init__(self, output_dir="results", formats=None, subsample_size=None):
         """
         Initialize the benchmark runner.
         
@@ -60,6 +60,8 @@ class BenchmarkRunner:
                 Directory to save results
             formats: list
                 Output formats (markdown, latex, html)
+            subsample_size: int
+                Subsample vertices for large graphs (default: no subsampling)
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True, parents=True)
@@ -69,6 +71,8 @@ class BenchmarkRunner:
         else:
             self.formats = formats
             
+        self.subsample_size = subsample_size
+        
         # Set up timestamp for this run
         self.timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         self.run_dir = self.output_dir / f"run_{self.timestamp}"
@@ -185,9 +189,9 @@ class BenchmarkRunner:
     
     def run_dataset_benchmarks(self):
         """Run benchmarks on real-world datasets."""
-        print(f"\n{'-'*80}")
-        print(f"Running real-world dataset benchmarks")
-        print(f"{'-'*80}")
+        # Create output directory
+        benchmark_dir = self.run_dir / "dataset_benchmarks"
+        benchmark_dir.mkdir(exist_ok=True)
         
         # List of datasets to test
         datasets = [
@@ -196,7 +200,8 @@ class BenchmarkRunner:
             'snap-ca-HepTh'
         ]
         
-        sample_size = 1000  # We'll sample large datasets to this size
+        # Use the configurable subsample_size if provided, otherwise no subsampling
+        sample_size = self.subsample_size  # Will be None if not specified
         results = []
         
         # Use tqdm for progress tracking
@@ -211,8 +216,8 @@ class BenchmarkRunner:
                 original_size = n_vertices
                 original_edges = len(edges)
                 
-                # Sample if needed
-                if n_vertices > sample_size:
+                # Sample if needed and if subsample_size is provided
+                if sample_size is not None and n_vertices > sample_size:
                     tqdm.write(f"Sampling {sample_size} vertices from {n_vertices}...")
                     sampled_vertices = np.random.choice(n_vertices, sample_size, replace=False)
                     vertex_map = {old_idx: new_idx for new_idx, old_idx in enumerate(sampled_vertices)}
@@ -225,6 +230,10 @@ class BenchmarkRunner:
                     
                     edges = np.array(sampled_edges)
                     n_vertices = sample_size
+                    tqdm.write(f"After sampling: {n_vertices} vertices, {len(edges)} edges")
+                else:
+                    if sample_size is None:
+                        tqdm.write(f"Using full dataset: {n_vertices} vertices, {len(edges)} edges")
                 
                 # Create NetworkX graph for analysis
                 G = nx.Graph()
@@ -948,10 +957,17 @@ def main():
         help="Output formats (default: markdown latex)"
     )
     
+    parser.add_argument(
+        "--subsample", "-s",
+        type=int,
+        default=None,
+        help="Subsample vertices for large graphs (default: no subsampling)"
+    )
+    
     args = parser.parse_args()
     
     # Create and run benchmark runner
-    runner = BenchmarkRunner(output_dir=args.output, formats=args.formats)
+    runner = BenchmarkRunner(output_dir=args.output, formats=args.formats, subsample_size=args.subsample)
     runner.run_all_benchmarks()
 
 
