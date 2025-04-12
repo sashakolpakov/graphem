@@ -17,6 +17,18 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from tqdm import tqdm
 from scipy import stats
+import cProfile
+import pstats
+import io
+from line_profiler import LineProfiler
+
+# For JAX profiling
+try:
+    import jax
+    from jax.profiler import start_trace, stop_trace
+    JAX_AVAILABLE = True
+except ImportError:
+    JAX_AVAILABLE = False
 
 # Import Graphem modules
 from graphem.embedder import GraphEmbedder
@@ -964,11 +976,81 @@ def main():
         help="Subsample vertices for large graphs (default: no subsampling)"
     )
     
+    parser.add_argument(
+        "--profile", "-p",
+        action="store_true",
+        help="Run with cProfile profiling (outputs profile.prof for visualization with snakeviz)"
+    )
+    
+    parser.add_argument(
+        "--line-profile", "-l",
+        action="store_true",
+        help="Run with line profiling (detailed line-by-line performance analysis)"
+    )
+    
+    parser.add_argument(
+        "--jax-profile", "-j",
+        action="store_true",
+        help="Run with JAX profiling for GPU operations (requires JAX, outputs to profile_jax directory)"
+    )
+    
     args = parser.parse_args()
     
-    # Create and run benchmark runner
+    # Create benchmark runner
     runner = BenchmarkRunner(output_dir=args.output, formats=args.formats, subsample_size=args.subsample)
-    runner.run_all_benchmarks()
+    
+    # Handle different profiling options
+    if args.profile:
+        print("\n--- Running with cProfile ---")
+        # Use cProfile
+        profile_path = "profile.prof"
+        cProfile.runctx('runner.run_all_benchmarks()', globals(), locals(), filename=profile_path)
+        
+        # Print summary to console
+        print(f"\n--- Profile saved to {profile_path} ---")
+        print("Top 20 functions by cumulative time:")
+        p = pstats.Stats(profile_path)
+        p.strip_dirs().sort_stats('cumulative').print_stats(20)
+        print(f"\nTo visualize: snakeviz {profile_path}")
+    
+    elif args.line_profile:
+        print("\n--- Running with line_profiler ---")
+        # Use line_profiler for detailed line-by-line analysis
+        profiler = LineProfiler()
+        
+        # Profile the most important methods
+        from graphem.embedder import GraphEmbedder
+        profiler.add_function(GraphEmbedder.layout)
+        profiler.add_function(GraphEmbedder.get_embedding)
+        profiler.add_function(runner.run_generator_benchmarks)
+        profiler.add_function(runner.run_dataset_benchmarks)
+        
+        # Run with profiling
+        profiler.runctx('runner.run_all_benchmarks()', globals(), locals())
+        
+        # Output results
+        profiler.print_stats()
+    
+    elif args.jax_profile and JAX_AVAILABLE:
+        print("\n--- Running with JAX profiler ---")
+        # Use JAX profiler for GPU operations
+        profile_dir = "profile_jax"
+        os.makedirs(profile_dir, exist_ok=True)
+        
+        # Start JAX tracing
+        start_trace(profile_dir)
+        
+        # Run benchmarks
+        runner.run_all_benchmarks()
+        
+        # Stop tracing
+        stop_trace()
+        print(f"\n--- JAX profile saved to {profile_dir} ---")
+        print("To visualize: tensorboard --logdir=profile_jax")
+    
+    else:
+        # Run without profiling
+        runner.run_all_benchmarks()
 
 
 if __name__ == "__main__":
