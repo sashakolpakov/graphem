@@ -16,6 +16,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from pathlib import Path
 from tqdm import tqdm
+from scipy import stats
 
 # Import Graphem modules
 from graphem.embedder import GraphEmbedder
