@@ -17,6 +17,11 @@ from graphem.generators import (
     generate_caveman,
     generate_relaxed_caveman
 )
-from graphem.visualization import visualize_graph, plot_benchmark_results
+from graphem.visualization import (
+    report_corr, 
+    report_full_correlation_matrix, 
+    plot_radial_vs_centrality, 
+    display_benchmark_results
+)
 
 __version__ = '0.1.0'
