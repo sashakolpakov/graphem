@@ -204,9 +204,9 @@ class GraphEmbedder:
 
         Parameters
         ----------
-        edge_width : int
+        edge_width : float
             The width of the edges in the graph embedding.
-        node_size : int
+        node_size : float
             The size of the nodes in the graph embedding.
         node_colors : array-like of shape (num_vertices,)
             An array of colors for each vertex.
@@ -231,9 +231,9 @@ class GraphEmbedder:
 
         Parameters
         ----------
-        edge_width : int
+        edge_width : float
             The width of the edges in the graph embedding.
-        node_size : int
+        node_size : float
             The size of the nodes in the graph embedding.
         node_colors : array-like of shape (num_vertices,)
             An array of colors for each vertex.
@@ -290,9 +290,9 @@ class GraphEmbedder:
 
         Parameters
         ----------
-        edge_width : int
+        edge_width : float
             The width of the edges in the graph embedding.
-        node_size : int
+        node_size : float
             The size of the nodes in the graph embedding.
         node_colors : array-like of shape (num_vertices,)
             An array of colors for each vertex.
