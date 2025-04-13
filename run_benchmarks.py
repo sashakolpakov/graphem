@@ -7,19 +7,17 @@ generates nicely formatted result tables in multiple formats (Markdown, LaTeX).
 """
 
 import os
+from pathlib import Path
+import cProfile
+import pstats
 import time
 import datetime
 import argparse
 import numpy as np
 import pandas as pd
 import networkx as nx
-import matplotlib.pyplot as plt
-from pathlib import Path
 from tqdm import tqdm
 from scipy import stats
-import cProfile
-import pstats
-import io
 from line_profiler import LineProfiler
 
 # For JAX profiling
@@ -38,21 +36,14 @@ from graphem.generators import (
     generate_scale_free,
     generate_geometric,
     generate_caveman,
-    generate_relaxed_caveman,
     generate_ws,
     generate_ba,
     generate_sbm
 )
-from graphem.benchmark import (
-    run_benchmark, 
-    benchmark_correlations,
-    run_influence_benchmark
-)
-from graphem.datasets import (
-    list_available_datasets,
-    load_dataset,
-    SNAPDataset
-)
+from graphem.benchmark import run_benchmark
+
+from graphem.datasets import load_dataset
+
 from graphem.influence import (
     graphem_seed_selection,
     ndlib_estimated_influence,
@@ -95,9 +86,9 @@ class BenchmarkRunner:
         
     def run_all_benchmarks(self):
         """Run all available benchmarks."""
-        print(f"\n{'='*80}")
-        print(f"Running all Graphem benchmarks")
-        print(f"{'='*80}")
+        print("\n{'='*80}")
+        print("Running all Graphem benchmarks")
+        print("{'='*80}")
         print(f"Results will be saved to: {self.run_dir}")
         
         # Record start time
@@ -124,9 +115,9 @@ class BenchmarkRunner:
         
     def run_generator_benchmarks(self):
         """Run benchmarks on various graph generators."""
-        print(f"\n{'-'*80}")
-        print(f"Running graph generator benchmarks")
-        print(f"{'-'*80}")
+        print("\n{'-'*80}")
+        print("Running graph generator benchmarks")
+        print("{'-'*80}")
         
         # Define graph configurations to test
         graph_configs = [
@@ -174,7 +165,7 @@ class BenchmarkRunner:
             corr_results = {}
             for measure in ['degree', 'betweenness', 'eigenvector', 'pagerank', 'closeness', 'edge_betweenness']:
                 if measure in result and 'radii' in result:
-                    from scipy import stats
+
                     
                     # Check if the measure is constant (which happens with degree for regular graphs)
                     values = result[measure]
@@ -297,29 +288,31 @@ class BenchmarkRunner:
                     pbar.update(1)
                     
                     # Try to calculate other centrality measures if graph is small enough
+
+                    btw_corr, eig_corr, pr_corr = np.nan, np.nan, np.nan
+
                     if n_vertices < 5000:
                         try:
                             btw = np.array(list(nx.betweenness_centrality(G).values()))
-                            btw_corr, btw_p = stats.spearmanr(radii, btw)
-                        except:
-                            btw_corr, btw_p = np.nan, np.nan
+                            btw_corr, _ = stats.spearmanr(radii, btw)
+                        except nx.NetworkXError as e:
+                            btw_corr = np.nan
+                            print(e)
                             
                         try:
                             eig = np.array(list(nx.eigenvector_centrality_numpy(G).values()))
-                            eig_corr, eig_p = stats.spearmanr(radii, eig)
-                        except:
-                            eig_corr, eig_p = np.nan, np.nan
+                            eig_corr, _ = stats.spearmanr(radii, eig)
+                        except nx.NetworkXError as e:
+                            eig_corr = np.nan
+                            print(e)
                             
                         try:
                             pr = np.array(list(nx.pagerank(G).values()))
-                            pr_corr, pr_p = stats.spearmanr(radii, pr)
-                        except:
-                            pr_corr, pr_p = np.nan, np.nan
-                    else:
-                        btw_corr, btw_p = np.nan, np.nan
-                        eig_corr, eig_p = np.nan, np.nan
-                        pr_corr, pr_p = np.nan, np.nan
-                    
+                            pr_corr, _ = stats.spearmanr(radii, pr)
+                        except nx.NetworkXError as e:
+                            pr_corr = np.nan
+                            print(e)
+
                     pbar.update(1)
                 
                 # Store results
@@ -357,9 +350,9 @@ class BenchmarkRunner:
     
     def run_influence_benchmarks(self):
         """Run influence maximization benchmarks."""
-        print(f"\n{'-'*80}")
-        print(f"Running influence maximization benchmarks")
-        print(f"{'-'*80}")
+        print("\n{'-'*80}")
+        print("Running influence maximization benchmarks")
+        print("{'-'*80}")
         
         # Define graph configurations to test
         graph_configs = [
@@ -412,7 +405,7 @@ class BenchmarkRunner:
                 
                 # Run layout with progress bar
                 iterations = 20
-                for i in tqdm(range(iterations), desc="Layout for GraphEm", leave=False):
+                for _ in tqdm(range(iterations), desc="Layout for GraphEm", leave=False):
                     embedder.update_positions()
                 
                 graphem_start = time.time()
@@ -424,7 +417,7 @@ class BenchmarkRunner:
                 greedy_start = time.time()
                 with tqdm(total=k, desc="Greedy Selection", leave=False) as pbar:
                     # We can't modify the greedy_seed_selection function directly, but we'll update afterward
-                    greedy_seeds, greedy_iters = greedy_seed_selection(G, k, p, iterations_count=50)
+                    greedy_seeds, _ = greedy_seed_selection(G, k, p, iterations_count=50)
                     # This just moves the progress bar to completion
                     pbar.update(k)
                 greedy_time = time.time() - greedy_start
@@ -489,7 +482,7 @@ class BenchmarkRunner:
             name: str
                 Name of the result set
             df: pandas.DataFrame
-                DataFrame with results
+                The DataFrame with results
         """
         # Create a directory for this result set
         result_dir = self.run_dir / name
@@ -1019,9 +1012,7 @@ def main():
         profiler = LineProfiler()
         
         # Profile the most important methods
-        from graphem.embedder import GraphEmbedder
-        profiler.add_function(GraphEmbedder.layout)
-        profiler.add_function(GraphEmbedder.get_embedding)
+        profiler.add_function(GraphEmbedder.run_layout)
         profiler.add_function(runner.run_generator_benchmarks)
         profiler.add_function(runner.run_dataset_benchmarks)
         

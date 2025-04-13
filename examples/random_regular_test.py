@@ -9,17 +9,21 @@ with varying degrees and sizes.
 import time
 import numpy as np
 import networkx as nx
-import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
 
 from graphem.embedder import GraphEmbedder
-from graphem.generators import generate_random_regular
 from graphem.benchmark import run_benchmark
-from graphem.visualization import report_full_correlation_matrix, plot_radial_vs_centrality
+from graphem.visualization import report_full_correlation_matrix
+from graphem.generators import (
+    erdos_renyi_graph,
+    generate_random_regular,
+    generate_ws,
+    generate_ba
+)
 
 
-def test_random_regular_varying_degree(n=100, degrees=[3, 4, 5, 6], dim=3, num_iterations=30):
+def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iterations=30):
     """
     Test random regular graphs with varying degrees.
     
@@ -27,22 +31,25 @@ def test_random_regular_varying_degree(n=100, degrees=[3, 4, 5, 6], dim=3, num_i
         n: int
             Number of vertices
         degrees: list
-            List of degrees to test
+            The list of degrees to test
         dim: int
             Dimension of the embedding
         num_iterations: int
             Number of layout iterations
     """
-    print(f"\n{'='*80}")
+    print("\n{'='*80}")
     print(f"Testing Random Regular Graphs with Varying Degrees (n={n})")
-    print(f"{'='*80}")
+    print("{'='*80}")
     
     results = []
+
+    if degrees is None:
+        degrees = [3, 4, 5, 6]
     
     for d in degrees:
-        print(f"\n{'-'*60}")
+        print("\n{'-'*60}")
         print(f"Random Regular Graph with degree d={d}")
-        print(f"{'-'*60}")
+        print("{'-'*60}")
         
         # Generate graph
         start_time = time.time()
@@ -67,24 +74,27 @@ def test_random_regular_varying_degree(n=100, degrees=[3, 4, 5, 6], dim=3, num_i
         try:
             avg_path_length = nx.average_shortest_path_length(G)
             print(f"- Average shortest path length: {avg_path_length:.2f}")
-        except nx.NetworkXError:
+        except nx.NetworkXError as e:
             avg_path_length = float('nan')
-            print("- Average shortest path length: N/A (Disconnected graph)")
+            print("- Average shortest path length: N/A")
+            print(e)
         
         try:
             avg_clustering = nx.average_clustering(G)
             print(f"- Average clustering coefficient: {avg_clustering:.4f}")
-        except:
+        except nx.NetworkXError as e:
             avg_clustering = float('nan')
             print("- Average clustering coefficient: N/A")
+            print(e)
             
         # Compute graph diameter
         try:
             diameter = nx.diameter(G)
             print(f"- Diameter: {diameter}")
-        except nx.NetworkXError:
+        except nx.NetworkXError as e:
             diameter = float('nan')
-            print("- Diameter: N/A (Disconnected graph)")
+            print("- Diameter: N/A")
+            print(e)
         
         # Create and run embedder
         embedder = GraphEmbedder(
@@ -134,7 +144,7 @@ def test_random_regular_varying_degree(n=100, degrees=[3, 4, 5, 6], dim=3, num_i
         
         # Display correlation with radial distances
         print("\nCorrelation between embedding radii and centrality measures:")
-        corr_matrix = report_full_correlation_matrix(
+        _ = report_full_correlation_matrix(
             radii, 
             degree_centrality,
             betweenness_centrality,
@@ -176,7 +186,7 @@ def test_random_regular_varying_degree(n=100, degrees=[3, 4, 5, 6], dim=3, num_i
     return df
 
 
-def test_random_regular_varying_size(degree=3, sizes=[50, 100, 200, 500], dim=3, num_iterations=30):
+def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations=30):
     """
     Test random regular graphs with varying sizes.
     
@@ -184,22 +194,25 @@ def test_random_regular_varying_size(degree=3, sizes=[50, 100, 200, 500], dim=3,
         degree: int
             Degree of each vertex
         sizes: list
-            List of graph sizes to test
+            The list of graph sizes to test
         dim: int
             Dimension of the embedding
         num_iterations: int
             Number of layout iterations
     """
-    print(f"\n{'='*80}")
+    print("\n{'='*80}")
     print(f"Testing Random Regular Graphs with Varying Sizes (d={degree})")
-    print(f"{'='*80}")
+    print("{'='*80}")
     
     results = []
+
+    if sizes is None:
+        sizes = [50, 100, 200, 500]
     
     for n in sizes:
-        print(f"\n{'-'*60}")
+        print("\n{'-'*60}")
         print(f"Random Regular Graph with size n={n}")
-        print(f"{'-'*60}")
+        print("{'-'*60}")
         
         # Generate graph
         start_time = time.time()
@@ -224,23 +237,26 @@ def test_random_regular_varying_size(degree=3, sizes=[50, 100, 200, 500], dim=3,
         try:
             avg_path_length = nx.average_shortest_path_length(G)
             print(f"- Average shortest path length: {avg_path_length:.2f}")
-        except nx.NetworkXError:
+        except nx.NetworkXError as e:
             avg_path_length = float('nan')
-            print("- Average shortest path length: N/A (Disconnected graph)")
+            print("- Average shortest path length: N/A")
+            print(e)
         
         try:
             avg_clustering = nx.average_clustering(G)
             print(f"- Average clustering coefficient: {avg_clustering:.4f}")
-        except:
+        except nx.NetworkXError as e:
             avg_clustering = float('nan')
             print("- Average clustering coefficient: N/A")
+            print(e)
             
         try:
             diameter = nx.diameter(G)
             print(f"- Diameter: {diameter}")
-        except nx.NetworkXError:
+        except nx.NetworkXError as e:
             diameter = float('nan')
-            print("- Diameter: N/A (Disconnected graph)")
+            print("- Diameter: N/A")
+            print(e)
         
         # Create and run embedder
         embedder = GraphEmbedder(
@@ -315,37 +331,25 @@ def compare_with_benchmark():
     """
     Compare random regular graphs with other graph types using the benchmark module.
     """
-    print(f"\n{'='*80}")
-    print(f"Comparing Random Regular Graphs with Other Graph Types")
-    print(f"{'='*80}")
+    print("\n{'='*80}")
+    print("Comparing Random Regular Graphs with Other Graph Types")
+    print("{'='*80}")
     
     # Define parameters for each graph type to test
     graph_configs = [
-        (generate_random_regular, {'n': 100, 'd': 3, 'seed': 42}, 'Random Regular'),
+        (generate_random_regular, {'n': 100, 'd': 3, 'seed': 42}, 'Random Regular (d=3)'),
         (generate_random_regular, {'n': 100, 'd': 5, 'seed': 42}, 'Random Regular (d=5)'),
-        (nx.generators.random_graphs.erdos_renyi_graph, {'n': 100, 'p': 0.03, 'seed': 42}, 'Erdős–Rényi'),
-        (nx.generators.random_graphs.watts_strogatz_graph, {'n': 100, 'k': 4, 'p': 0.1, 'seed': 42}, 'Watts-Strogatz'),
-        (nx.generators.random_graphs.barabasi_albert_graph, {'n': 100, 'm': 2, 'seed': 42}, 'Barabási-Albert')
+        (erdos_renyi_graph, {'n': 100, 'p': 0.03, 'seed': 42}, 'Erdős–Rényi'),
+        (generate_ws, {'n': 100, 'k': 4, 'p': 0.1, 'seed': 42}, 'Watts-Strogatz'),
+        (generate_ba, {'n': 100, 'm': 2, 'seed': 42}, 'Barabási-Albert')
     ]
     
     benchmark_results = []
     
     for generator, params, name in graph_configs:
-        print(f"\n{'-'*60}")
+        print("\n{'-'*60}")
         print(f"Benchmarking {name} graph")
-        print(f"{'-'*60}")
-        
-        # For networkx generators, convert to our format
-        if generator.__module__.startswith('networkx'):
-            G = generator(**params)
-            edges = np.array(list(G.edges()))
-            n = G.number_of_nodes()
-            
-            # Create custom generator function that returns our edge format
-            def custom_generator(**kwargs):
-                return edges
-                
-            generator = custom_generator
+        print("{'-'*60}")
         
         # Run benchmark
         result = run_benchmark(

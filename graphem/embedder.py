@@ -94,7 +94,8 @@ class GraphEmbedder:
 
         return jnp.array(embedding)
 
-    def locate_knn_midpoints(self, midpoints, k):
+    @staticmethod
+    def locate_knn_midpoints(midpoints, k):
         """
         Locate k nearest neighbors for each midpoint.
         """

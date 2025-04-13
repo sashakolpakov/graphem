@@ -6,31 +6,27 @@ This script demonstrates how to download, load, and analyze real-world graph dat
 from various sources including SNAP, Network Repository, and Semantic Scholar.
 """
 
-import os
 import time
 import numpy as np
 import networkx as nx
 import pandas as pd
 import plotly.express as px
-from pathlib import Path
 
 from graphem.embedder import GraphEmbedder
+from graphem.visualization import report_full_correlation_matrix
 from graphem.datasets import (
     list_available_datasets,
     load_dataset,
-    load_dataset_as_networkx,
-    SNAPDataset
 )
-from graphem.visualization import report_full_correlation_matrix, plot_radial_vs_centrality
 
 
 def print_available_datasets():
     """
     Print information about all available datasets.
     """
-    print(f"\n{'='*80}")
-    print(f"Available Real-World Datasets")
-    print(f"{'='*80}")
+    print("\n{'='*80}")
+    print("Available Real-World Datasets")
+    print("{'='*80}")
     
     datasets = list_available_datasets()
     
@@ -45,7 +41,7 @@ def print_available_datasets():
     # Print by source
     for source, dataset_list in by_source.items():
         print(f"\n{source} Datasets:")
-        print(f"{'-'*60}")
+        print("{'-'*60}")
         
         for dataset_id, info in dataset_list:
             nodes = info.get('nodes', 'Unknown')
@@ -71,9 +67,9 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print(f"\n{'='*80}")
+    print("\n{'='*80}")
     print(f"Analyzing dataset: {dataset_name}")
-    print(f"{'='*80}")
+    print("{'='*80}")
     
     # Load the dataset
     print(f"Loading dataset {dataset_name}...")
@@ -109,7 +105,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     density = 2 * len(edges) / (n_vertices * (n_vertices - 1))
     avg_degree = 2 * len(edges) / n_vertices
     
-    print(f"Graph statistics:")
+    print("Graph statistics:")
     print(f"- Density: {density:.6f}")
     print(f"- Average degree: {avg_degree:.2f}")
     
@@ -136,8 +132,9 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         try:
             diameter = nx.diameter(G)
             print(f"- Diameter: {diameter}")
-        except nx.NetworkXError:
-            print("- Diameter: N/A (Graph not connected)")
+        except nx.NetworkXError as e:
+            print("- Diameter: N/A")
+            print(e)
     else:
         print("- Diameter: Skipped (Graph too large)")
     
@@ -146,8 +143,9 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         try:
             avg_path_length = nx.average_shortest_path_length(G)
             print(f"- Average shortest path length: {avg_path_length:.2f}")
-        except nx.NetworkXError:
-            print("- Average shortest path length: N/A (Graph not connected)")
+        except nx.NetworkXError as e:
+            print("- Average shortest path length: N/A")
+            print(e)
     else:
         print("- Average shortest path length: Skipped (Graph too large)")
     
@@ -156,7 +154,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     print(f"- Average clustering coefficient: {avg_clustering:.4f}")
     
     # Create and run embedder
-    print(f"Creating embedder with dimension {dim}...")
+    print(f"Creating embedding in dimension {dim}...")
     embedder = GraphEmbedder(
         edges=edges,
         n_vertices=n_vertices,
@@ -197,8 +195,9 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     print("Calculating eigenvector centrality...")
     try:
         eigenvector = np.array(list(nx.eigenvector_centrality_numpy(G).values()))
-    except:
+    except nx.NetworkXError as e:
         print("Error calculating eigenvector centrality, using zeros")
+        print(e)
         eigenvector = np.zeros(n_vertices)
     
     print("Calculating PageRank...")
@@ -241,7 +240,7 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
     
     Parameters:
         dataset_names: list
-            List of dataset names to compare
+            The list of dataset names to compare
         sample_size: int
             Sample size for each dataset
         dim: int
@@ -249,16 +248,16 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print(f"\n{'='*80}")
-    print(f"Comparing Multiple Datasets")
-    print(f"{'='*80}")
+    print("\n{'='*80}")
+    print("Comparing Multiple Datasets")
+    print("{'='*80}")
     
     results = []
     
     for dataset_name in dataset_names:
-        print(f"\n{'-'*60}")
+        print("\n{'-'*60}")
         print(f"Dataset: {dataset_name}")
-        print(f"{'-'*60}")
+        print("{'-'*60}")
         
         # Load the dataset
         print(f"Loading dataset {dataset_name}...")
@@ -301,12 +300,16 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         # Compute average shortest path length if manageable
         try:
             diameter = nx.diameter(G)
-        except nx.NetworkXError:
+        except nx.NetworkXError as e:
+            print("- Diameter: N/A")
+            print(e)
             diameter = float('nan')
         
         try:
             avg_path_length = nx.average_shortest_path_length(G)
-        except nx.NetworkXError:
+        except nx.NetworkXError as e:
+            print("- Average shortest path length: N/A")
+            print(e)
             avg_path_length = float('nan')
         
         # Compute clustering coefficient
@@ -329,13 +332,6 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         layout_start = time.time()
         embedder.run_layout(num_iterations=num_iterations)
         layout_time = time.time() - layout_start
-        
-        # Get positions and calculate radial distances
-        positions = np.array(embedder.positions)
-        radii = np.linalg.norm(positions, axis=1)
-        
-        # Calculate centrality measures
-        degree = np.array([d for _, d in G.degree()])
         
         # Store results
         results.append({

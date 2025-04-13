@@ -1,4 +1,4 @@
-# Graphem
+# GraphEm
 
 A graph embedding library based on JAX for efficient k-nearest neighbors and influence maximization in networks.
 
@@ -25,13 +25,13 @@ pip install -r requirements.txt
 ### Basic Graph Embedding
 
 ```python
-import numpy as np
 from graphem.generators import erdos_renyi_graph
 from graphem.embedder import GraphEmbedder
 
 # Generate a random graph
-edges = erdos_renyi_graph(n=200, p=0.05)
 n_vertices = 200
+edges = erdos_renyi_graph(n=n_vertices, p=0.05)
+
 
 # Create an embedder
 embedder = GraphEmbedder(
@@ -57,6 +57,8 @@ embedder.display_layout(edge_width=0.5, node_size=5)
 import networkx as nx
 from graphem.influence import graphem_seed_selection, ndlib_estimated_influence
 
+# This is supposed to be added to the previous code (like the above example) ...
+
 # Convert edges to NetworkX graph
 G = nx.Graph()
 G.add_nodes_from(range(n_vertices))
@@ -73,6 +75,7 @@ print(f"Estimated influence: {influence} nodes ({influence/n_vertices:.2%} of th
 ### Benchmarking
 
 ```python
+from graphem.generators import erdos_renyi_graph
 from graphem.benchmark import benchmark_correlations
 from graphem.visualization import report_full_correlation_matrix
 
