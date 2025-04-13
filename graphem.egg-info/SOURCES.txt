@@ -1,6 +1,4 @@
 README.md
-pyproject.toml
-setup.cfg
 setup.py
 graphem/__init__.py
 graphem/benchmark.py
