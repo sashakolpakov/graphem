@@ -603,7 +603,7 @@ class BenchmarkRunner:
         content.append(f"\n\n*Generated on: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*")
         
         # Write to file
-        with open(filepath, 'w') as f:
+        with open(filepath, 'w', encoding='utf-8') as f:
             f.write("\n".join(content))
         
         print(f"Saved Markdown results to {filepath}")
@@ -746,7 +746,7 @@ class BenchmarkRunner:
         ])
         
         # Write to file
-        with open(filepath, 'w') as f:
+        with open(filepath, 'w', encoding='utf-8') as f:
             f.write("\n".join(latex_content))
         
         print(f"Saved LaTeX results to {filepath}")
@@ -906,7 +906,7 @@ class BenchmarkRunner:
         ])
         
         # Write to file
-        with open(filepath, 'w') as f:
+        with open(filepath, 'w', encoding='utf-8') as f:
             f.write("\n".join(html_content))
         
         print(f"Saved HTML results to {filepath}")
@@ -922,19 +922,19 @@ class BenchmarkRunner:
         # Create summary file
         summary_path = self.run_dir / "summary.md"
         
-        with open(summary_path, 'w') as f:
+        with open(summary_path, 'w', encoding='utf-8') as f:
             f.write("# Graphem Benchmark Summary\n\n")
             f.write(f"**Date:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write(f"**Total execution time:** {total_time:.2f} seconds\n\n")
             
             # List all benchmarks run
             f.write("## Benchmarks Executed\n\n")
-            for result_name in self.results.keys():
+            for result_name in self.results:
                 f.write(f"- {result_name.replace('_', ' ').title()}\n")
             
             # Add links to detailed results
             f.write("\n## Result Files\n\n")
-            for result_name in self.results.keys():
+            for result_name in self.results:
                 f.write(f"### {result_name.replace('_', ' ').title()}\n\n")
                 for fmt in self.formats:
                     rel_path = f"{result_name}/{result_name}.{fmt}"
