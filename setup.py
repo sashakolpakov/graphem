@@ -27,8 +27,8 @@ required = ["jax>=0.3.0",
 
 setup(
     name="graphem",
-    version="0.1.0",
-    description="A graph embedding library based on JAX for efficient k-nearest neighbors",
+    version="0.0.1",
+    description="A graph embedding library based on JAX",
     author="Igor Rivin, Alexander Kolpakov",
     packages=find_packages(),
     install_requires=required,

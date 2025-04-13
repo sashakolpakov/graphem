@@ -19,7 +19,7 @@ Key features:
 At the moment, you can install from the repository only. 
 
 ```bash
-pip install -r requirements.txt
+pip install git+https://github.com/sashakolpakov/graphem.git
 ```
 
 Soon a python package will be made available. 
