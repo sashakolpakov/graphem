@@ -1,0 +1,150 @@
+Metadata-Version: 2.1
+Name: graphem
+Version: 0.1.0
+Summary: A graph embedding library based on JAX for efficient k-nearest neighbors
+Author: Igor Rivin, Alexander Kolpakov
+License: MIT
+Project-URL: Homepage, https://github.com/igorrivin/graphem
+Project-URL: Bug Tracker, https://github.com/igorrivin/graphem/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: jax>=0.3.0
+Requires-Dist: jaxlib>=0.3.0
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: matplotlib>=3.5.0
+Requires-Dist: networkx>=2.6.0
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: plotly>=5.5.0
+Requires-Dist: scipy>=1.7.0
+Requires-Dist: ndlib>=5.1.0
+Requires-Dist: loguru>=0.6.0
+Requires-Dist: kaleido>=0.2.1
+Requires-Dist: tqdm>=4.66.0
+Provides-Extra: dev
+Requires-Dist: pylint>=2.15.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Provides-Extra: profiling
+Requires-Dist: line_profiler>=4.0.0; extra == "profiling"
+Requires-Dist: snakeviz>=2.2.0; extra == "profiling"
+Requires-Dist: tensorboard>=2.10.0; extra == "profiling"
+Requires-Dist: pyinstrument>=5.0.0; extra == "profiling"
+
+# GraphEm
+
+A graph embedding library based on JAX for efficient k-nearest neighbors and influence maximization in networks.
+
+## Overview
+
+Graphem is a Python library for graph visualization and analysis, with a focus on efficient embedding of large networks. It uses JAX for accelerated computation and provides tools for influence maximization in networks.
+
+Key features:
+- Fast graph embedding using Laplacian embedding
+- Efficient k-nearest neighbors search with JAX
+- Various graph generation models
+- Tools for influence maximization
+- Graph visualization with Plotly
+- Benchmarking tools for comparing graph metrics
+
+## Installation
+
+At the moment, you can install from the repository only. 
+
+```bash
+pip install -r requirements.txt
+```
+
+Soon a python package will be made available. 
+
+## Usage
+
+### Basic Graph Embedding
+
+```python
+from graphem.generators import erdos_renyi_graph
+from graphem.embedder import GraphEmbedder
+
+# Generate a random graph
+n_vertices = 200
+edges = erdos_renyi_graph(n=n_vertices, p=0.05)
+
+
+# Create an embedder
+embedder = GraphEmbedder(
+    edges=edges,
+    n_vertices=n_vertices,
+    dimension=3,  # 3D embedding
+    L_min=10.0,   # Minimum edge length
+    k_attr=0.5,   # Attraction force constant
+    k_inter=0.1,  # Repulsion force constant
+    knn_k=15      # Number of nearest neighbors
+)
+
+# Run the layout algorithm
+embedder.run_layout(num_iterations=40)
+
+# Visualize the graph
+embedder.display_layout(edge_width=0.5, node_size=5)
+```
+
+### Influence Maximization
+
+```python
+import networkx as nx
+from graphem.influence import graphem_seed_selection, ndlib_estimated_influence
+
+# This is supposed to be added to the previous code (like the above example) ...
+
+# Convert edges to NetworkX graph
+G = nx.Graph()
+G.add_nodes_from(range(n_vertices))
+G.add_edges_from(edges)
+
+# Select seed nodes using the Graphem method
+seeds = graphem_seed_selection(embedder, k=10, num_iterations=20)
+
+# Estimate influence
+influence, iterations = ndlib_estimated_influence(G, seeds, p=0.1, iterations_count=200)
+print(f"Estimated influence: {influence} nodes ({influence/n_vertices:.2%} of the graph)")
+```
+
+### Benchmarking
+
+```python
+from graphem.generators import erdos_renyi_graph
+from graphem.benchmark import benchmark_correlations
+from graphem.visualization import report_full_correlation_matrix
+
+# Run benchmark to calculate correlations
+results = benchmark_correlations(
+    erdos_renyi_graph,
+    {'n': 200, 'p': 0.05},
+    dim=3,
+    num_iterations=40
+)
+
+# Display correlation matrix
+corr_matrix = report_full_correlation_matrix(
+    results['radii'],
+    results['degree'],
+    results['betweenness'],
+    results['eigenvector'],
+    results['pagerank'],
+    results['closeness'],
+    results['edge_betweenness']
+)
+```
+
+## Example Scripts
+
+The `examples/` directory contains sample scripts demonstrating different use cases:
+
+- `basic_embedding.py`: Simple graph embedding example
+- `influence_maximization.py`: Seed selection for influence maximization
+- `benchmark.py`: Benchmark different graph models
+
+## License
+
+MIT
