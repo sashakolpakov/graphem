@@ -16,9 +16,13 @@ Key features:
 
 ## Installation
 
+At the moment, you can install from the repository only. 
+
 ```bash
 pip install -r requirements.txt
 ```
+
+Soon a python package will be made available. 
 
 ## Usage
 

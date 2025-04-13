@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "A graph embedding library based on JAX for efficient k-nearest neighbors"
 readme = "README.md"
 authors = [
-    {name = "Igor Rivin"}
+    {name = "Igor Rivin, Alexander Kolpakov"}
 ]
 license = {text = "MIT"}
 classifiers = [
@@ -41,6 +41,7 @@ profiling = [
     "line_profiler>=4.0.0",
     "snakeviz>=2.2.0",
     "tensorboard>=2.10.0",
+    "pyinstrument>=5.0.0"
 ]
 
 [project.urls]
