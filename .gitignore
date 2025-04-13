@@ -46,5 +46,5 @@ venv.bak/
 *.swo
 
 # Project specific
+results/
 data/raw/
-results/output/
