@@ -12,25 +12,10 @@ from loguru import logger
 
 from graphem.index import HPIndex
 
-"""
-Optimized Graph Embedding functionality for Graphem.
-"""
-
-import os
-import sys
-import jax
-import jax.numpy as jnp
-import numpy as np
-import plotly.graph_objects as go
-from loguru import logger
-from functools import partial
-
-from graphem.index import HPIndex
-
 
 class GraphEmbedder:
     """
-    A class for embedding graphs using the Laplacian embedding with JAX optimizations.
+    A class for embedding graphs using the Laplacian embedding.
 
     Attributes:
             edges: np.ndarray of shape (num_edges, 2)
@@ -78,19 +63,7 @@ class GraphEmbedder:
         else:
             self.logger = my_logger
             self.logger.info("Logger initialized")
-        
-        # Initial positions
         self.positions = self._laplacian_embedding()
-        
-        # JIT compile the spring forces computation
-        self.compute_spring_forces_jit = jax.jit(
-            lambda positions: self._compute_spring_forces(
-                positions, self.edges, self.L_min, self.k_attr
-            )
-        )
-        
-        # Pre-compile vectorized repulsion calculation
-        self.repulse_vectorized_jit = jax.jit(self._repulse_vectorized)
 
     def _laplacian_embedding(self):
         """
@@ -121,28 +94,11 @@ class GraphEmbedder:
 
         return jnp.array(embedding)
 
-    # JIT-compiled function to locate KNN midpoints
-    @partial(jax.jit, static_argnums=(2,))
-    def _locate_knn_midpoints_internal(self, midpoints, k):
-        """JIT-compiled internal function for KNN calculation."""
-        # This is simplified for demonstration; in practice, you might need
-        # to adapt the HPIndex.knn_tiled function for JIT compilation
-        distances = jax.vmap(
-            lambda x: jnp.sqrt(jnp.sum((midpoints - x)**2, axis=1))
-        )(midpoints)
-        
-        # Get indices of k+1 smallest distances (including self)
-        indices = jnp.argsort(distances, axis=1)[:, :k+1]
-        
-        # Remove self-neighbor (first column)
-        return indices[:, 1:]
-    
     def locate_knn_midpoints(self, midpoints, k):
         """
         Locate k nearest neighbors for each midpoint.
         """
         # Use our efficient KNN search
-        # For now, we'll use the existing implementation since HPIndex may not be JIT-compatible
         knn_idx = HPIndex.knn_tiled(
             midpoints, midpoints, k=k+1, 
             x_tile_size=min(midpoints.shape[0], 8192), 
@@ -153,130 +109,131 @@ class GraphEmbedder:
         return knn_idx[:, 1:]
 
     @staticmethod
-    def _compute_spring_forces(positions, edges, L_min, k_attr):
+    def compute_spring_forces(positions, edges, L_min, k_attr):
         """
-        Compute the spring forces between vertices using vectorized operations.
+        Compute the spring forces between vertices.
         """
-        # Extract edge endpoints
-        u = edges[:, 0]
-        v = edges[:, 1]
-        
-        # Compute edge vectors
-        edge_vecs = positions[v] - positions[u]
-        
-        # Compute lengths
-        lengths = jnp.linalg.norm(edge_vecs, axis=1)
-        
-        # Compute force directions (unit vectors along edges)
-        directions = edge_vecs / jnp.expand_dims(jnp.maximum(lengths, 1e-8), axis=1)
-        
-        # Compute spring force magnitudes
-        force_mags = k_attr * (lengths - L_min)
-        
-        # Compute forces
-        forces = jnp.expand_dims(force_mags, axis=1) * directions
-        
         # Initialize displacement array
         displacement = jnp.zeros_like(positions)
         
-        # Update displacements using scatter-add operations
-        displacement = displacement.at[u].add(forces)
-        displacement = displacement.at[v].add(-forces)
+        # Loop over edges and compute spring forces
+        def compute_edge_force(i, disp_acc):
+            # Extract edge endpoints
+            edge = edges[i]
+            u, v = edge[0], edge[1]
+            
+            # Compute current length
+            edge_vec = positions[v] - positions[u]
+            length = jnp.linalg.norm(edge_vec)
+            
+            # Compute force direction (unit vector along the edge)
+            direction = edge_vec / (length + 1e-8)  # Avoid division by zero
+            
+            # Compute spring force magnitude (proportional to length)
+            force_mag = k_attr * (length - L_min)
+            
+            # Apply force to both endpoints in opposite directions
+            force = force_mag * direction
+            
+            # Update displacements
+            disp_acc = disp_acc.at[u].add(force)
+            disp_acc = disp_acc.at[v].add(-force)
+            
+            return disp_acc
+        
+        # Compute forces for all edges
+        displacement = jax.lax.fori_loop(
+            0, edges.shape[0], compute_edge_force, displacement
+        )
         
         return displacement
 
     @staticmethod
-    def _repulse_vectorized(vertices, midpoints):
-        """Vectorized version of repulse function."""
-        # Compute pairwise differences
-        diff = jnp.expand_dims(vertices, 1) - jnp.expand_dims(midpoints, 0)
+    def compute_intersection_forces_with_knn_index(positions, edges, knn_idx, sampled_indices, k_inter):
+        """
+        Compute the intersection forces between vertices and their nearest neighbors.
+        """
+        # Initialize displacement array
+        displacement = jnp.zeros_like(positions)
         
-        # Compute distances
-        distances = jnp.linalg.norm(diff, axis=2)
-        
-        # Avoid division by zero with a small epsilon
-        safe_distances = jnp.maximum(distances, 1e-8)
-        
-        # Compute directions (unit vectors)
-        directions = diff / jnp.expand_dims(safe_distances, 2)
-        
-        # Compute force magnitudes (inverse square law)
-        magnitudes = 1.0 / (jnp.square(safe_distances) + 1e-8)
-        
-        # Apply magnitudes to directions
-        forces = jnp.expand_dims(magnitudes, 2) * directions
-        
-        return forces
-    
-    # JIT-compiled intersection forces computation
-    @partial(jax.jit, static_argnums=(0,))
-    def _compute_intersection_forces_jit(self, positions, edges, knn_indices, sampled_indices, k_inter):
-        """JIT-compiled function to compute intersection forces."""
         # Compute midpoints of all edges
         midpoints = (positions[edges[:, 0]] + positions[edges[:, 1]]) / 2
         
-        # Get sampled midpoints and their edges
+        # Sample uniformly at random from midpoints
         sampled_midpoints = midpoints[sampled_indices]
-        sampled_edges = edges[sampled_indices]
         
-        # Get neighbor midpoints and edges
-        neighbor_indices = knn_indices.reshape(-1)
-        neighbor_midpoints = midpoints[neighbor_indices].reshape(sampled_indices.shape[0], -1, positions.shape[1])
-        neighbor_edges = edges[neighbor_indices].reshape(sampled_indices.shape[0], -1, 2)
-        
-        # Create vectors for vertices
-        # For each sampled edge
-        u_sampled = positions[sampled_edges[:, 0]]
-        v_sampled = positions[sampled_edges[:, 1]]
-        
-        # For each neighbor edge (reshape for broadcasting)
-        u_neighbor = jnp.take(positions, neighbor_edges[..., 0], axis=0)
-        v_neighbor = jnp.take(positions, neighbor_edges[..., 1], axis=0)
-        
-        # Check adjacency - vertices should not be shared
-        u_sampled_expanded = jnp.expand_dims(sampled_edges[:, 0], 1)
-        v_sampled_expanded = jnp.expand_dims(sampled_edges[:, 1], 1)
-        not_adjacent = (neighbor_edges[..., 0] != u_sampled_expanded) & \
-                       (neighbor_edges[..., 0] != v_sampled_expanded) & \
-                       (neighbor_edges[..., 1] != u_sampled_expanded) & \
-                       (neighbor_edges[..., 1] != v_sampled_expanded)
-        
-        # Calculate repulsion forces using vectorized function
-        # Repulsion from neighbor midpoints to sampled vertices
-        repulsion_u_to_neighbor = jax.vmap(lambda u, mids: jax.vmap(
-            lambda mid: GraphEmbedder._repulse(u, mid)
-        )(mids))(u_sampled, neighbor_midpoints)
-        
-        repulsion_v_to_neighbor = jax.vmap(lambda v, mids: jax.vmap(
-            lambda mid: GraphEmbedder._repulse(v, mid)
-        )(mids))(v_sampled, neighbor_midpoints)
-        
-        # Apply adjacency mask
-        not_adjacent_expanded = jnp.expand_dims(not_adjacent, -1)
-        repulsion_u_to_neighbor = repulsion_u_to_neighbor * not_adjacent_expanded
-        repulsion_v_to_neighbor = repulsion_v_to_neighbor * not_adjacent_expanded
-        
-        # Scale by k_inter
-        repulsion_u_to_neighbor = k_inter * repulsion_u_to_neighbor
-        repulsion_v_to_neighbor = k_inter * repulsion_v_to_neighbor
-        
-        # Initialize displacement array
-        displacement = jnp.zeros_like(positions)
-        
-        # First add forces to sampled vertices
-        for i in range(sampled_indices.shape[0]):
-            # Add force to u vertex
-            displacement = displacement.at[sampled_edges[i, 0]].add(
-                jnp.sum(repulsion_u_to_neighbor[i], axis=0))
+        # Loop over each sampled midpoint and its nearest neighbors
+        def process_midpoint(i, disp_acc):
+            midpoint_idx = sampled_indices[i]
+            mid = midpoints[midpoint_idx]
+            edge = edges[midpoint_idx]
+            u, v = edge[0], edge[1]
             
-            # Add force to v vertex
-            displacement = displacement.at[sampled_edges[i, 1]].add(
-                jnp.sum(repulsion_v_to_neighbor[i], axis=0))
+            # loop over the k nearest neighbors
+            def process_neighbor(j, inner_disp):
+                # Get the neighbor edge midpoint
+                neighbor_idx = knn_idx[i, j]
+                neighbor_edge = edges[neighbor_idx]
+                neighbor_mid = midpoints[neighbor_idx]
+                
+                # Avoid self-edge and immediate neighbors
+                not_adjacent = (neighbor_edge[0] != u) & (neighbor_edge[0] != v) & \
+                               (neighbor_edge[1] != u) & (neighbor_edge[1] != v)
+                
+                def apply_forces(inner_disp_apply):
+                    # Compute minimum distance from midpoint to the edge
+                    # First compute vectors for the edge
+                    p1 = positions[neighbor_edge[0]]
+                    p2 = positions[neighbor_edge[1]]
+                    
+                    # Repulsion force
+                    force_u = GraphEmbedder.repulse(positions[u], neighbor_mid)
+                    force_v = GraphEmbedder.repulse(positions[v], neighbor_mid)
+                    
+                    # Apply repulsion to the vertices of the original edge
+                    inner_disp_apply = inner_disp_apply.at[u].add(k_inter * force_u)
+                    inner_disp_apply = inner_disp_apply.at[v].add(k_inter * force_v)
+                    
+                    # Also apply repulsion to the vertices of the neighboring edge
+                    force_p1 = GraphEmbedder.repulse(p1, mid)
+                    force_p2 = GraphEmbedder.repulse(p2, mid)
+                    
+                    inner_disp_apply = inner_disp_apply.at[neighbor_edge[0]].add(k_inter * force_p1)
+                    inner_disp_apply = inner_disp_apply.at[neighbor_edge[1]].add(k_inter * force_p2)
+                    
+                    return inner_disp_apply
+                
+                # Apply forces only if edges are not adjacent
+                inner_disp = jax.lax.cond(
+                    not_adjacent,
+                    apply_forces,
+                    lambda x: x,
+                    inner_disp
+                )
+                
+                return inner_disp
+            
+            # Process all neighbors of this midpoint
+            disp_acc = jax.lax.fori_loop(
+                0, knn_idx.shape[1], process_neighbor, disp_acc
+            )
+            
+            return disp_acc
+        
+        # Process all sampled midpoints
+        displacement = jax.lax.fori_loop(
+            0, sampled_indices.shape[0], process_midpoint, displacement
+        )
         
         return displacement
 
     @staticmethod
-    def _repulse(vertex, mid):
+    def orient(a, b, c):
+        """Compute the orientation of three points (positive if counter-clockwise)."""
+        return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+
+    @staticmethod
+    def repulse(vertex, mid):
         """Compute repulsion force vector."""
         diff = vertex - mid
         distance = jnp.linalg.norm(diff)
@@ -286,36 +243,15 @@ class GraphEmbedder:
         magnitude = 1.0 / (distance * distance + 1e-8)
         return magnitude * direction
 
-    # JIT-compiled position update step
-    @partial(jax.jit, static_argnums=(0,))
-    def _update_positions_step_jit(self, positions, edges, sampled_indices, knn_indices):
-        """JIT-compiled function to perform one step of position updates."""
-        # Compute spring forces using the jitted function
-        spring_forces = self._compute_spring_forces(positions, edges, self.L_min, self.k_attr)
-        
-        # Compute intersection forces using the jitted function
-        intersection_forces = self._compute_intersection_forces_jit(
-            positions, edges, knn_indices, sampled_indices, self.k_inter
-        )
-        
-        # Combine forces
-        total_forces = spring_forces + intersection_forces
-        
-        # Update positions
-        new_positions = positions + 0.1 * total_forces
-        
-        # Apply clipping for 3D case
-        if positions.shape[1] == 3:
-            new_positions = new_positions.at[:, 2].set(
-                jnp.clip(new_positions[:, 2], -5.0, 5.0)
-            )
-        
-        return new_positions
-
     def update_positions(self):
         """
         Update the positions of the vertices based on the spring forces and intersection forces.
         """
+        # Compute spring forces
+        spring_forces = self.compute_spring_forces(
+            self.positions, self.edges, self.L_min, self.k_attr
+        )
+        
         # Sample midpoints for intersection detection
         self.logger.info(f"Sampling {self.sample_size} midpoints for intersection detection")
         n_edges = self.edges.shape[0]
@@ -331,17 +267,28 @@ class GraphEmbedder:
             midpoints[sampled_indices], k=self.knn_k
         )
         
-        # Use the JIT-compiled function to update positions
-        self.positions = self._update_positions_step_jit(
-            self.positions, self.edges, sampled_indices, knn_idx
+        # Compute intersection forces
+        intersection_forces = self.compute_intersection_forces_with_knn_index(
+            self.positions, self.edges, knn_idx, sampled_indices, self.k_inter
         )
+        
+        # Combine forces and update positions
+        total_forces = spring_forces + intersection_forces
+        
+        # Apply a constant factor to the forces to control the speed of movement
+        self.positions = self.positions + 0.1 * total_forces
+        
+        # If the dimension is 3, keep it bounded to the specified plane
+        if self.dimension == 3:
+            self.positions = self.positions.at[:, 2].set(
+                jnp.clip(self.positions[:, 2], -5.0, 5.0)
+            )
 
     def run_layout(self, num_iterations=100):
         """
         Run the layout for a given number of iterations.
         """
         self.logger.info(f"Running layout for {num_iterations} iterations")
-        
         for i in range(num_iterations):
             self.update_positions()
             if (i + 1) % 10 == 0:

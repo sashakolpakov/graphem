@@ -1,6 +1,0 @@
-graph_type,vertices,edges,avg_degree,graphem_influence,greedy_influence,random_influence,graphem_time,greedy_time,graphem_norm_influence,greedy_norm_influence,random_norm_influence,graphem_efficiency,greedy_efficiency
-Erdős–Rényi,200,977,9.77,0,0,0.0,0.0001533031463623047,6.90372896194458,0.0,0.0,0.0,0.0,0.0
-Random Regular,200,400,4.0,0,0,0.0,0.00014281272888183594,5.82781720161438,0.0,0.0,0.0,0.0,0.0
-Watts-Strogatz,200,400,4.0,0,0,0.0,0.00011920928955078125,5.747584104537964,0.0,0.0,0.0,0.0,0.0
-Barabási-Albert,200,591,5.91,0,0,0.0,0.000125885009765625,6.251224756240845,0.0,0.0,0.0,0.0,0.0
-SBM,200,1110,11.1,0,0,0.0,0.00013184547424316406,7.420572996139526,0.0,0.0,0.0,0.0,0.0

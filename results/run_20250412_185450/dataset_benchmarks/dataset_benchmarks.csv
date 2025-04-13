@@ -1,4 +1,0 @@
-dataset,original_vertices,original_edges,sampled_vertices,sampled_edges,density,avg_degree,lcc_size,lcc_fraction,layout_time,degree_correlation,betweenness_correlation,eigenvector_correlation,pagerank_correlation,error
-snap-facebook_combined,4039.0,88234.0,100.0,64.0,0.01292929292929293,1.28,9.0,0.09,6.3525309562683105,0.7303749478855069,0.4944461681055409,0.21136812399026014,0.7403793366277874,
-snap-ca-GrQc,,,,,,,,,,,,,,index is out of bounds for axis 0 with size 0
-snap-ca-HepTh,,,,,,,,,,,,,,index is out of bounds for axis 0 with size 0
