@@ -67,7 +67,7 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         density = 2 * len(edges) / (n * (n - 1))
         avg_degree = 2 * len(edges) / n
         
-        print(f"Graph statistics:")
+        print("Graph statistics:")
         print(f"- Density: {density:.4f}")
         print(f"- Average degree: {avg_degree:.2f}")
         
@@ -117,7 +117,7 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         
         # Display the graph
         print("Displaying graph layout...")
-        embedder.display_layout(edge_width=0.5, node_size=5)
+        embedder.display_layout(edge_width=1, node_size=5)
         
         # Store results
         results.append({
@@ -230,7 +230,7 @@ def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations
         density = 2 * len(edges) / (n * (n - 1))
         avg_degree = 2 * len(edges) / n
         
-        print(f"Graph statistics:")
+        print("Graph statistics:")
         print(f"- Density: {density:.4f}")
         print(f"- Average degree: {avg_degree:.2f}")
         
@@ -279,7 +279,7 @@ def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations
         
         # Display the graph
         print("Displaying graph layout...")
-        embedder.display_layout(edge_width=0.5, node_size=5)
+        embedder.display_layout(edge_width=1, node_size=5)
         
         # Store results
         results.append({

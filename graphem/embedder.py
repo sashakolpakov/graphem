@@ -255,28 +255,28 @@ class GraphEmbedder:
         edge_trace = go.Scatter(
             x=x_edges, y=y_edges,
             mode='lines',
-            line=dict(color='gray', width=edge_width),
+            line={"color": 'gray', "width": edge_width},
             hoverinfo='none'
         )
 
         node_trace = go.Scatter(
             x=pos[:, 0], y=pos[:, 1],
             mode='markers',
-            marker=dict(
-                color=node_colors if node_colors is not None else 'red',
-                colorscale='Bluered',
-                size=node_size,
-                colorbar=dict(title='Degree'),
-                showscale=True
-            ),
+            marker={
+                "color": node_colors if node_colors is not None else 'red',
+                "colorscale": 'Bluered',
+                "size": node_size,
+                "colorbar": {"title": 'Degree'},
+                "showscale": True
+            },
             hoverinfo='none'
         )
 
         fig = go.Figure(data=[edge_trace, node_trace])
         fig.update_layout(
             title="2D Graph Embedding",
-            xaxis=dict(title="X", showgrid=False, zeroline=False),
-            yaxis=dict(title="Y", showgrid=False, zeroline=False),
+            xaxis={"title": 'X', "showgrid": False, "zeroline": False},
+            yaxis={"title": 'Y', "showgrid": False, "zeroline": False},
             showlegend=False,
             width=800,
             height=800
@@ -305,7 +305,6 @@ class GraphEmbedder:
         pos = np.array(self.positions)
         edges = np.array(self.edges)
 
-
         x_edges, y_edges, z_edges = [], [], []
         for i, j in edges:
             x_edges += [pos[i, 0], pos[j, 0], None]
@@ -315,31 +314,27 @@ class GraphEmbedder:
         edge_trace = go.Scatter3d(
             x=x_edges, y=y_edges, z=z_edges,
             mode='lines',
-            line=dict(color='gray', width=edge_width),
+            line={"color": 'gray', "width": edge_width},
             hoverinfo='none'
         )
 
         node_trace = go.Scatter3d(
             x=pos[:, 0], y=pos[:, 1], z=pos[:, 2],
             mode='markers',
-            marker=dict(
-                color=node_colors if node_colors is not None else 'red',
-                colorscale='Bluered',
-                size=node_size,
-                colorbar=dict(title='Degree'),
-                showscale=True
-            ),
+            marker={
+                "color": node_colors if node_colors is not None else 'red',
+                "colorscale": 'Bluered',
+                "size": node_size,
+                "colorbar": {"title": 'Degree'},
+                "showscale": True
+            },
             hoverinfo='none'
         )
 
         fig = go.Figure(data=[edge_trace, node_trace])
         fig.update_layout(
             title="3D Graph Embedding",
-            scene=dict(
-                xaxis=dict(title="X"),
-                yaxis=dict(title="Y"),
-                zaxis=dict(title="Z")
-            ),
+            scene={"xaxis": {"title": 'X'}, "yaxis": {"title": 'Y'}, "zaxis": {"title": 'Z'}},
             showlegend=False,
             width=800,
             height=800

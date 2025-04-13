@@ -59,7 +59,7 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
     G.add_nodes_from(range(n))
     G.add_edges_from(edges)
     
-    print(f"Graph statistics:")
+    print("Graph statistics:")
     print(f"- Density: {2 * len(edges) / (n * (n - 1)):.4f}")
     print(f"- Average degree: {2 * len(edges) / n:.2f}")
     
@@ -94,7 +94,7 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
     
     # Display the graph
     print("Displaying graph layout...")
-    embedder.display_layout(edge_width=0.5, node_size=5)
+    embedder.display_layout(edge_width=1, node_size=5)
     
     return embedder
 

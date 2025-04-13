@@ -5,6 +5,7 @@ Benchmark functionality for Graphem.
 import time
 import numpy as np
 import networkx as nx
+from scipy import stats
 from loguru import logger
 
 from graphem.embedder import GraphEmbedder
@@ -12,13 +13,12 @@ from graphem.influence import graphem_seed_selection, ndlib_estimated_influence,
 
 
 def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, k_inter=0.1, 
-                 knn_k=15, edge_width=0.5, node_size=8, sample_size=512, batch_size=1024, 
-                 num_iterations=40):
+                 knn_k=15, sample_size=512, batch_size=1024, num_iterations=40):
     """
     Run a benchmark on the given graph.
     
     Parameters:
-        graph_generator: function
+        graph_generator: callable
             Function to generate a graph
         graph_params: dict
             Parameters for the graph generator
@@ -149,7 +149,7 @@ def benchmark_correlations(graph_generator, graph_params, dim=2, L_min=10.0, k_a
     Run a benchmark to calculate correlations between embedding radii and centrality measures.
     
     Parameters:
-        graph_generator: function
+        graph_generator: callable
             Function to generate a graph
         graph_params: dict
             Parameters for the graph generator
@@ -177,7 +177,6 @@ def benchmark_correlations(graph_generator, graph_params, dim=2, L_min=10.0, k_a
     correlations = {}
     
     # Degree correlation
-    from scipy import stats
     rho, p = stats.spearmanr(radii, results['degree'])
     correlations['degree'] = {'rho': rho, 'p': p}
     
@@ -213,7 +212,7 @@ def run_influence_benchmark(graph_generator, graph_params, k=10, p=0.1, iteratio
     Run a benchmark comparing influence maximization methods.
     
     Parameters:
-        graph_generator: function
+        graph_generator: callable
             Function to generate a graph
         graph_params: dict
             Parameters for the graph generator
@@ -308,30 +307,21 @@ def run_influence_benchmark(graph_generator, graph_params, k=10, p=0.1, iteratio
     random_influence = np.mean(random_influences)
     
     # Compile results
-    results = {
-        'graph_type': graph_generator.__name__,
-        'n': n,
-        'm': m,
-        'graphem_seeds': graphem_seeds,
-        'greedy_seeds': greedy_seeds,
-        'graphem_influence': graphem_influence,
-        'greedy_influence': greedy_influence,
-        'random_influence': random_influence,
-        'graphem_time': graphem_time,
-        'greedy_time': greedy_time,
-        'graphem_eval_time': graphem_eval_time,
-        'greedy_eval_time': greedy_eval_time,
-        'greedy_iterations': greedy_iters,
-    }
+    results = {'graph_type': graph_generator.__name__, 'n': n, 'm': m, 'graphem_seeds': graphem_seeds,
+               'greedy_seeds': greedy_seeds, 'graphem_influence': graphem_influence,
+               'greedy_influence': greedy_influence, 'random_influence': random_influence, 'graphem_time': graphem_time,
+               'greedy_time': greedy_time, 'graphem_eval_time': graphem_eval_time, 'greedy_eval_time': greedy_eval_time,
+               'greedy_iterations': greedy_iters, 'graphem_norm_influence': graphem_influence / n,
+               'greedy_norm_influence': greedy_influence / n, 'random_norm_influence': random_influence / n}
     
     # Calculate normalized influences
-    results['graphem_norm_influence'] = graphem_influence / n
-    results['greedy_norm_influence'] = greedy_influence / n
-    results['random_norm_influence'] = random_influence / n
-    
+
     # Calculate efficiency ratios
     results['graphem_efficiency'] = results['graphem_norm_influence'] / graphem_time
     results['greedy_efficiency'] = results['greedy_norm_influence'] / greedy_time
+
+    total_time = time.time() - start_time
+    results['total_time'] = total_time
     
     logger.info("Influence benchmark completed")
     return results

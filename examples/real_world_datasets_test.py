@@ -224,12 +224,12 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     
     # Display the graph
     print("Displaying graph layout...")
-    embedder.display_layout(edge_width=0.5, node_size=5)
+    embedder.display_layout(edge_width=1, node_size=5)
     
     # Color nodes by degree centrality
     print("Displaying graph layout with nodes colored by degree centrality...")
     normalized_degree = (degree - np.min(degree)) / (np.max(degree) - np.min(degree) + 1e-10)
-    embedder.display_layout(edge_width=0.5, node_size=5, node_colors=normalized_degree)
+    embedder.display_layout(edge_width=1, node_size=5, node_colors=normalized_degree)
     
     return embedder, G
 
