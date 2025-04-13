@@ -64,9 +64,17 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
         betweenness[i] = val
     
     eigenvector = np.zeros(n)
-    eig_dict = nx.eigenvector_centrality_numpy(nx_graph)
-    for i, val in eig_dict.items():
-        eigenvector[i] = val
+    try:
+        eig_dict = nx.eigenvector_centrality_numpy(nx_graph)
+        for i, val in eig_dict.items():
+            eigenvector[i] = val
+    except (nx.NetworkXError, nx.AmbiguousSolution) as e:
+        logger.warning(f"Eigenvector centrality calculation failed: {e}")
+        logger.warning("Setting eigenvector centrality to degree centrality as fallback")
+        # Use degree centrality as a fallback
+        deg_dict = nx.degree_centrality(nx_graph)
+        for i, val in deg_dict.items():
+            eigenvector[i] = val
     
     pagerank = np.zeros(n)
     pr_dict = nx.pagerank(nx_graph)
