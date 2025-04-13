@@ -16,9 +16,34 @@ Key features:
 
 ## Installation
 
+### Standard Installation
+
 ```bash
-pip install -r requirements.txt
+# Install directly from GitHub
+pip install git+https://github.com/igorrivin/graphem.git
+
+# OR clone and install locally
+git clone https://github.com/igorrivin/graphem.git
+cd graphem
+pip install .
 ```
+
+### Development Installation
+
+```bash
+git clone https://github.com/igorrivin/graphem.git
+cd graphem
+pip install -e .  # Install in development mode
+pip install -e ".[dev,profiling]"  # Install with development and profiling extras
+```
+
+### Dependencies
+
+All required dependencies will be installed automatically. Key dependencies include:
+- JAX and JAXlib for accelerated computation
+- NetworkX for graph operations
+- Plotly for visualization
+- NumPy and SciPy for numerical operations
 
 ## Usage
 
