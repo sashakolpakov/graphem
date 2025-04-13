@@ -11,7 +11,7 @@ import scipy.sparse.linalg as spla
 from scipy.sparse.csgraph import laplacian
 from tqdm import tqdm
 
-from index import HPIndex
+from graphem.index import HPIndex
 
 
 class GraphEmbedder:
