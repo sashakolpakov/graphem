@@ -1,6 +1,6 @@
 # GraphEm
 
-A graph embedding library based on JAX for efficient k-nearest neighbors and influence maximization in networks.
+A graph embedding library based on JAX for efficient centrality measures approximation and influence maximization in networks.
 
 ## Overview
 
