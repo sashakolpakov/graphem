@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>graphem.influence</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          A graph embedding library based on JAX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code class="thisobject"><a href="graphem.influence.html" class="internal-link" title="This module">influence</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#graphem_seed_selection" class="internal-link" title="graphem.influence.graphem_seed_selection">graphem<wbr></wbr>_seed<wbr></wbr>_selection</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#greedy_seed_selection" class="internal-link" title="graphem.influence.greedy_seed_selection">greedy<wbr></wbr>_seed<wbr></wbr>_selection</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#ndlib_estimated_influence" class="internal-link" title="graphem.influence.ndlib_estimated_influence">ndlib<wbr></wbr>_estimated<wbr></wbr>_influence</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Package</span>
+        <code><a href="index.html" class="internal-link" title="The parent of this module">graphem</a></code> 
+      </div>
+      
+      <div>
+        
+
+        <div class="childrenKindTitle">Modules</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.benchmark.html" class="internal-link" title="graphem.benchmark">benchmark</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html" class="internal-link" title="graphem.datasets">datasets</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.embedder.html" class="internal-link" title="graphem.embedder">embedder</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.generators.html" class="internal-link" title="graphem.generators">generators</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.index.html" class="internal-link" title="graphem.index">index</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.influence.html" class="internal-link" title="graphem.influence">influence</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.visualization.html" class="internal-link" title="graphem.visualization">visualization</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+        
+
+        
+         
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="index.html#__version__" class="internal-link" title="graphem.__version__">__version__</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="module"><code><code><a href="index.html" class="internal-link">graphem</a></code><wbr></wbr>.<code><a href="graphem.influence.html" class="internal-link" title="graphem.influence">influence</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          module documentation
+        </div>
+
+        <div class="extrasDocstring">
+          
+          <p></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Influence maximization functionality for Graphem.</p></div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id17">
+  
+  
+  <tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#graphem_seed_selection" class="internal-link" title="graphem.influence.graphem_seed_selection">graphem<wbr></wbr>_seed<wbr></wbr>_selection</a></code></td>
+    <td>Run the GraphEmbedder layout to get an embedding, then select k seeds by choosing the nodes with the highest radial distances.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#greedy_seed_selection" class="internal-link" title="graphem.influence.greedy_seed_selection">greedy<wbr></wbr>_seed<wbr></wbr>_selection</a></code></td>
+    <td>Greedy seed selection using NDlib influence estimation. For each candidate node evaluation, it calls NDlib's simulation and accumulates the total number of iterations used across all evaluations.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#ndlib_estimated_influence" class="internal-link" title="graphem.influence.ndlib_estimated_influence">ndlib<wbr></wbr>_estimated<wbr></wbr>_influence</a></code></td>
+    <td>Run NDlib's Independent Cascades model on graph G, starting with the given seeds, and return the estimated final influence (number of nodes in state 2) and the number of iterations executed.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basefunction">
+  
+  
+  <a name="graphem.influence.graphem_seed_selection">
+    
+  </a>
+  <a name="graphem_seed_selection">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">graphem_seed_selection</span><span class="function-signature">(embedder, k, num_iterations=20)</span>:
+    
+    <a class="headerLink" href="#graphem_seed_selection" title="graphem.influence.graphem_seed_selection">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Run the GraphEmbedder layout to get an embedding, then select
+k seeds by choosing the nodes with the highest radial distances.
+
+Parameters:
+    embedder: GraphEmbedder
+        The initialized graph embedder object
+    k: int
+        Number of seed nodes to select
+    num_iterations: int
+        Number of layout iterations to run
+
+Returns:
+    seeds: list
+        List of k vertices selected as seeds</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.influence.greedy_seed_selection">
+    
+  </a>
+  <a name="greedy_seed_selection">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">greedy_seed_selection</span><span class="function-signature">(G, k, p=0.1, iterations_count=200)</span>:
+    
+    <a class="headerLink" href="#greedy_seed_selection" title="graphem.influence.greedy_seed_selection">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Greedy seed selection using NDlib influence estimation.
+For each candidate node evaluation, it calls NDlib's simulation and accumulates
+the total number of iterations used across all evaluations.
+
+Returns:
+    seeds: the selected seed set (list of nodes)
+    total_iters: the total number of NDlib iterations run during selection.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.influence.ndlib_estimated_influence">
+    
+  </a>
+  <a name="ndlib_estimated_influence">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">ndlib_estimated_influence</span><span class="function-signature">(G, seeds, p=0.1, iterations_count=200)</span>:
+    
+    <a class="headerLink" href="#ndlib_estimated_influence" title="graphem.influence.ndlib_estimated_influence">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Run NDlib's Independent Cascades model on graph G, starting with the given seeds,
+and return the estimated final influence (number of nodes in state 2) and
+the number of iterations executed.
+
+Parameters:
+    G: networkx.Graph
+        The graph to run influence propagation on
+    seeds: list
+        The list of seed nodes
+    p: float
+        Propagation probability
+    iterations_count: int
+        Maximum number of simulation iterations
+
+Returns:
+    influence: float
+        The estimated influence (average number of influenced nodes)
+    iterations: int
+        The number of iterations run</p></div>
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for A graph embedding library based on JAX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-23 17:28:25.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
