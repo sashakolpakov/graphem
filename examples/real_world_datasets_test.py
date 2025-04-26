@@ -200,6 +200,10 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         print("Error calculating eigenvector centrality, using zeros")
         print(e)
         eigenvector = np.zeros(n_vertices)
+    except nx.AmbiguousSolution as e:
+        print("Error calculating eigenvector centrality, using zeros")
+        print(e)
+        eigenvector = np.zeros(n_vertices)
     
     print("Calculating PageRank...")
     pagerank = np.array(list(nx.pagerank(G).values()))
