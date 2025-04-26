@@ -28,7 +28,7 @@ required = ["jax>=0.3.0",
 
 setup(
     name="graphem-jax",
-    version="0.0.1.post1",
+    version="0.0.1.post2",
     description="A graph embedding library based on JAX",
     author="Igor Rivin, Alexander Kolpakov",
     packages=find_packages(),

@@ -75,7 +75,8 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     # Load the dataset
     print(f"Loading dataset {dataset_name}...")
     start_time = time.time()
-    edges, n_vertices = load_dataset(dataset_name)
+    vertices, edges = load_dataset(dataset_name)
+    n_vertices = len(vertices)
     load_time = time.time() - start_time
     
     print(f"Loaded dataset with {n_vertices:,} vertices and {len(edges):,} edges in {load_time:.2f}s")
@@ -99,8 +100,12 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     
     # Create NetworkX graph for analysis
     G = nx.Graph()
-    G.add_nodes_from(range(n_vertices))
+    G.add_nodes_from(vertices)
     G.add_edges_from(edges)
+    G = nx.convert_node_labels_to_integers(G,
+                                           first_label=0,
+                                           ordering='default',
+                                           label_attribute=None)
     
     # Analyze graph properties
     density = 2 * len(edges) / (n_vertices * (n_vertices - 1))
@@ -267,7 +272,8 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         # Load the dataset
         print(f"Loading dataset {dataset_name}...")
         start_time = time.time()
-        edges, n_vertices = load_dataset(dataset_name)
+        vertices, edges = load_dataset(dataset_name)
+        n_vertices = len(vertices)
         load_time = time.time() - start_time
         
         print(f"Loaded dataset with {n_vertices:,} vertices and {len(edges):,} edges in {load_time:.2f}s")
@@ -290,8 +296,12 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         
         # Create NetworkX graph for analysis
         G = nx.Graph()
-        G.add_nodes_from(range(n_vertices))
+        G.add_nodes_from(n_vertices)
         G.add_edges_from(edges)
+        G = nx.convert_node_labels_to_integers(G,
+                                               first_label=0,
+                                               ordering='default',
+                                               label_attribute=None)
         
         # Analyze graph properties
         density = 2 * len(edges) / (n_vertices * (n_vertices - 1))

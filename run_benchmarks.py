@@ -19,6 +19,7 @@ import networkx as nx
 from tqdm import tqdm
 from scipy import stats
 from line_profiler import LineProfiler
+from copy import copy
 
 # For JAX profiling
 try:
@@ -213,35 +214,41 @@ class BenchmarkRunner:
             
             try:
                 # Load the dataset
-                edges, n_vertices = load_dataset(dataset_name)
+                vertices, edges = load_dataset(dataset_name)
                 
                 # Record original size
-                original_size = n_vertices
+                original_size = len(vertices)
                 original_edges = len(edges)
+
+                n_vertices = copy(original_size)
                 
                 # Sample if needed and if subsample_size is provided
                 if sample_size is not None and n_vertices > sample_size:
                     tqdm.write(f"Sampling {sample_size} vertices from {n_vertices}...")
-                    sampled_vertices = np.random.choice(n_vertices, sample_size, replace=False)
-                    vertex_map = {old_idx: new_idx for new_idx, old_idx in enumerate(sampled_vertices)}
+                    sampled_vertices = np.random.choice(vertices, sample_size, replace=False)
                     
                     # Filter edges that contain sampled vertices
                     sampled_edges = []
                     for u, v in edges:
-                        if u in vertex_map and v in vertex_map:
-                            sampled_edges.append((vertex_map[u], vertex_map[v]))
+                        if u in sampled_vertices and v in sampled_vertices:
+                            sampled_edges.append((u, v))
                     
+                    vertices = sampled_vertices
                     edges = np.array(sampled_edges)
                     n_vertices = sample_size
                     tqdm.write(f"After sampling: {n_vertices} vertices, {len(edges)} edges")
                 else:
                     if sample_size is None:
                         tqdm.write(f"Using full dataset: {n_vertices} vertices, {len(edges)} edges")
-                
+
                 # Create NetworkX graph for analysis
                 G = nx.Graph()
-                G.add_nodes_from(range(n_vertices))
+                G.add_nodes_from(vertices)
                 G.add_edges_from(edges)
+                G = nx.convert_node_labels_to_integers(G,
+                                                       first_label=0,
+                                                       ordering='default',
+                                                       label_attribute=None)
                 
                 # Basic graph properties
                 density = 2 * len(edges) / (n_vertices * (n_vertices - 1))
