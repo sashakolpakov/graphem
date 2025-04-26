@@ -24,9 +24,9 @@ def print_available_datasets():
     """
     Print information about all available datasets.
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print("Available Real-World Datasets")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     datasets = list_available_datasets()
     
@@ -40,8 +40,9 @@ def print_available_datasets():
     
     # Print by source
     for source, dataset_list in by_source.items():
+        print(f"{'-'*25}")
         print(f"\n{source} Datasets:")
-        print("{'-'*60}")
+        print(f"{'-'*25}")
         
         for dataset_id, info in dataset_list:
             nodes = info.get('nodes', 'Unknown')
@@ -67,9 +68,9 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print(f"Analyzing dataset: {dataset_name}")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     # Load the dataset
     print(f"Loading dataset {dataset_name}...")

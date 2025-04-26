@@ -86,9 +86,9 @@ class BenchmarkRunner:
         
     def run_all_benchmarks(self):
         """Run all available benchmarks."""
-        print("\n{'='*80}")
+        print(f"\n{'='*75}")
         print("Running all Graphem benchmarks")
-        print("{'='*80}")
+        print(f"{'='*75}")
         print(f"Results will be saved to: {self.run_dir}")
         
         # Record start time
@@ -115,9 +115,9 @@ class BenchmarkRunner:
         
     def run_generator_benchmarks(self):
         """Run benchmarks on various graph generators."""
-        print("\n{'-'*80}")
+        print(f"\n{'-'*75}")
         print("Running graph generator benchmarks")
-        print("{'-'*80}")
+        print(f"{'-'*75}")
         
         # Define graph configurations to test
         graph_configs = [
@@ -350,9 +350,9 @@ class BenchmarkRunner:
     
     def run_influence_benchmarks(self):
         """Run influence maximization benchmarks."""
-        print("\n{'-'*80}")
+        print(f"\n{'-'*75}")
         print("Running influence maximization benchmarks")
-        print("{'-'*80}")
+        print(f"{'-'*75}")
         
         # Define graph configurations to test
         graph_configs = [

@@ -39,9 +39,9 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print("\n{'='*50}")
+    print(f"\n{'='*50}")
     print(f"Testing {name} graph")
-    print("{'='*50}")
+    print(f"{'='*50}")
     
     # Generate graph
     edges = generator(**params)

@@ -19,7 +19,6 @@ from loguru import logger
 from tqdm import tqdm
 
 
-
 def get_data_directory():
     """
     Get the data directory for storing downloaded datasets.
