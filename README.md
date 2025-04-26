@@ -103,13 +103,18 @@ corr_matrix = report_full_correlation_matrix(
 )
 ```
 
+## Benchmarking Script
+
+The root directory contain `run_benchmarks.py` that runs all available tests and benchmarks in the library and
+generates nicely formatted result tables in Markdown and LaTeX.
+
 ## Example Scripts
 
 The `examples/` directory contains sample scripts demonstrating different use cases:
 
-- `basic_embedding.py`: Simple graph embedding example
-- `influence_maximization.py`: Seed selection for influence maximization
-- `benchmark.py`: Benchmark different graph models
+- `graph_generator_test.py`: Test script for various graph generators
+- `random_regular_test.py`: Focused test script for random regular graphs
+- `real_world_datasets_test.py`: Test script for working with real-world datasets
 
 ## License
 

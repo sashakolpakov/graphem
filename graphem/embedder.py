@@ -266,7 +266,7 @@ class GraphEmbedder:
                 "color": node_colors if node_colors is not None else 'red',
                 "colorscale": 'Bluered',
                 "size": node_size,
-                "colorbar": {"title": 'Degree'},
+                "colorbar": {"title": 'Node Label'},
                 "showscale": True
             },
             hoverinfo='none'
@@ -325,7 +325,7 @@ class GraphEmbedder:
                 "color": node_colors if node_colors is not None else 'red',
                 "colorscale": 'Bluered',
                 "size": node_size,
-                "colorbar": {"title": 'Degree'},
+                "colorbar": {"title": 'Node Label'},
                 "showscale": True
             },
             hoverinfo='none'

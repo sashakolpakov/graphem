@@ -3,7 +3,7 @@
 Comprehensive benchmark runner for the Graphem library.
 
 This script runs all available tests and benchmarks in the library and
-generates nicely formatted result tables in multiple formats (Markdown, LaTeX).
+generates result tables in multiple formats (Markdown, LaTeX).
 """
 
 import os

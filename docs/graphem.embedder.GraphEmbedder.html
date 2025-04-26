@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>graphem.embedder.GraphEmbedder</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          A graph embedding library based on JAX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="graphem.embedder.GraphEmbedder.html" class="internal-link" title="This class"><wbr></wbr>Graph<wbr></wbr>Embedder</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#compute_intersection_forces_with_knn_index" class="internal-link" title="graphem.embedder.GraphEmbedder.compute_intersection_forces_with_knn_index">compute<wbr></wbr>_intersection<wbr></wbr>_forces<wbr></wbr>_with<wbr></wbr>_knn<wbr></wbr>_index</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#compute_spring_forces" class="internal-link" title="graphem.embedder.GraphEmbedder.compute_spring_forces">compute<wbr></wbr>_spring<wbr></wbr>_forces</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#__init__" class="internal-link" title="graphem.embedder.GraphEmbedder.__init__">__init__</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#display_layout" class="internal-link" title="graphem.embedder.GraphEmbedder.display_layout">display<wbr></wbr>_layout</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#locate_knn_midpoints" class="internal-link" title="graphem.embedder.GraphEmbedder.locate_knn_midpoints">locate<wbr></wbr>_knn<wbr></wbr>_midpoints</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#run_layout" class="internal-link" title="graphem.embedder.GraphEmbedder.run_layout">run<wbr></wbr>_layout</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#update_positions" class="internal-link" title="graphem.embedder.GraphEmbedder.update_positions">update<wbr></wbr>_positions</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_display_layout_2d" class="internal-link" title="graphem.embedder.GraphEmbedder._display_layout_2d">_display<wbr></wbr>_layout<wbr></wbr>_2d</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_display_layout_3d" class="internal-link" title="graphem.embedder.GraphEmbedder._display_layout_3d">_display<wbr></wbr>_layout<wbr></wbr>_3d</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_laplacian_embedding" class="internal-link" title="graphem.embedder.GraphEmbedder._laplacian_embedding">_laplacian<wbr></wbr>_embedding</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#batch_size" class="internal-link" title="graphem.embedder.GraphEmbedder.batch_size">batch<wbr></wbr>_size</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#dimension" class="internal-link" title="graphem.embedder.GraphEmbedder.dimension">dimension</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#edges" class="internal-link" title="graphem.embedder.GraphEmbedder.edges">edges</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#k_attr" class="internal-link" title="graphem.embedder.GraphEmbedder.k_attr">k<wbr></wbr>_attr</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#k_inter" class="internal-link" title="graphem.embedder.GraphEmbedder.k_inter">k<wbr></wbr>_inter</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#knn_k" class="internal-link" title="graphem.embedder.GraphEmbedder.knn_k">knn<wbr></wbr>_k</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#L_min" class="internal-link" title="graphem.embedder.GraphEmbedder.L_min"><wbr></wbr>L_min</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#logger" class="internal-link" title="graphem.embedder.GraphEmbedder.logger">logger</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#n" class="internal-link" title="graphem.embedder.GraphEmbedder.n">n</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#positions" class="internal-link" title="graphem.embedder.GraphEmbedder.positions">positions</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#sample_size" class="internal-link" title="graphem.embedder.GraphEmbedder.sample_size">sample<wbr></wbr>_size</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="graphem.embedder.html" class="internal-link" title="The parent of this class">embedder</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.embedder.GraphEmbedder.html" class="internal-link" title="graphem.embedder.GraphEmbedder"><wbr></wbr>Graph<wbr></wbr>Embedder</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        
+         
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">graphem</a></code><wbr></wbr>.<code><a href="graphem.embedder.html" class="internal-link" title="graphem.embedder">embedder</a></code><wbr></wbr>.<code><a href="graphem.embedder.GraphEmbedder.html" class="internal-link" title="graphem.embedder.GraphEmbedder">GraphEmbedder</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">GraphEmbedder</span>:</code></p><p>Constructor: <code><a href="#__init__" class="internal-link" title="graphem.embedder.GraphEmbedder.__init__">GraphEmbedder(edges, n_vertices, dimension, L_min, ...)</a></code></p>
+          <p><a href="classIndex.html#graphem.embedder.GraphEmbedder">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p class="pre">A class for embedding graphs using the Laplacian embedding.
+
+Attributes:
+        edges: np.ndarray of shape (num_edges, 2)
+            Array of edge pairs (i, j) with i &lt; j.
+        n: int
+            Number of vertices in the graph.
+        dimension: int
+            Dimension of the embedding.
+        L_min: float
+            Minimum length of the spring.
+        k_attr: float
+            Attraction force constant.
+        k_inter: float
+            Repulsion force constant for intersections.
+        knn_k: int
+            Number of nearest neighbors to consider.
+        sample_size: int
+            Number of samples for kNN search.
+        batch_size: int
+            Batch size for kNN search.
+        my_logger: loguru.logger
+            Logger object to use for logging.</p></div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id13">
+  
+  
+  <tr class="staticmethod">
+    
+    <td>Static Method</td>
+    <td><code><a href="#compute_intersection_forces_with_knn_index" class="internal-link" title="graphem.embedder.GraphEmbedder.compute_intersection_forces_with_knn_index">compute<wbr></wbr>_intersection<wbr></wbr>_forces<wbr></wbr>_with<wbr></wbr>_knn<wbr></wbr>_index</a></code></td>
+    <td>Compute the intersection forces between vertices and their nearest neighbors.</td>
+  </tr><tr class="staticmethod">
+    
+    <td>Static Method</td>
+    <td><code><a href="#compute_spring_forces" class="internal-link" title="graphem.embedder.GraphEmbedder.compute_spring_forces">compute<wbr></wbr>_spring<wbr></wbr>_forces</a></code></td>
+    <td>Compute the spring forces between vertices.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__init__" class="internal-link" title="graphem.embedder.GraphEmbedder.__init__">__init__</a></code></td>
+    <td>Initialize the GraphEmbedder.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#display_layout" class="internal-link" title="graphem.embedder.GraphEmbedder.display_layout">display<wbr></wbr>_layout</a></code></td>
+    <td>Display the graph embedding using Plotly.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#locate_knn_midpoints" class="internal-link" title="graphem.embedder.GraphEmbedder.locate_knn_midpoints">locate<wbr></wbr>_knn<wbr></wbr>_midpoints</a></code></td>
+    <td>Locate k nearest neighbors for each midpoint.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#run_layout" class="internal-link" title="graphem.embedder.GraphEmbedder.run_layout">run<wbr></wbr>_layout</a></code></td>
+    <td>Run the layout for a given number of iterations.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#update_positions" class="internal-link" title="graphem.embedder.GraphEmbedder.update_positions">update<wbr></wbr>_positions</a></code></td>
+    <td>Update the positions of the vertices based on the spring forces and intersection forces.</td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#batch_size" class="internal-link" title="graphem.embedder.GraphEmbedder.batch_size">batch<wbr></wbr>_size</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#dimension" class="internal-link" title="graphem.embedder.GraphEmbedder.dimension">dimension</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#edges" class="internal-link" title="graphem.embedder.GraphEmbedder.edges">edges</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#k_attr" class="internal-link" title="graphem.embedder.GraphEmbedder.k_attr">k<wbr></wbr>_attr</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#k_inter" class="internal-link" title="graphem.embedder.GraphEmbedder.k_inter">k<wbr></wbr>_inter</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#knn_k" class="internal-link" title="graphem.embedder.GraphEmbedder.knn_k">knn<wbr></wbr>_k</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#L_min" class="internal-link" title="graphem.embedder.GraphEmbedder.L_min"><wbr></wbr>L_min</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#logger" class="internal-link" title="graphem.embedder.GraphEmbedder.logger">logger</a></code></td>
+    <td>System logger</td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#n" class="internal-link" title="graphem.embedder.GraphEmbedder.n">n</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#positions" class="internal-link" title="graphem.embedder.GraphEmbedder.positions">positions</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#sample_size" class="internal-link" title="graphem.embedder.GraphEmbedder.sample_size">sample<wbr></wbr>_size</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method private">
+    
+    <td>Method</td>
+    <td><code><a href="#_display_layout_2d" class="internal-link" title="graphem.embedder.GraphEmbedder._display_layout_2d">_display<wbr></wbr>_layout<wbr></wbr>_2d</a></code></td>
+    <td>Display a 2D graph embedding using Plotly.</td>
+  </tr><tr class="method private">
+    
+    <td>Method</td>
+    <td><code><a href="#_display_layout_3d" class="internal-link" title="graphem.embedder.GraphEmbedder._display_layout_3d">_display<wbr></wbr>_layout<wbr></wbr>_3d</a></code></td>
+    <td>Display a 3D graph embedding using Plotly.</td>
+  </tr><tr class="method private">
+    
+    <td>Method</td>
+    <td><code><a href="#_laplacian_embedding" class="internal-link" title="graphem.embedder.GraphEmbedder._laplacian_embedding">_laplacian<wbr></wbr>_embedding</a></code></td>
+    <td>Compute the Laplacian embedding of the graph.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basestaticmethod">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.compute_intersection_forces_with_knn_index">
+    
+  </a>
+  <a name="compute_intersection_forces_with_knn_index">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @staticmethod<br />@jit<br />
+    <span class="py-keyword">def</span> <span class="py-defname">compute_intersection_forces_with_knn_index</span><span class="function-signature">(positions, edges, knn_idx, sampled_indices, k_inter)</span>:
+    
+    <a class="headerLink" href="#compute_intersection_forces_with_knn_index" title="graphem.embedder.GraphEmbedder.compute_intersection_forces_with_knn_index">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Compute the intersection forces between vertices and their nearest neighbors.</p></div>
+  </div>
+</div><div class="basestaticmethod">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.compute_spring_forces">
+    
+  </a>
+  <a name="compute_spring_forces">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @staticmethod<br />@jit<br />
+    <span class="py-keyword">def</span> <span class="py-defname">compute_spring_forces</span><span class="function-signature">(positions, edges, L_min, k_attr)</span>:
+    
+    <a class="headerLink" href="#compute_spring_forces" title="graphem.embedder.GraphEmbedder.compute_spring_forces">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Compute the spring forces between vertices.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span><span class="function-signature">(self, edges, n_vertices, dimension=2, L_min=1.0, k_attr=0.2, k_inter=0.5, knn_k=10, sample_size=256, batch_size=1024, my_logger=None, verbose=True)</span>:
+    
+    <a class="headerLink" href="#__init__" title="graphem.embedder.GraphEmbedder.__init__">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Initialize the GraphEmbedder.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.display_layout">
+    
+  </a>
+  <a name="display_layout">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">display_layout</span><span class="function-signature">(self, edge_width=1, node_size=3, node_colors=None)</span>:
+    
+    <a class="headerLink" href="#display_layout" title="graphem.embedder.GraphEmbedder.display_layout">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Display the graph embedding using Plotly.
+
+
+Parameters
+----------
+edge_width : float
+    The width of the edges in the graph embedding.
+node_size : float
+    The size of the nodes in the graph embedding.
+node_colors : array-like of shape (num_vertices,)
+    An array of colors for each vertex.
+
+Returns
+-------
+None
+    Displays the graph embedding using Plotly in the appropriate dimension.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.locate_knn_midpoints">
+    
+  </a>
+  <a name="locate_knn_midpoints">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">locate_knn_midpoints</span><span class="function-signature">(self, midpoints, k)</span>:
+    
+    <a class="headerLink" href="#locate_knn_midpoints" title="graphem.embedder.GraphEmbedder.locate_knn_midpoints">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Locate k nearest neighbors for each midpoint.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.run_layout">
+    
+  </a>
+  <a name="run_layout">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">run_layout</span><span class="function-signature">(self, num_iterations=100)</span>:
+    
+    <a class="headerLink" href="#run_layout" title="graphem.embedder.GraphEmbedder.run_layout">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Run the layout for a given number of iterations.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.update_positions">
+    
+  </a>
+  <a name="update_positions">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">update_positions</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#update_positions" title="graphem.embedder.GraphEmbedder.update_positions">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Update the positions of the vertices based on the spring forces and intersection forces.</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.batch_size">
+    
+  </a>
+  <a name="batch_size">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">batch_size</span> =
+    
+    <a class="headerLink" href="#batch_size" title="graphem.embedder.GraphEmbedder.batch_size">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.dimension">
+    
+  </a>
+  <a name="dimension">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">dimension</span> =
+    
+    <a class="headerLink" href="#dimension" title="graphem.embedder.GraphEmbedder.dimension">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.edges">
+    
+  </a>
+  <a name="edges">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">edges</span> =
+    
+    <a class="headerLink" href="#edges" title="graphem.embedder.GraphEmbedder.edges">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.k_attr">
+    
+  </a>
+  <a name="k_attr">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">k_attr</span> =
+    
+    <a class="headerLink" href="#k_attr" title="graphem.embedder.GraphEmbedder.k_attr">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.k_inter">
+    
+  </a>
+  <a name="k_inter">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">k_inter</span> =
+    
+    <a class="headerLink" href="#k_inter" title="graphem.embedder.GraphEmbedder.k_inter">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.knn_k">
+    
+  </a>
+  <a name="knn_k">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">knn_k</span> =
+    
+    <a class="headerLink" href="#knn_k" title="graphem.embedder.GraphEmbedder.knn_k">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.L_min">
+    
+  </a>
+  <a name="L_min">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">L_min</span> =
+    
+    <a class="headerLink" href="#L_min" title="graphem.embedder.GraphEmbedder.L_min">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.logger">
+    
+  </a>
+  <a name="logger">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">logger</span> =
+    
+    <a class="headerLink" href="#logger" title="graphem.embedder.GraphEmbedder.logger">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>System logger</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.n">
+    
+  </a>
+  <a name="n">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">n</span> =
+    
+    <a class="headerLink" href="#n" title="graphem.embedder.GraphEmbedder.n">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.positions">
+    
+  </a>
+  <a name="positions">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">positions</span> =
+    
+    <a class="headerLink" href="#positions" title="graphem.embedder.GraphEmbedder.positions">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder.sample_size">
+    
+  </a>
+  <a name="sample_size">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">sample_size</span> =
+    
+    <a class="headerLink" href="#sample_size" title="graphem.embedder.GraphEmbedder.sample_size">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="basemethod private">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder._display_layout_2d">
+    
+  </a>
+  <a name="_display_layout_2d">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_display_layout_2d</span><span class="function-signature">(self, edge_width=1, node_size=3, node_colors=None)</span>:
+    
+    <a class="headerLink" href="#_display_layout_2d" title="graphem.embedder.GraphEmbedder._display_layout_2d">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Display a 2D graph embedding using Plotly.
+
+
+Parameters
+----------
+edge_width : float
+    The width of the edges in the graph embedding.
+node_size : float
+    The size of the nodes in the graph embedding.
+node_colors : array-like of shape (num_vertices,)
+    An array of colors for each vertex.
+
+Returns
+-------
+None
+    Displays a Plotly 2D figure with vertices plotted as red markers and edges as gray lines.</p></div>
+  </div>
+</div><div class="basemethod private">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder._display_layout_3d">
+    
+  </a>
+  <a name="_display_layout_3d">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_display_layout_3d</span><span class="function-signature">(self, edge_width=1, node_size=3, node_colors=None)</span>:
+    
+    <a class="headerLink" href="#_display_layout_3d" title="graphem.embedder.GraphEmbedder._display_layout_3d">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Display a 3D graph embedding using Plotly.
+
+
+Parameters
+----------
+edge_width : float
+    The width of the edges in the graph embedding.
+node_size : float
+    The size of the nodes in the graph embedding.
+node_colors : array-like of shape (num_vertices,)
+    An array of colors for each vertex.
+
+Returns
+-------
+None
+    Displays a Plotly 3D figure with vertices plotted as red markers and edges as gray lines.</p></div>
+  </div>
+</div><div class="basemethod private">
+  
+  
+  <a name="graphem.embedder.GraphEmbedder._laplacian_embedding">
+    
+  </a>
+  <a name="_laplacian_embedding">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_laplacian_embedding</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#_laplacian_embedding" title="graphem.embedder.GraphEmbedder._laplacian_embedding">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Compute the Laplacian embedding of the graph.</p></div>
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for A graph embedding library based on JAX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-25 00:38:46.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>

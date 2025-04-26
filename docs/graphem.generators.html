@@ -1,0 +1,1051 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>graphem.generators</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          A graph embedding library based on JAX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code class="thisobject"><a href="graphem.generators.html" class="internal-link" title="This module">generators</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#compute_vertex_degrees" class="internal-link" title="graphem.generators.compute_vertex_degrees">compute<wbr></wbr>_vertex<wbr></wbr>_degrees</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#erdos_renyi_graph" class="internal-link" title="graphem.generators.erdos_renyi_graph">erdos<wbr></wbr>_renyi<wbr></wbr>_graph</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_ba" class="internal-link" title="graphem.generators.generate_ba">generate<wbr></wbr>_ba</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_balanced_tree" class="internal-link" title="graphem.generators.generate_balanced_tree">generate<wbr></wbr>_balanced<wbr></wbr>_tree</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_bipartite_graph" class="internal-link" title="graphem.generators.generate_bipartite_graph">generate<wbr></wbr>_bipartite<wbr></wbr>_graph</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_caveman" class="internal-link" title="graphem.generators.generate_caveman">generate<wbr></wbr>_caveman</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_geometric" class="internal-link" title="graphem.generators.generate_geometric">generate<wbr></wbr>_geometric</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_power_cluster" class="internal-link" title="graphem.generators.generate_power_cluster">generate<wbr></wbr>_power<wbr></wbr>_cluster</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_random_regular" class="internal-link" title="graphem.generators.generate_random_regular">generate<wbr></wbr>_random<wbr></wbr>_regular</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_relaxed_caveman" class="internal-link" title="graphem.generators.generate_relaxed_caveman">generate<wbr></wbr>_relaxed<wbr></wbr>_caveman</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_road_network" class="internal-link" title="graphem.generators.generate_road_network">generate<wbr></wbr>_road<wbr></wbr>_network</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_sbm" class="internal-link" title="graphem.generators.generate_sbm">generate<wbr></wbr>_sbm</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_scale_free" class="internal-link" title="graphem.generators.generate_scale_free">generate<wbr></wbr>_scale<wbr></wbr>_free</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#generate_ws" class="internal-link" title="graphem.generators.generate_ws">generate<wbr></wbr>_ws</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Package</span>
+        <code><a href="index.html" class="internal-link" title="The parent of this module">graphem</a></code> 
+      </div>
+      
+      <div>
+        
+
+        <div class="childrenKindTitle">Modules</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.benchmark.html" class="internal-link" title="graphem.benchmark">benchmark</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html" class="internal-link" title="graphem.datasets">datasets</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.embedder.html" class="internal-link" title="graphem.embedder">embedder</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.generators.html" class="internal-link" title="graphem.generators">generators</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.index.html" class="internal-link" title="graphem.index">index</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.influence.html" class="internal-link" title="graphem.influence">influence</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.visualization.html" class="internal-link" title="graphem.visualization">visualization</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+        
+
+        
+         
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="index.html#__version__" class="internal-link" title="graphem.__version__">__version__</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="module"><code><code><a href="index.html" class="internal-link">graphem</a></code><wbr></wbr>.<code><a href="graphem.generators.html" class="internal-link" title="graphem.generators">generators</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          module documentation
+        </div>
+
+        <div class="extrasDocstring">
+          
+          <p></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Graph generators for Graphem.</p>
+<p>This module provides various functions to generate different types of graphs.</p>
+</div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id14">
+  
+  
+  <tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#compute_vertex_degrees" class="internal-link" title="graphem.generators.compute_vertex_degrees">compute<wbr></wbr>_vertex<wbr></wbr>_degrees</a></code></td>
+    <td>Compute the degree of each vertex from the edge list.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#erdos_renyi_graph" class="internal-link" title="graphem.generators.erdos_renyi_graph">erdos<wbr></wbr>_renyi<wbr></wbr>_graph</a></code></td>
+    <td>Generate a random undirected graph using the Erdős–Rényi G(n, p) model.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_ba" class="internal-link" title="graphem.generators.generate_ba">generate<wbr></wbr>_ba</a></code></td>
+    <td>Generate a Barabási-Albert preferential attachment graph.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_balanced_tree" class="internal-link" title="graphem.generators.generate_balanced_tree">generate<wbr></wbr>_balanced<wbr></wbr>_tree</a></code></td>
+    <td>Generate a balanced r-ary tree of height h.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_bipartite_graph" class="internal-link" title="graphem.generators.generate_bipartite_graph">generate<wbr></wbr>_bipartite<wbr></wbr>_graph</a></code></td>
+    <td>Generate a random bipartite graph.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_caveman" class="internal-link" title="graphem.generators.generate_caveman">generate<wbr></wbr>_caveman</a></code></td>
+    <td>Generate a caveman graph with l cliques of size k.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_geometric" class="internal-link" title="graphem.generators.generate_geometric">generate<wbr></wbr>_geometric</a></code></td>
+    <td>Generate a random geometric graph in a unit cube.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_power_cluster" class="internal-link" title="graphem.generators.generate_power_cluster">generate<wbr></wbr>_power<wbr></wbr>_cluster</a></code></td>
+    <td>Generate a powerlaw cluster graph.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_random_regular" class="internal-link" title="graphem.generators.generate_random_regular">generate<wbr></wbr>_random<wbr></wbr>_regular</a></code></td>
+    <td>Generate a random regular graph where each node has degree d.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_relaxed_caveman" class="internal-link" title="graphem.generators.generate_relaxed_caveman">generate<wbr></wbr>_relaxed<wbr></wbr>_caveman</a></code></td>
+    <td>Generate a relaxed caveman graph with l cliques of size k, and a rewiring probability p.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_road_network" class="internal-link" title="graphem.generators.generate_road_network">generate<wbr></wbr>_road<wbr></wbr>_network</a></code></td>
+    <td>Generate a 2D grid graph representing a road network.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_sbm" class="internal-link" title="graphem.generators.generate_sbm">generate<wbr></wbr>_sbm</a></code></td>
+    <td>Generate a stochastic block model graph.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_scale_free" class="internal-link" title="graphem.generators.generate_scale_free">generate<wbr></wbr>_scale<wbr></wbr>_free</a></code></td>
+    <td>Generate a scale-free graph using Holme and Kim algorithm.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#generate_ws" class="internal-link" title="graphem.generators.generate_ws">generate<wbr></wbr>_ws</a></code></td>
+    <td>Generate a Watts-Strogatz small-world graph.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basefunction">
+  
+  
+  <a name="graphem.generators.compute_vertex_degrees">
+    
+  </a>
+  <a name="compute_vertex_degrees">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">compute_vertex_degrees</span><span class="function-signature">(n, edges)</span>:
+    
+    <a class="headerLink" href="#compute_vertex_degrees" title="graphem.generators.compute_vertex_degrees">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Compute the degree of each vertex from the edge list.
+
+Parameters:
+  n: number of vertices
+  edges: array of shape (num_edges, 2)
+
+Returns:
+  degrees: np.array of shape (n,) with degree of each vertex</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.erdos_renyi_graph">
+    
+  </a>
+  <a name="erdos_renyi_graph">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">erdos_renyi_graph</span><span class="function-signature">(n, p, seed=0)</span>:
+    
+    <a class="headerLink" href="#erdos_renyi_graph" title="graphem.generators.erdos_renyi_graph">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a random undirected graph using the Erdős–Rényi G(n, p) model.
+
+Parameters:
+  n: int
+     Number of vertices.
+  p: float
+     Probability that an edge exists between any pair of vertices.
+  seed: int
+     Random seed for reproducibility.
+
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_ba">
+    
+  </a>
+  <a name="generate_ba">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_ba</span><span class="function-signature">(n=300, m=3, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_ba" title="graphem.generators.generate_ba">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a Barabási-Albert preferential attachment graph.
+
+Parameters:
+  n: int
+     Number of vertices.
+  m: int
+     Number of edges to attach from a new vertex to existing vertices.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_balanced_tree">
+    
+  </a>
+  <a name="generate_balanced_tree">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_balanced_tree</span><span class="function-signature">(r=2, h=10)</span>:
+    
+    <a class="headerLink" href="#generate_balanced_tree" title="graphem.generators.generate_balanced_tree">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a balanced r-ary tree of height h.
+
+Parameters:
+  r: int
+     Branching factor of the tree.
+  h: int
+     Height of the tree.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_bipartite_graph">
+    
+  </a>
+  <a name="generate_bipartite_graph">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_bipartite_graph</span><span class="function-signature">(n_top=50, n_bottom=100)</span>:
+    
+    <a class="headerLink" href="#generate_bipartite_graph" title="graphem.generators.generate_bipartite_graph">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a random bipartite graph.
+
+Parameters:
+  n_top: int
+     Number of vertices in the top set.
+  n_bottom: int
+     Number of vertices in the bottom set.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_caveman">
+    
+  </a>
+  <a name="generate_caveman">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_caveman</span><span class="function-signature">(l=10, k=10)</span>:
+    
+    <a class="headerLink" href="#generate_caveman" title="graphem.generators.generate_caveman">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a caveman graph with l cliques of size k.
+
+Parameters:
+  l: int
+     Number of cliques.
+  k: int
+     Size of each clique.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_geometric">
+    
+  </a>
+  <a name="generate_geometric">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_geometric</span><span class="function-signature">(n=100, radius=0.2, dim=2, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_geometric" title="graphem.generators.generate_geometric">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a random geometric graph in a unit cube.
+
+Parameters:
+  n: int
+     Number of vertices.
+  radius: float
+     Distance threshold for connecting vertices.
+  dim: int
+     Dimension of the space.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_power_cluster">
+    
+  </a>
+  <a name="generate_power_cluster">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_power_cluster</span><span class="function-signature">(n=1000, m=3, p=0.5, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_power_cluster" title="graphem.generators.generate_power_cluster">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a powerlaw cluster graph.
+
+Parameters:
+  n: int
+     Number of vertices.
+  m: int
+     Number of random edges to add per new vertex.
+  p: float
+     Probability of adding a triangle after adding a random edge.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_random_regular">
+    
+  </a>
+  <a name="generate_random_regular">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_random_regular</span><span class="function-signature">(n=100, d=3, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_random_regular" title="graphem.generators.generate_random_regular">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a random regular graph where each node has degree d.
+
+Parameters:
+  n: int
+     Number of vertices.
+  d: int
+     Degree of each vertex.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_relaxed_caveman">
+    
+  </a>
+  <a name="generate_relaxed_caveman">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_relaxed_caveman</span><span class="function-signature">(l=10, k=10, p=0.1, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_relaxed_caveman" title="graphem.generators.generate_relaxed_caveman">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a relaxed caveman graph with l cliques of size k,
+and a rewiring probability p.
+
+Parameters:
+  l: int
+     Number of cliques.
+  k: int
+     Size of each clique.
+  p: float
+     Rewiring probability.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_road_network">
+    
+  </a>
+  <a name="generate_road_network">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_road_network</span><span class="function-signature">(width=30, height=30)</span>:
+    
+    <a class="headerLink" href="#generate_road_network" title="graphem.generators.generate_road_network">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a 2D grid graph representing a road network.
+
+Parameters:
+  width: int
+     Width of the grid.
+  height: int
+     Height of the grid.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_sbm">
+    
+  </a>
+  <a name="generate_sbm">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_sbm</span><span class="function-signature">(n_per_block=75, num_blocks=4, p_in=0.15, p_out=0.01, labels=False, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_sbm" title="graphem.generators.generate_sbm">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a stochastic block model graph.
+
+Parameters:
+  n_per_block: int
+     Number of vertices per block.
+  num_blocks: int
+     Number of blocks.
+  p_in: float
+     Probability of edge within a block.
+  p_out: float
+     Probability of edge between blocks.
+  labels: bool
+     If True, return vertex labels.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.
+  labels: np.ndarray of shape (n,) (only if labels=True)
+     Block labels for each vertex.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_scale_free">
+    
+  </a>
+  <a name="generate_scale_free">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_scale_free</span><span class="function-signature">(n=100, alpha=0.41, beta=0.54, gamma=0.05, delta_in=0.2, delta_out=0, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_scale_free" title="graphem.generators.generate_scale_free">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a scale-free graph using Holme and Kim algorithm.
+
+Parameters:
+  n: int
+     Number of vertices.
+  alpha, beta, gamma, delta_in, delta_out: float
+     Parameters for the scale-free graph generation.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="graphem.generators.generate_ws">
+    
+  </a>
+  <a name="generate_ws">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">generate_ws</span><span class="function-signature">(n=1000, k=6, p=0.3, seed=0)</span>:
+    
+    <a class="headerLink" href="#generate_ws" title="graphem.generators.generate_ws">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="pre">Generate a Watts-Strogatz small-world graph.
+
+Parameters:
+  n: int
+     Number of vertices.
+  k: int
+     Each vertex is connected to k nearest neighbors in ring topology.
+  p: float
+     Probability of rewiring each edge.
+  seed: int
+     Random seed for reproducibility.
+     
+Returns:
+  edges: np.ndarray of shape (num_edges, 2)
+     Array of edge pairs (i, j) with i &lt; j.</p></div>
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for A graph embedding library based on JAX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-25 00:38:46.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
