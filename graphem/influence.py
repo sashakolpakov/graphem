@@ -3,7 +3,6 @@ Influence maximization functionality for Graphem.
 """
 
 import numpy as np
-import networkx as nx
 import ndlib.models.ModelConfig as mc
 import ndlib.models.epidemics as ep
 
@@ -32,7 +31,7 @@ def graphem_seed_selection(embedder, k, num_iterations=20):
     positions = np.array(embedder.positions)
     radial_distances = np.linalg.norm(positions, axis=1)
     
-    # Select the k nodes with highest radial distances
+    # Select the k nodes with the highest radial distances
     seeds = np.argsort(-radial_distances)[:k]
     
     return seeds.tolist()
@@ -48,7 +47,7 @@ def ndlib_estimated_influence(G, seeds, p=0.1, iterations_count=200):
         G: networkx.Graph
             The graph to run influence propagation on
         seeds: list
-            List of seed nodes
+            The list of seed nodes
         p: float
             Propagation probability
         iterations_count: int

@@ -7,40 +7,8 @@ import jax
 import jax.numpy as jnp
 
 
-def _compute_batch_distances(y_batch, x):
-    """
-    Compute the squared distances between a batch of query points and all
-    database points.
-
-    Args:
-        y_batch: (batch_size, d) array of query points
-        x: (n, d) array of database points
-
-    Returns:
-        (batch_size, n) array of squared distances
-    """
-    # Get squared norms for broadcasting
-    x_norms = jnp.sum(jnp.square(x), axis=1)
-    y_norms = jnp.sum(jnp.square(y_batch), axis=1)
-    
-    # Compute distances using ||x-y||^2 = ||x||^2 + ||y||^2 - 2x·y
-    # y_norms[:, None] broadcasts to (batch_size, 1)
-    # x_norms[None, :] broadcasts to (1, n)
-    # The resulting distances will be of shape (batch_size, n)
-    
-    # Matrix multiplication to get dot products
-    dot_products = jnp.dot(y_batch, x.T)
-    
-    # Combine using the distance formula
-    distances = y_norms[:, None] + x_norms[None, :] - 2 * dot_products
-    
-    # Ensure no negative distances due to numerical errors
-    distances = jnp.maximum(distances, 0.0)
-    
-    return distances
-
-
 class HPIndex:
+
     """
     A kernelized kNN index that uses batching / tiling to efficiently handle
     large datasets with limited memory usage.
@@ -87,7 +55,7 @@ class HPIndex:
     @staticmethod
     @partial(jax.jit, static_argnums=(2, 3, 4, 5, 6, 7, 8))
     def _knn_tiled_jit(x, y, k, x_tile_size, y_batch_size,
-                     num_y_batches, y_remainder, num_x_tiles, n_x):
+                       num_y_batches, y_remainder, num_x_tiles, n_x):
         """
         JIT-compiled implementation of tiled KNN with concrete batch parameters.
         """
@@ -183,7 +151,7 @@ class HPIndex:
         )
 
         # Handle y remainder with similar changes if needed
-        if y_remainder > 0:
+        def handle_y_remainder(indices, distances):
             y_start = num_y_batches * y_batch_size
 
             # Get and pad remainder batch
@@ -194,7 +162,7 @@ class HPIndex:
             remainder_indices = jnp.zeros((y_batch_size, k), dtype=jnp.int32)
             remainder_distances = jnp.ones((y_batch_size, k)) * jnp.finfo(jnp.float32).max
 
-            # Process x tiles for the remainder batch
+            # Process x tiles for the remainder batch (with same fix as above)
             def process_x_tile_remainder(carry, x_tile_idx):
                 batch_idx, batch_dist = carry
 
@@ -247,15 +215,49 @@ class HPIndex:
                 jnp.arange(num_x_tiles)
             )
 
-            # Only keep results for valid y remainder points
+            # Extract valid remainder results and update
             valid_remainder_indices = remainder_indices[:y_remainder]
-            
-            # Update the full results with the remainder results
-            all_indices = jax.lax.dynamic_update_slice(
-                all_indices, valid_remainder_indices, (y_start, 0)
-            )
-            all_distances = jax.lax.dynamic_update_slice(
-                all_distances, remainder_distances[:y_remainder], (y_start, 0)
+
+            indices = jax.lax.dynamic_update_slice(
+                indices, valid_remainder_indices, (y_start, 0)
             )
 
-        return all_indices
+            return indices, distances
+
+        # Conditionally handle remainder to avoid issues with remainder=0
+        all_indices, all_distances = jax.lax.cond(
+            y_remainder > 0,
+            lambda args: handle_y_remainder(*args),
+            lambda args: args,
+            (all_indices, all_distances)
+        )
+
+        return all_indices, all_distances
+
+
+# Globally define the _compute_batch_distances function for reuse
+@jax.jit
+def _compute_batch_distances(y_batch, x):
+    """
+    Compute the squared distances between a batch of query points and all
+    database points.
+
+    Args:
+        y_batch: (batch_size, d) array of query points
+        x: (n, d) array of database points
+
+    Returns:
+        (batch_size, n) array of squared distances
+    """
+    # Compute squared norms
+    x_norm = jnp.sum(x**2, axis=1)
+    y_norm = jnp.sum(y_batch**2, axis=1)
+
+    # Compute xy term
+    xy = jnp.dot(y_batch, x.T)
+
+    # Complete squared distance: ||y||² + ||x||² - 2*<y,x>
+    dists2 = y_norm[:, jnp.newaxis] + x_norm[jnp.newaxis, :] - 2 * xy
+    dists2 = jnp.clip(dists2, 0, jnp.finfo(jnp.float32).max)
+
+    return dists2

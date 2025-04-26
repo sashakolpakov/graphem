@@ -4,7 +4,6 @@ Visualization utilities for Graphem.
 
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
 from scipy import stats
 
@@ -91,7 +90,7 @@ def report_full_correlation_matrix(radii, deg, btw, eig, pr, clo, edge_btw, alph
     return corr_matrix
 
 
-def plot_radial_vs_centrality(radii, centralities, names, alpha=0.025):
+def plot_radial_vs_centrality(radii, centralities, names):
     """
     Plot scatter plots of radial distances vs. various centrality measures.
     
@@ -102,8 +101,6 @@ def plot_radial_vs_centrality(radii, centralities, names, alpha=0.025):
             List of centrality measures
         names: list of str
             Names of the centrality measures
-        alpha: float
-            Alpha level for confidence interval
     """
     # Create figure with subplots
     fig = px.scatter(

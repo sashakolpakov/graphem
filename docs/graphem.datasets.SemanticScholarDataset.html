@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>graphem.datasets.SemanticScholarDataset</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          A graph embedding library based on JAX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="graphem.datasets.SemanticScholarDataset.html" class="internal-link" title="This class"><wbr></wbr>Semantic<wbr></wbr>Scholar<wbr></wbr>Dataset</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#__init__" class="internal-link" title="graphem.datasets.SemanticScholarDataset.__init__">__init__</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#download" class="internal-link" title="graphem.datasets.SemanticScholarDataset.download">download</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#is_downloaded" class="internal-link" title="graphem.datasets.SemanticScholarDataset.is_downloaded">is<wbr></wbr>_downloaded</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#load" class="internal-link" title="graphem.datasets.SemanticScholarDataset.load">load</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        <div class="childrenKindTitle">Inherited Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.DatasetLoader.html#info" class="internal-link" title="graphem.datasets.DatasetLoader.info">info</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.DatasetLoader.html#load_as_networkx" class="internal-link" title="graphem.datasets.DatasetLoader.load_as_networkx">load<wbr></wbr>_as<wbr></wbr>_networkx</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#AVAILABLE_DATASETS" class="internal-link" title="graphem.datasets.SemanticScholarDataset.AVAILABLE_DATASETS">AVAILABLE<wbr></wbr>_DATASETS</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#dataset_info" class="internal-link" title="graphem.datasets.SemanticScholarDataset.dataset_info">dataset<wbr></wbr>_info</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#dataset_name" class="internal-link" title="graphem.datasets.SemanticScholarDataset.dataset_name">dataset<wbr></wbr>_name</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#edges_file" class="internal-link" title="graphem.datasets.SemanticScholarDataset.edges_file">edges<wbr></wbr>_file</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#nodes_file" class="internal-link" title="graphem.datasets.SemanticScholarDataset.nodes_file">nodes<wbr></wbr>_file</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#url" class="internal-link" title="graphem.datasets.SemanticScholarDataset.url">url</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        <div class="childrenKindTitle">Inherited Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.DatasetLoader.html#data_dir" class="internal-link" title="graphem.datasets.DatasetLoader.data_dir">data<wbr></wbr>_dir</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.DatasetLoader.html#name" class="internal-link" title="graphem.datasets.DatasetLoader.name">name</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="graphem.datasets.html" class="internal-link" title="The parent of this class">datasets</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.DatasetLoader.html" class="internal-link" title="graphem.datasets.DatasetLoader"><wbr></wbr>Dataset<wbr></wbr>Loader</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.NetworkRepositoryDataset.html" class="internal-link" title="graphem.datasets.NetworkRepositoryDataset"><wbr></wbr>Network<wbr></wbr>Repository<wbr></wbr>Dataset</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.SemanticScholarDataset.html" class="internal-link" title="graphem.datasets.SemanticScholarDataset"><wbr></wbr>Semantic<wbr></wbr>Scholar<wbr></wbr>Dataset</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.SNAPDataset.html" class="internal-link" title="graphem.datasets.SNAPDataset"><wbr></wbr>SNAPDataset</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html#download_file" class="internal-link" title="graphem.datasets.download_file">download<wbr></wbr>_file</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html#extract_file" class="internal-link" title="graphem.datasets.extract_file">extract<wbr></wbr>_file</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html#get_data_directory" class="internal-link" title="graphem.datasets.get_data_directory">get<wbr></wbr>_data<wbr></wbr>_directory</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html#list_available_datasets" class="internal-link" title="graphem.datasets.list_available_datasets">list<wbr></wbr>_available<wbr></wbr>_datasets</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html#load_dataset" class="internal-link" title="graphem.datasets.load_dataset">load<wbr></wbr>_dataset</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="graphem.datasets.html#load_dataset_as_networkx" class="internal-link" title="graphem.datasets.load_dataset_as_networkx">load<wbr></wbr>_dataset<wbr></wbr>_as<wbr></wbr>_networkx</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">graphem</a></code><wbr></wbr>.<code><a href="graphem.datasets.html" class="internal-link" title="graphem.datasets">datasets</a></code><wbr></wbr>.<code><a href="graphem.datasets.SemanticScholarDataset.html" class="internal-link" title="graphem.datasets.SemanticScholarDataset">SemanticScholarDataset</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">SemanticScholarDataset</span>(<a href="graphem.datasets.DatasetLoader.html" class="internal-link" title="graphem.datasets.DatasetLoader">DatasetLoader</a>):</code></p><p>Constructor: <code><a href="#__init__" class="internal-link" title="graphem.datasets.SemanticScholarDataset.__init__">SemanticScholarDataset(dataset_name)</a></code></p>
+          <p><a href="classIndex.html#graphem.datasets.SemanticScholarDataset">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Loader for Semantic Scholar citation network datasets.</p>
+<p>Semantic Scholar is a free, AI-powered research tool for scientific literature. This loader downloads and processes the citation network from subsets of Semantic Scholar data.</p>
+</div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id10">
+  
+  
+  <tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__init__" class="internal-link" title="graphem.datasets.SemanticScholarDataset.__init__">__init__</a></code></td>
+    <td>Initialize the Semantic Scholar dataset loader.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#download" class="internal-link" title="graphem.datasets.SemanticScholarDataset.download">download</a></code></td>
+    <td>Download the Semantic Scholar dataset.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#is_downloaded" class="internal-link" title="graphem.datasets.SemanticScholarDataset.is_downloaded">is<wbr></wbr>_downloaded</a></code></td>
+    <td>Check if the dataset is already downloaded.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#load" class="internal-link" title="graphem.datasets.SemanticScholarDataset.load">load</a></code></td>
+    <td>Load the Semantic Scholar dataset as edges.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
+    <td><code><a href="#AVAILABLE_DATASETS" class="internal-link" title="graphem.datasets.SemanticScholarDataset.AVAILABLE_DATASETS">AVAILABLE<wbr></wbr>_DATASETS</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#dataset_info" class="internal-link" title="graphem.datasets.SemanticScholarDataset.dataset_info">dataset<wbr></wbr>_info</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#dataset_name" class="internal-link" title="graphem.datasets.SemanticScholarDataset.dataset_name">dataset<wbr></wbr>_name</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#edges_file" class="internal-link" title="graphem.datasets.SemanticScholarDataset.edges_file">edges<wbr></wbr>_file</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#nodes_file" class="internal-link" title="graphem.datasets.SemanticScholarDataset.nodes_file">nodes<wbr></wbr>_file</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#url" class="internal-link" title="graphem.datasets.SemanticScholarDataset.url">url</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr>
+</table>
+          
+            <p class="inheritedFrom">
+              Inherited from <code><a href="graphem.datasets.DatasetLoader.html" class="internal-link" title="graphem.datasets.DatasetLoader">DatasetLoader</a></code>:
+            </p>
+            <table class="children sortable" id="id11">
+  
+  
+  <tr class="basemethod">
+    
+    <td>Method</td>
+    <td><code><a href="graphem.datasets.DatasetLoader.html#info" class="internal-link" title="graphem.datasets.DatasetLoader.info">info</a></code></td>
+    <td>Print information about the dataset.</td>
+  </tr><tr class="basemethod">
+    
+    <td>Method</td>
+    <td><code><a href="graphem.datasets.DatasetLoader.html#load_as_networkx" class="internal-link" title="graphem.datasets.DatasetLoader.load_as_networkx">load<wbr></wbr>_as<wbr></wbr>_networkx</a></code></td>
+    <td>Load the dataset as a NetworkX graph.</td>
+  </tr><tr class="baseinstancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="graphem.datasets.DatasetLoader.html#data_dir" class="internal-link" title="graphem.datasets.DatasetLoader.data_dir">data<wbr></wbr>_dir</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="baseinstancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="graphem.datasets.DatasetLoader.html#name" class="internal-link" title="graphem.datasets.DatasetLoader.name">name</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr>
+</table>
+            
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basemethod">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span><span class="function-signature">(self, dataset_name=<span class="rst-variable-quote">'</span><span class="rst-variable-string">s2-CS</span><span class="rst-variable-quote">'</span>)</span>:
+    
+    <a class="headerLink" href="#__init__" title="graphem.datasets.SemanticScholarDataset.__init__">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    <div class="interfaceinfo">overrides <code><a href="graphem.datasets.DatasetLoader.html#__init__" class="internal-link">graphem.datasets.DatasetLoader.__init__</a></code></div>
+    <div><p class="pre">Initialize the Semantic Scholar dataset loader.
+
+Parameters:
+    dataset_name: str
+        Name of the Semantic Scholar dataset to load</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.download">
+    
+  </a>
+  <a name="download">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">download</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#download" title="graphem.datasets.SemanticScholarDataset.download">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    <div class="interfaceinfo">overrides <code><a href="graphem.datasets.DatasetLoader.html#download" class="internal-link">graphem.datasets.DatasetLoader.download</a></code></div>
+    <div><p>Download the Semantic Scholar dataset.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.is_downloaded">
+    
+  </a>
+  <a name="is_downloaded">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">is_downloaded</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#is_downloaded" title="graphem.datasets.SemanticScholarDataset.is_downloaded">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    <div class="interfaceinfo">overrides <code><a href="graphem.datasets.DatasetLoader.html#is_downloaded" class="internal-link">graphem.datasets.DatasetLoader.is_downloaded</a></code></div>
+    <div><p>Check if the dataset is already downloaded.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.load">
+    
+  </a>
+  <a name="load">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">load</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#load" title="graphem.datasets.SemanticScholarDataset.load">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    <div class="interfaceinfo">overrides <code><a href="graphem.datasets.DatasetLoader.html#load" class="internal-link">graphem.datasets.DatasetLoader.load</a></code></div>
+    <div><p class="pre">Load the Semantic Scholar dataset as edges.
+
+Returns:
+    tuple: (edges, n_vertices)
+        edges: np.ndarray of shape (num_edges, 2)
+        n_vertices: int, number of vertices</p></div>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.AVAILABLE_DATASETS">
+    
+  </a>
+  <a name="AVAILABLE_DATASETS">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">AVAILABLE_DATASETS</span>: <code>dict</code> =
+    
+    <a class="headerLink" href="#AVAILABLE_DATASETS" title="graphem.datasets.SemanticScholarDataset.AVAILABLE_DATASETS">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">s2-CS</span><span class="rst-variable-quote">'</span>: {<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">url</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">https://github.com/mattbierbaum/citation-networks/raw/master/</span><span class="rst-variable-linewrap">↵</span>
+<span class="rst-variable-string">s2-CS.tar.gz</span><span class="rst-variable-quote">'</span>,
+           <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">description</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">Computer Science citation network from Semantic Schol</span><span class="rst-variable-linewrap">↵</span>
+<span class="rst-variable-string">ar</span><span class="rst-variable-quote">'</span>,
+           <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">nodes_file</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">s2-CS-nodes.csv</span><span class="rst-variable-quote">'</span>,
+           <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">edges_file</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">s2-CS-citations.csv</span><span class="rst-variable-quote">'</span>}}</code></pre></td></tr></table>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.dataset_info">
+    
+  </a>
+  <a name="dataset_info">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">dataset_info</span> =
+    
+    <a class="headerLink" href="#dataset_info" title="graphem.datasets.SemanticScholarDataset.dataset_info">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.dataset_name">
+    
+  </a>
+  <a name="dataset_name">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">dataset_name</span> =
+    
+    <a class="headerLink" href="#dataset_name" title="graphem.datasets.SemanticScholarDataset.dataset_name">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.edges_file">
+    
+  </a>
+  <a name="edges_file">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">edges_file</span> =
+    
+    <a class="headerLink" href="#edges_file" title="graphem.datasets.SemanticScholarDataset.edges_file">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.nodes_file">
+    
+  </a>
+  <a name="nodes_file">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">nodes_file</span> =
+    
+    <a class="headerLink" href="#nodes_file" title="graphem.datasets.SemanticScholarDataset.nodes_file">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="graphem.datasets.SemanticScholarDataset.url">
+    
+  </a>
+  <a name="url">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">url</span> =
+    
+    <a class="headerLink" href="#url" title="graphem.datasets.SemanticScholarDataset.url">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for A graph embedding library based on JAX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-25 00:38:46.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>

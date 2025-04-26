@@ -7,7 +7,6 @@ with a focus on the random regular graphs and other recently added generators.
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 import networkx as nx
 
 from graphem.embedder import GraphEmbedder
@@ -40,9 +39,9 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print(f"\n{'='*50}")
+    print("\n{'='*50}")
     print(f"Testing {name} graph")
-    print(f"{'='*50}")
+    print("{'='*50}")
     
     # Generate graph
     edges = generator(**params)
@@ -60,19 +59,21 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
     G.add_nodes_from(range(n))
     G.add_edges_from(edges)
     
-    print(f"Graph statistics:")
+    print("Graph statistics:")
     print(f"- Density: {2 * len(edges) / (n * (n - 1)):.4f}")
     print(f"- Average degree: {2 * len(edges) / n:.2f}")
     
     try:
         print(f"- Average shortest path length: {nx.average_shortest_path_length(G):.2f}")
-    except nx.NetworkXError:
-        print("- Average shortest path length: N/A (Disconnected graph)")
+    except nx.NetworkXError as e:
+        print("- Average shortest path length: N/A")
+        print(e)
     
     try:
         print(f"- Average clustering coefficient: {nx.average_clustering(G):.4f}")
-    except:
+    except nx.NetworkXError as e:
         print("- Average clustering coefficient: N/A")
+        print(e)
     
     # Create and run embedder
     embedder = GraphEmbedder(
@@ -93,7 +94,7 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
     
     # Display the graph
     print("Displaying graph layout...")
-    embedder.display_layout(edge_width=0.5, node_size=5)
+    embedder.display_layout(edge_width=1, node_size=5)
     
     return embedder
 

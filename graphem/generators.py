@@ -82,7 +82,6 @@ def generate_sbm(n_per_block=75, num_blocks=4, p_in=0.15, p_out=0.01, labels=Fal
          Block labels for each vertex.
     """
     # Use NetworkX to generate the SBM
-    n = n_per_block * num_blocks
     sizes = [n_per_block] * num_blocks
     p_matrix = np.ones((num_blocks, num_blocks)) * p_out
     np.fill_diagonal(p_matrix, p_in)
@@ -100,8 +99,8 @@ def generate_sbm(n_per_block=75, num_blocks=4, p_in=0.15, p_out=0.01, labels=Fal
         # Generate labels (block IDs for each vertex)
         vertex_labels = np.repeat(np.arange(num_blocks), n_per_block)
         return edges, vertex_labels
-    else:
-        return edges
+
+    return edges
 
 
 def generate_ba(n=300, m=3, seed=0):

@@ -1,6 +1,6 @@
-# Graphem
+# GraphEm
 
-A graph embedding library based on JAX for efficient k-nearest neighbors and influence maximization in networks.
+A graph embedding library based on JAX for efficient centrality measures approximation and influence maximization in networks.
 
 ## Overview
 
@@ -16,47 +16,26 @@ Key features:
 
 ## Installation
 
-### Standard Installation
+At the moment, you can install from the repository only. 
 
 ```bash
-# Install directly from GitHub
-pip install git+https://github.com/igorrivin/graphem.git
-
-# OR clone and install locally
-git clone https://github.com/igorrivin/graphem.git
-cd graphem
-pip install .
+pip install git+https://github.com/sashakolpakov/graphem.git
 ```
 
-### Development Installation
-
-```bash
-git clone https://github.com/igorrivin/graphem.git
-cd graphem
-pip install -e .  # Install in development mode
-pip install -e ".[dev,profiling]"  # Install with development and profiling extras
-```
-
-### Dependencies
-
-All required dependencies will be installed automatically. Key dependencies include:
-- JAX and JAXlib for accelerated computation
-- NetworkX for graph operations
-- Plotly for visualization
-- NumPy and SciPy for numerical operations
+Soon a python package will be made available. 
 
 ## Usage
 
 ### Basic Graph Embedding
 
 ```python
-import numpy as np
 from graphem.generators import erdos_renyi_graph
 from graphem.embedder import GraphEmbedder
 
 # Generate a random graph
-edges = erdos_renyi_graph(n=200, p=0.05)
 n_vertices = 200
+edges = erdos_renyi_graph(n=n_vertices, p=0.05)
+
 
 # Create an embedder
 embedder = GraphEmbedder(
@@ -82,6 +61,8 @@ embedder.display_layout(edge_width=0.5, node_size=5)
 import networkx as nx
 from graphem.influence import graphem_seed_selection, ndlib_estimated_influence
 
+# This is supposed to be added to the previous code (like the above example) ...
+
 # Convert edges to NetworkX graph
 G = nx.Graph()
 G.add_nodes_from(range(n_vertices))
@@ -98,6 +79,7 @@ print(f"Estimated influence: {influence} nodes ({influence/n_vertices:.2%} of th
 ### Benchmarking
 
 ```python
+from graphem.generators import erdos_renyi_graph
 from graphem.benchmark import benchmark_correlations
 from graphem.visualization import report_full_correlation_matrix
 
@@ -121,13 +103,18 @@ corr_matrix = report_full_correlation_matrix(
 )
 ```
 
+## Benchmarking Script
+
+The root directory contain `run_benchmarks.py` that runs all available tests and benchmarks in the library and
+generates nicely formatted result tables in Markdown and LaTeX.
+
 ## Example Scripts
 
 The `examples/` directory contains sample scripts demonstrating different use cases:
 
-- `basic_embedding.py`: Simple graph embedding example
-- `influence_maximization.py`: Seed selection for influence maximization
-- `benchmark.py`: Benchmark different graph models
+- `graph_generator_test.py`: Test script for various graph generators
+- `random_regular_test.py`: Focused test script for random regular graphs
+- `real_world_datasets_test.py`: Test script for working with real-world datasets
 
 ## License
 

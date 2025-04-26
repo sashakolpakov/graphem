@@ -6,7 +6,7 @@ from various sources including SNAP (Stanford Network Analysis Project),
 Network Repository, and other public graph repositories.
 """
 
-import os
+from pathlib import Path
 import gzip
 import shutil
 import tarfile
@@ -17,7 +17,7 @@ import pandas as pd
 import networkx as nx
 from loguru import logger
 from tqdm import tqdm
-from pathlib import Path
+
 
 
 def get_data_directory():
@@ -467,10 +467,9 @@ class NetworkRepositoryDataset(DatasetLoader):
         # Different file formats have different parsing methods
         if file_path.suffix == '.mtx':
             return self._load_mtx_file(file_path)
-        elif file_path.suffix == '.edges':
+        if file_path.suffix == '.edges':
             return self._load_edges_file(file_path)
-        else:
-            raise ValueError(f"Unsupported file format: {file_path.suffix}")
+        raise ValueError(f"Unsupported file format: {file_path.suffix}")
     
     def _load_mtx_file(self, file_path):
         """
@@ -724,26 +723,25 @@ def load_dataset(dataset_name):
             edges: np.ndarray of shape (num_edges, 2)
             n_vertices: int, number of vertices
     """
+    loader = None
     if dataset_name.startswith("snap-"):
         name = dataset_name[5:]  # Remove "snap-" prefix
         loader = SNAPDataset(name)
-    elif dataset_name.startswith("netrepo-"):
+    if dataset_name.startswith("netrepo-"):
         name = dataset_name[8:]  # Remove "netrepo-" prefix
         loader = NetworkRepositoryDataset(name)
-    elif dataset_name.startswith("semanticscholar-"):
+    if dataset_name.startswith("semanticscholar-"):
         name = dataset_name[16:]  # Remove "semanticscholar-" prefix
         loader = SemanticScholarDataset(name)
-    else:
-        # Try to guess the source
-        if dataset_name in SNAPDataset.AVAILABLE_DATASETS:
-            loader = SNAPDataset(dataset_name)
-        elif dataset_name in NetworkRepositoryDataset.AVAILABLE_DATASETS:
-            loader = NetworkRepositoryDataset(dataset_name)
-        elif dataset_name in SemanticScholarDataset.AVAILABLE_DATASETS:
-            loader = SemanticScholarDataset(dataset_name)
-        else:
-            raise ValueError(f"Unknown dataset: {dataset_name}")
-    
+    # Otherwise, try to guess the source
+    if dataset_name in SNAPDataset.AVAILABLE_DATASETS:
+        loader = SNAPDataset(dataset_name)
+    if dataset_name in NetworkRepositoryDataset.AVAILABLE_DATASETS:
+        loader = NetworkRepositoryDataset(dataset_name)
+    if dataset_name in SemanticScholarDataset.AVAILABLE_DATASETS:
+        loader = SemanticScholarDataset(dataset_name)
+    if loader is None:
+        raise ValueError(f"Unknown dataset: {dataset_name}")
     return loader.load()
 
 
