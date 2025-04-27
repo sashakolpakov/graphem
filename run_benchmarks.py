@@ -7,6 +7,7 @@ generates result tables in multiple formats (Markdown, LaTeX).
 """
 
 import os
+from copy import copy
 from pathlib import Path
 import cProfile
 import pstats
@@ -19,7 +20,6 @@ import networkx as nx
 from tqdm import tqdm
 from scipy import stats
 from line_profiler import LineProfiler
-from copy import copy
 
 # For JAX profiling
 try:
