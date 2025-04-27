@@ -136,7 +136,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     # Compute diameter if manageable
     if n_vertices < 10000:
         try:
-            diameter = nx.diameter(G)
+            diameter = nx.diameter(G_cc)
             print(f"- Diameter: {diameter}")
         except nx.NetworkXError as e:
             print("- Diameter: N/A")
@@ -147,7 +147,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     # Compute average shortest path length if manageable
     if n_vertices < 10000:
         try:
-            avg_path_length = nx.average_shortest_path_length(G)
+            avg_path_length = nx.average_shortest_path_length(G_cc)
             print(f"- Average shortest path length: {avg_path_length:.2f}")
         except nx.NetworkXError as e:
             print("- Average shortest path length: N/A")
@@ -156,7 +156,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         print("- Average shortest path length: Skipped (Graph too large)")
     
     # Compute clustering coefficient
-    avg_clustering = nx.average_clustering(G)
+    avg_clustering = nx.average_clustering(G_cc)
     print(f"- Average clustering coefficient: {avg_clustering:.4f}")
     
     # Create and run embedder
@@ -189,34 +189,30 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     radii = np.linalg.norm(positions, axis=1)
     
     # Calculate centrality measures
-    degree = np.array([d for _, d in G.degree()])
+    degree = np.array([d for _, d in G_cc.degree()])
     
     # Only calculate betweenness for smaller graphs
     if n_vertices < 5000:
         print("Calculating betweenness centrality...")
-        betweenness = np.array(list(nx.betweenness_centrality(G).values()))
+        betweenness = np.array(list(nx.betweenness_centrality(G_cc).values()))
     else:
         print("Skipping betweenness centrality (graph too large)")
         betweenness = np.zeros(n_vertices)
     
     print("Calculating eigenvector centrality...")
     try:
-        eigenvector = np.array(list(nx.eigenvector_centrality_numpy(G).values()))
+        eigenvector = np.array(list(nx.eigenvector_centrality_numpy(G_cc).values()))
     except nx.NetworkXError as e:
-        print("Error calculating eigenvector centrality, using zeros")
-        print(e)
-        eigenvector = np.zeros(n_vertices)
-    except nx.AmbiguousSolution as e:
         print("Error calculating eigenvector centrality, using zeros")
         print(e)
         eigenvector = np.zeros(n_vertices)
     
     print("Calculating PageRank...")
-    pagerank = np.array(list(nx.pagerank(G).values()))
+    pagerank = np.array(list(nx.pagerank(G_cc).values()))
     
     print("Calculating closeness centrality...")
     if n_vertices < 5000:
-        closeness = np.array(list(nx.closeness_centrality(G).values()))
+        closeness = np.array(list(nx.closeness_centrality(G_cc).values()))
     else:
         print("Skipping closeness centrality (graph too large)")
         closeness = np.zeros(n_vertices)
@@ -242,7 +238,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     normalized_degree = (degree - np.min(degree)) / (np.max(degree) - np.min(degree) + 1e-10)
     embedder.display_layout(edge_width=1, node_size=5, node_colors=normalized_degree)
     
-    return embedder, G
+    return embedder, G_cc
 
 
 def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
@@ -312,36 +308,48 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         largest_cc = max(nx.connected_components(G), key=len)
         lcc_size = len(largest_cc)
         lcc_fraction = lcc_size / n_vertices
+
+        # Analyze largest connected component
+        G_cc = G
+        if len(largest_cc) < n_vertices:
+            print(f"Extracting largest connected component with {len(largest_cc):,} vertices...")
+            G_cc = G.subgraph(largest_cc).copy()
+
+            # Re-index nodes to be consecutive integers
+            G_cc = nx.convert_node_labels_to_integers(G_cc)
+
+            # Extract edges from the largest component
+            n_vertices = len(largest_cc)
         
         # Compute average shortest path length if manageable
         try:
-            diameter = nx.diameter(G)
+            diameter = nx.diameter(G_cc)
         except nx.NetworkXError as e:
             print("- Diameter: N/A")
             print(e)
             diameter = float('nan')
         
         try:
-            avg_path_length = nx.average_shortest_path_length(G)
+            avg_path_length = nx.average_shortest_path_length(G_cc)
         except nx.NetworkXError as e:
             print("- Average shortest path length: N/A")
             print(e)
             avg_path_length = float('nan')
         
         # Compute clustering coefficient
-        avg_clustering = nx.average_clustering(G)
+        avg_clustering = nx.average_clustering(G_cc)
         
         # Create and run embedder
         embedder = GraphEmbedder(
-            edges=G.edges,
-            n_vertices=G.number_of_nodes(),
+            edges=G_cc.edges,
+            n_vertices=G_cc.number_of_nodes(),
             dimension=dim,
             L_min=10.0,
             k_attr=0.5,
             k_inter=0.1,
-            knn_k=min(15, G.number_of_nodes() // 10),
-            sample_size=min(512, G.number_of_edges()),
-            batch_size=min(1024, G.number_of_nodes()),
+            knn_k=min(15, G_cc.number_of_nodes() // 10),
+            sample_size=min(512, G_cc.number_of_edges()),
+            batch_size=min(1024, G_cc.number_of_nodes()),
             verbose=False
         )
         
