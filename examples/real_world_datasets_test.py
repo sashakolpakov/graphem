@@ -84,15 +84,15 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     # Sample the graph if needed
     if sample_size is not None and sample_size < n_vertices:
         print(f"Sampling {sample_size:,} vertices from the graph...")
-        sampled_vertices = np.random.choice(n_vertices, sample_size, replace=False)
-        vertex_map = {old_idx: new_idx for new_idx, old_idx in enumerate(sampled_vertices)}
+        sampled_vertices = np.random.choice(vertices, sample_size, replace=False)
         
         # Filter edges that contain sampled vertices
         sampled_edges = []
         for u, v in edges:
-            if u in vertex_map and v in vertex_map:
-                sampled_edges.append((vertex_map[u], vertex_map[v]))
+            if u in sampled_vertices and v in sampled_vertices:
+                sampled_edges.append((u, v))
         
+        vertices = sampled_vertices
         edges = np.array(sampled_edges)
         n_vertices = sample_size
         
@@ -121,6 +121,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     print(f"- Largest component size: {len(max(components, key=len)):,} vertices")
     
     # Analyze largest connected component
+    G_cc = G
     largest_cc = max(components, key=len)
     if len(largest_cc) < n_vertices:
         print(f"Extracting largest connected component with {len(largest_cc):,} vertices...")
@@ -130,7 +131,6 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         G_cc = nx.convert_node_labels_to_integers(G_cc)
         
         # Extract edges from the largest component
-        edges = np.array(list(G_cc.edges()))
         n_vertices = len(largest_cc)
     
     # Compute diameter if manageable
@@ -163,15 +163,15 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     print(f"Creating embedding in dimension {dim}...")
     # Create and run embedder
     embedder = GraphEmbedder(
-        edges=G.edges,
-        n_vertices=G.number_of_nodes(),
+        edges=G_cc.edges,
+        n_vertices=G_cc.number_of_nodes(),
         dimension=dim,
         L_min=10.0,
         k_attr=0.5,
         k_inter=0.1,
-        knn_k=min(15, G.number_of_nodes() // 10),
-        sample_size=min(512, G.number_of_edges()),
-        batch_size=min(1024, G.number_of_nodes()),
+        knn_k=min(15, G_cc.number_of_nodes() // 10),
+        sample_size=min(512, G_cc.number_of_edges()),
+        batch_size=min(1024, G_cc.number_of_nodes()),
         verbose=False
     )
     
@@ -281,15 +281,15 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         
         # Sample the graph
         print(f"Sampling {sample_size:,} vertices from the graph...")
-        sampled_vertices = np.random.choice(n_vertices, sample_size, replace=False)
-        vertex_map = {old_idx: new_idx for new_idx, old_idx in enumerate(sampled_vertices)}
+        sampled_vertices = np.random.choice(vertices, sample_size, replace=False)
         
         # Filter edges that contain sampled vertices
         sampled_edges = []
         for u, v in edges:
-            if u in vertex_map and v in vertex_map:
-                sampled_edges.append((vertex_map[u], vertex_map[v]))
-        
+            if u in sampled_vertices and v in sampled_vertices:
+                sampled_edges.append((u, v))
+
+        vertices = sampled_vertices
         edges = np.array(sampled_edges)
         n_vertices = sample_size
         
@@ -297,7 +297,7 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         
         # Create NetworkX graph for analysis
         G = nx.Graph()
-        G.add_nodes_from(n_vertices)
+        G.add_nodes_from(vertices)
         G.add_edges_from(edges)
         G = nx.convert_node_labels_to_integers(G,
                                                first_label=0,
@@ -400,10 +400,10 @@ def main():
     print_available_datasets()
     
     # Analyze a small social network dataset
-    analyze_dataset('snap-facebook_combined', dim=3, num_iterations=50)
+    analyze_dataset('snap-facebook_combined', sample_size=None, dim=3, num_iterations=50)
     
     # Analyze a medium-sized dataset with sampling
-    analyze_dataset('snap-ca-GrQc', sample_size=1000, dim=3, num_iterations=30)
+    analyze_dataset('snap-ca-GrQc', sample_size=2500, dim=3, num_iterations=30)
     
     # Compare multiple datasets
     compare_datasets([
