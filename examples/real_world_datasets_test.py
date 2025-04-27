@@ -263,16 +263,16 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print("Comparing Multiple Datasets")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     results = []
     
     for dataset_name in dataset_names:
-        print("\n{'-'*60}")
+        print(f"\n{'-'*25}")
         print(f"Dataset: {dataset_name}")
-        print("{'-'*60}")
+        print(f"{'-'*25}")
         
         # Load the dataset
         print(f"Loading dataset {dataset_name}...")
