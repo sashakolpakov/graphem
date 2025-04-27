@@ -161,17 +161,18 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     
     # Create and run embedder
     print(f"Creating embedding in dimension {dim}...")
+    # Create and run embedder
     embedder = GraphEmbedder(
-        edges=edges,
-        n_vertices=n_vertices,
+        edges=G.edges,
+        n_vertices=G.number_of_nodes(),
         dimension=dim,
         L_min=10.0,
         k_attr=0.5,
         k_inter=0.1,
-        knn_k=min(15, n_vertices // 10),
-        sample_size=min(512, len(edges)),
-        batch_size=min(1024, n_vertices),
-        verbose=True
+        knn_k=min(15, G.number_of_nodes() // 10),
+        sample_size=min(512, G.number_of_edges()),
+        batch_size=min(1024, G.number_of_nodes()),
+        verbose=False
     )
     
     print(f"Running layout for {num_iterations} iterations...")
@@ -332,15 +333,15 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         
         # Create and run embedder
         embedder = GraphEmbedder(
-            edges=edges,
-            n_vertices=n_vertices,
+            edges=G.edges,
+            n_vertices=G.number_of_nodes(),
             dimension=dim,
             L_min=10.0,
             k_attr=0.5,
             k_inter=0.1,
-            knn_k=min(15, n_vertices // 10),
-            sample_size=min(512, len(edges)),
-            batch_size=min(1024, n_vertices),
+            knn_k=min(15, G.number_of_nodes() // 10),
+            sample_size=min(512, G.number_of_edges()),
+            batch_size=min(1024, G.number_of_nodes()),
             verbose=False
         )
         
