@@ -37,9 +37,9 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         num_iterations: int
             Number of layout iterations
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print(f"Testing Random Regular Graphs with Varying Degrees (n={n})")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     results = []
 
@@ -47,9 +47,9 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         degrees = [3, 4, 5, 6]
     
     for d in degrees:
-        print("\n{'-'*60}")
+        print(f"\n{'-'*25}")
         print(f"Random Regular Graph with degree d={d}")
-        print("{'-'*60}")
+        print(f"{'-'*25}")
         
         # Generate graph
         start_time = time.time()
@@ -200,9 +200,9 @@ def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations
         num_iterations: int
             Number of layout iterations
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print(f"Testing Random Regular Graphs with Varying Sizes (d={degree})")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     results = []
 
@@ -210,9 +210,9 @@ def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations
         sizes = [50, 100, 200, 500]
     
     for n in sizes:
-        print("\n{'-'*60}")
+        print(f"\n{'-'*25}")
         print(f"Random Regular Graph with size n={n}")
-        print("{'-'*60}")
+        print(f"{'-'*25}")
         
         # Generate graph
         start_time = time.time()
@@ -331,9 +331,9 @@ def compare_with_benchmark():
     """
     Compare random regular graphs with other graph types using the benchmark module.
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print("Comparing Random Regular Graphs with Other Graph Types")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     # Define parameters for each graph type to test
     graph_configs = [
@@ -347,9 +347,9 @@ def compare_with_benchmark():
     benchmark_results = []
     
     for generator, params, name in graph_configs:
-        print("\n{'-'*60}")
+        print(f"\n{'-'*25}")
         print(f"Benchmarking {name} graph")
-        print("{'-'*60}")
+        print(f"{'-'*25}")
         
         # Run benchmark
         result = run_benchmark(

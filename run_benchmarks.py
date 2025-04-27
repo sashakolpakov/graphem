@@ -7,6 +7,7 @@ generates result tables in multiple formats (Markdown, LaTeX).
 """
 
 import os
+from copy import copy
 from pathlib import Path
 import cProfile
 import pstats
@@ -86,9 +87,9 @@ class BenchmarkRunner:
         
     def run_all_benchmarks(self):
         """Run all available benchmarks."""
-        print("\n{'='*80}")
+        print(f"\n{'='*75}")
         print("Running all Graphem benchmarks")
-        print("{'='*80}")
+        print(f"{'='*75}")
         print(f"Results will be saved to: {self.run_dir}")
         
         # Record start time
@@ -115,9 +116,9 @@ class BenchmarkRunner:
         
     def run_generator_benchmarks(self):
         """Run benchmarks on various graph generators."""
-        print("\n{'-'*80}")
+        print(f"\n{'-'*75}")
         print("Running graph generator benchmarks")
-        print("{'-'*80}")
+        print(f"{'-'*75}")
         
         # Define graph configurations to test
         graph_configs = [
@@ -163,10 +164,9 @@ class BenchmarkRunner:
             
             # For correlation analysis, compute and save key correlations
             corr_results = {}
-            for measure in ['degree', 'betweenness', 'eigenvector', 'pagerank', 'closeness', 'edge_betweenness']:
+            for measure in ['degree', 'betweenness', 'eigenvector', 'pagerank', 'closeness', 'node_load']:
                 if measure in result and 'radii' in result:
 
-                    
                     # Check if the measure is constant (which happens with degree for regular graphs)
                     values = result[measure]
                     if np.all(values == values[0]):
@@ -213,35 +213,41 @@ class BenchmarkRunner:
             
             try:
                 # Load the dataset
-                edges, n_vertices = load_dataset(dataset_name)
+                vertices, edges = load_dataset(dataset_name)
                 
                 # Record original size
-                original_size = n_vertices
+                original_size = len(vertices)
                 original_edges = len(edges)
+
+                n_vertices = copy(original_size)
                 
                 # Sample if needed and if subsample_size is provided
                 if sample_size is not None and n_vertices > sample_size:
                     tqdm.write(f"Sampling {sample_size} vertices from {n_vertices}...")
-                    sampled_vertices = np.random.choice(n_vertices, sample_size, replace=False)
-                    vertex_map = {old_idx: new_idx for new_idx, old_idx in enumerate(sampled_vertices)}
+                    sampled_vertices = np.random.choice(vertices, sample_size, replace=False)
                     
                     # Filter edges that contain sampled vertices
                     sampled_edges = []
                     for u, v in edges:
-                        if u in vertex_map and v in vertex_map:
-                            sampled_edges.append((vertex_map[u], vertex_map[v]))
+                        if u in sampled_vertices and v in sampled_vertices:
+                            sampled_edges.append((u, v))
                     
+                    vertices = sampled_vertices
                     edges = np.array(sampled_edges)
                     n_vertices = sample_size
                     tqdm.write(f"After sampling: {n_vertices} vertices, {len(edges)} edges")
                 else:
                     if sample_size is None:
                         tqdm.write(f"Using full dataset: {n_vertices} vertices, {len(edges)} edges")
-                
+
                 # Create NetworkX graph for analysis
                 G = nx.Graph()
-                G.add_nodes_from(range(n_vertices))
+                G.add_nodes_from(vertices)
                 G.add_edges_from(edges)
+                G = nx.convert_node_labels_to_integers(G,
+                                                       first_label=0,
+                                                       ordering='default',
+                                                       label_attribute=None)
                 
                 # Basic graph properties
                 density = 2 * len(edges) / (n_vertices * (n_vertices - 1))
@@ -350,9 +356,9 @@ class BenchmarkRunner:
     
     def run_influence_benchmarks(self):
         """Run influence maximization benchmarks."""
-        print("\n{'-'*80}")
+        print(f"\n{'-'*75}")
         print("Running influence maximization benchmarks")
-        print("{'-'*80}")
+        print(f"{'-'*75}")
         
         # Define graph configurations to test
         graph_configs = [

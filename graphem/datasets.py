@@ -19,7 +19,6 @@ from loguru import logger
 from tqdm import tqdm
 
 
-
 def get_data_directory():
     """
     Get the data directory for storing downloaded datasets.
@@ -153,12 +152,16 @@ class DatasetLoader:
         Returns:
             networkx.Graph: The loaded graph
         """
-        edges, n_vertices = self.load()
+        edges, vertices = self.load()
         
         # Create a NetworkX graph
         G = nx.Graph()
-        G.add_nodes_from(range(n_vertices))
+        G.add_nodes_from(vertices)
         G.add_edges_from(edges)
+        G = nx.convert_node_labels_to_integers(G,
+                                               first_label=0,
+                                               ordering='default',
+                                               label_attribute=None)
         
         return G
     
@@ -170,7 +173,8 @@ class DatasetLoader:
             print(f"Dataset '{self.name}' is not downloaded yet.")
             return
         
-        edges, n_vertices = self.load()
+        vertices, edges = self.load()
+        n_vertices = len(vertices)
         n_edges = len(edges)
         
         print(f"Dataset: {self.name}")
@@ -304,9 +308,9 @@ class SNAPDataset(DatasetLoader):
         Load the SNAP dataset as edges.
         
         Returns:
-            tuple: (edges, n_vertices)
+            tuple: (vertices, edges)
+                vertices: np.ndarray of shape (num_vertices,)
                 edges: np.ndarray of shape (num_edges, 2)
-                n_vertices: int, number of vertices
         """
         if not self.is_downloaded():
             self.download()
@@ -347,10 +351,10 @@ class SNAPDataset(DatasetLoader):
             mask = unique_edges[:, 0] < unique_edges[:, 1]
             edges = unique_edges[mask]
         
-        # Calculate number of vertices
-        n_vertices = max(np.max(edges[:, 0]), np.max(edges[:, 1])) + 1
+        # Extract vertices from edges
+        vertices = np.unique(edges.flatten())
         
-        return edges, n_vertices
+        return vertices, edges
 
 
 class NetworkRepositoryDataset(DatasetLoader):
@@ -427,36 +431,43 @@ class NetworkRepositoryDataset(DatasetLoader):
         
         # Extract the file
         extract_file(download_path, self.data_dir)
-    
+
     def is_downloaded(self):
         """
-        Check if the dataset is already downloaded.
+        Check if the expected dataset file exists without scanning the whole tree.
+
+        Returns:
+            bool: True if the expected file exists, False otherwise
         """
-        # Find the pattern file after extraction
-        for file in self.data_dir.glob(f"**/{self.file_pattern}"):
-            return True
-        return False
-    
+        expected_path = self.data_dir / self.file_pattern
+        return expected_path.exists()
+
     def _find_data_file(self):
         """
         Find the data file after extraction.
-        
+
         Returns:
             Path: Path to the data file
         """
-        for file in self.data_dir.glob(f"**/{self.file_pattern}"):
-            return file
-        
-        raise FileNotFoundError(f"Could not find data file matching pattern {self.file_pattern} in {self.data_dir}")
-    
+        matches = list(self.data_dir.glob(f"**/{self.file_pattern}"))
+        if not matches:
+            raise FileNotFoundError(
+                f"Could not find data file matching pattern {self.file_pattern} in {self.data_dir}"
+            )
+        if len(matches) > 1:
+            raise RuntimeError(
+                f"Multiple files matched {self.file_pattern} in {self.data_dir}: {matches}"
+            )
+        return matches[0]
+
     def load(self):
         """
         Load the Network Repository dataset as edges.
         
         Returns:
-            tuple: (edges, n_vertices)
+            tuple: (vertices, edges)
+                vertices: np.ndarray of shape (num_vertices,)
                 edges: np.ndarray of shape (num_edges, 2)
-                n_vertices: int, number of vertices
         """
         if not self.is_downloaded():
             self.download()
@@ -480,19 +491,16 @@ class NetworkRepositoryDataset(DatasetLoader):
                 Path to the .mtx file
         
         Returns:
-            tuple: (edges, n_vertices)
+            tuple: (vertices, edges)
         """
         edges = []
-        n_vertices = 0
         
         with open(file_path, 'r') as f:
             # Skip comments
             for line in f:
                 if not line.startswith('%'):
                     # First non-comment line has matrix dimensions
-                    parts = line.strip().split()
-                    if len(parts) >= 2:
-                        n_vertices = int(parts[0])
+                    # We need the edge data only, so we skip it
                     break
             
             # Read edge data
@@ -505,6 +513,9 @@ class NetworkRepositoryDataset(DatasetLoader):
         
         # Convert to numpy array
         edges = np.array(edges)
+
+        # Extract unique vertices from edges
+        vertices = np.unique(edges.flatten())
         
         # Make undirected if needed
         if not self.is_directed:
@@ -515,7 +526,7 @@ class NetworkRepositoryDataset(DatasetLoader):
             mask = unique_edges[:, 0] < unique_edges[:, 1]
             edges = unique_edges[mask]
         
-        return edges, n_vertices
+        return vertices, edges
     
     def _load_edges_file(self, file_path):
         """
@@ -526,7 +537,7 @@ class NetworkRepositoryDataset(DatasetLoader):
                 Path to the edges file
         
         Returns:
-            tuple: (edges, n_vertices)
+            tuple: (vertices, edges)
         """
         edges = []
         
@@ -545,6 +556,9 @@ class NetworkRepositoryDataset(DatasetLoader):
         
         # Convert to numpy array
         edges = np.array(edges)
+
+        # Extract unique vertices from edges
+        vertices = np.unique(edges.flatten())
         
         # Make undirected if needed
         if not self.is_directed:
@@ -555,10 +569,7 @@ class NetworkRepositoryDataset(DatasetLoader):
             mask = unique_edges[:, 0] < unique_edges[:, 1]
             edges = unique_edges[mask]
         
-        # Calculate number of vertices
-        n_vertices = max(np.max(edges[:, 0]), np.max(edges[:, 1])) + 1
-        
-        return edges, n_vertices
+        return vertices, edges
 
 
 class SemanticScholarDataset(DatasetLoader):
@@ -626,9 +637,9 @@ class SemanticScholarDataset(DatasetLoader):
         Load the Semantic Scholar dataset as edges.
         
         Returns:
-            tuple: (edges, n_vertices)
+            tuple: (vertices, edges)
+                vertices: np.ndarray of shape (num_vertices,)
                 edges: np.ndarray of shape (num_edges, 2)
-                n_vertices: int, number of vertices
         """
         if not self.is_downloaded():
             self.download()
@@ -639,7 +650,6 @@ class SemanticScholarDataset(DatasetLoader):
         
         # Create a mapping from paper IDs to indices
         paper_to_idx = {paper_id: idx for idx, paper_id in enumerate(nodes_df['id'])}
-        n_vertices = len(paper_to_idx)
         
         # Load the edges file
         edges_path = self.data_dir / self.edges_file
@@ -659,6 +669,9 @@ class SemanticScholarDataset(DatasetLoader):
         
         # Convert to numpy array
         edges = np.array(edges)
+
+        # Extract unique vertices from edges
+        vertices = np.unique(edges.flatten())
         
         # Make undirected by keeping only edges where source < target
         reversed_edges = edges[:, [1, 0]]
@@ -667,7 +680,7 @@ class SemanticScholarDataset(DatasetLoader):
         mask = unique_edges[:, 0] < unique_edges[:, 1]
         edges = unique_edges[mask]
         
-        return edges, n_vertices
+        return vertices, edges
 
 
 def list_available_datasets():
@@ -719,9 +732,9 @@ def load_dataset(dataset_name):
             Name of the dataset to load
     
     Returns:
-        tuple: (edges, n_vertices)
+        tuple: (vertices, edges)
+            vertices: np.ndarray of shape (num_vertices,)
             edges: np.ndarray of shape (num_edges, 2)
-            n_vertices: int, number of vertices
     """
     loader = None
     if dataset_name.startswith("snap-"):
@@ -756,10 +769,14 @@ def load_dataset_as_networkx(dataset_name):
     Returns:
         networkx.Graph: The loaded graph
     """
-    edges, n_vertices = load_dataset(dataset_name)
+    vertices, edges = load_dataset(dataset_name)
     
     G = nx.Graph()
-    G.add_nodes_from(range(n_vertices))
+    G.add_nodes_from(vertices)
     G.add_edges_from(edges)
+    G = nx.convert_node_labels_to_integers(G,
+                                           first_label=0,
+                                           ordering='default',
+                                           label_attribute=None)
     
     return G

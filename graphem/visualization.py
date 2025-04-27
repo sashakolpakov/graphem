@@ -49,7 +49,7 @@ def report_corr(name, radii, centrality, alpha=0.025):
     return rho, p_value
 
 
-def report_full_correlation_matrix(radii, deg, btw, eig, pr, clo, edge_btw, alpha=0.025):
+def report_full_correlation_matrix(radii, deg, btw, eig, pr, clo, nload, alpha=0.025):
     """
     Calculate and report correlations between radial distances and various centrality measures.
     
@@ -72,7 +72,7 @@ def report_full_correlation_matrix(radii, deg, btw, eig, pr, clo, edge_btw, alph
         'Eigenvector': eig,
         'PageRank': pr,
         'Closeness': clo,
-        'Edge Betweenness': edge_btw
+        'Node Load': nload
     })
     
     # Calculate correlation matrix
@@ -85,7 +85,7 @@ def report_full_correlation_matrix(radii, deg, btw, eig, pr, clo, edge_btw, alph
     report_corr("Eigenvector", radii, eig, alpha)
     report_corr("PageRank", radii, pr, alpha)
     report_corr("Closeness", radii, clo, alpha)
-    report_corr("Edge Betweenness", radii, edge_btw, alpha)
+    report_corr("Node Load", radii, nload, alpha)
     
     return corr_matrix
 

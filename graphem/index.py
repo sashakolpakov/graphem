@@ -1,5 +1,5 @@
 """
-A JAX-based implementation for efficient k-nearest neighbors.
+A JAX-based implementation of efficient k-nearest neighbors.
 """
 
 from functools import partial

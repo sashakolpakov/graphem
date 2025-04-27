@@ -7,7 +7,7 @@ For modern Python packaging, pyproject.toml is the recommended approach.
 
 from setuptools import setup, find_packages
 
-# Read requirements from requirements.txt
+# Install requirements
 required = ["jax>=0.3.0",
             "jaxlib>=0.3.0",
             "numpy>=1.21.0",
@@ -23,11 +23,12 @@ required = ["jax>=0.3.0",
             "snakeviz>=2.2.0",
             "tensorboard>=2.10.0",
             "tqdm>=4.66.0",
-            "pyinstrument>=5.0.0"]
+            "pyinstrument>=5.0.0",
+            "tabulate>=0.9.0"]
 
 setup(
     name="graphem-jax",
-    version="0.0.1.post1",
+    version="0.0.1.post2",
     description="A graph embedding library based on JAX",
     author="Igor Rivin, Alexander Kolpakov",
     packages=find_packages(),
