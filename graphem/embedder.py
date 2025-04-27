@@ -1,3 +1,7 @@
+"""
+A JAX-based implementation of graph embedding.
+"""
+
 import sys
 import os
 import numpy as np

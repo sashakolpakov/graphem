@@ -431,28 +431,35 @@ class NetworkRepositoryDataset(DatasetLoader):
         
         # Extract the file
         extract_file(download_path, self.data_dir)
-    
+
     def is_downloaded(self):
         """
-        Check if the dataset is already downloaded.
+        Check if the expected dataset file exists without scanning the whole tree.
+
+        Returns:
+            bool: True if the expected file exists, False otherwise
         """
-        # Find the pattern file after extraction
-        for file in self.data_dir.glob(f"**/{self.file_pattern}"):
-            return True
-        return False
-    
+        expected_path = self.data_dir / self.file_pattern
+        return expected_path.exists()
+
     def _find_data_file(self):
         """
         Find the data file after extraction.
-        
+
         Returns:
             Path: Path to the data file
         """
-        for file in self.data_dir.glob(f"**/{self.file_pattern}"):
-            return file
-        
-        raise FileNotFoundError(f"Could not find data file matching pattern {self.file_pattern} in {self.data_dir}")
-    
+        matches = list(self.data_dir.glob(f"**/{self.file_pattern}"))
+        if not matches:
+            raise FileNotFoundError(
+                f"Could not find data file matching pattern {self.file_pattern} in {self.data_dir}"
+            )
+        if len(matches) > 1:
+            raise RuntimeError(
+                f"Multiple files matched {self.file_pattern} in {self.data_dir}: {matches}"
+            )
+        return matches[0]
+
     def load(self):
         """
         Load the Network Repository dataset as edges.
@@ -493,9 +500,7 @@ class NetworkRepositoryDataset(DatasetLoader):
             for line in f:
                 if not line.startswith('%'):
                     # First non-comment line has matrix dimensions
-                    parts = line.strip().split()
-                    if len(parts) >= 2:
-                        n_vertices = int(parts[0])
+                    # We need the edge data only, so we skip it
                     break
             
             # Read edge data
