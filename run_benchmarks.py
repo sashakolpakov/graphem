@@ -164,10 +164,9 @@ class BenchmarkRunner:
             
             # For correlation analysis, compute and save key correlations
             corr_results = {}
-            for measure in ['degree', 'betweenness', 'eigenvector', 'pagerank', 'closeness', 'edge_betweenness']:
+            for measure in ['degree', 'betweenness', 'eigenvector', 'pagerank', 'closeness', 'node_load']:
                 if measure in result and 'radii' in result:
 
-                    
                     # Check if the measure is constant (which happens with degree for regular graphs)
                     values = result[measure]
                     if np.all(values == values[0]):

@@ -216,6 +216,14 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     else:
         print("Skipping closeness centrality (graph too large)")
         closeness = np.zeros(n_vertices)
+
+    # Only calculate node load for smaller graphs
+    if n_vertices < 5000:
+        print("Calculating node load centrality...")
+        node_load = np.array(list(nx.load_centrality(G_cc).values()))
+    else:
+        print("Skipping node load centrality (graph too large)")
+        node_load = np.zeros(n_vertices)
     
     # Display correlation with radial distances
     print("\nCorrelation between embedding radii and centrality measures:")
@@ -226,7 +234,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         eigenvector,
         pagerank,
         closeness,
-        np.zeros_like(radii)  # placeholder for edge betweenness
+        node_load
     )
     
     # Display the graph
@@ -409,9 +417,9 @@ def main():
     
     # Analyze a small social network dataset
     analyze_dataset('snap-facebook_combined', sample_size=None, dim=3, num_iterations=50)
-    
+
     # Analyze a medium-sized dataset with sampling
-    analyze_dataset('snap-ca-GrQc', sample_size=2500, dim=3, num_iterations=30)
+    analyze_dataset('snap-ca-GrQc', sample_size=3500, dim=3, num_iterations=30)
     
     # Compare multiple datasets
     compare_datasets([
@@ -419,7 +427,7 @@ def main():
         'snap-ca-GrQc',
         'snap-ca-HepTh',
         'snap-wiki-vote'
-    ], sample_size=500, dim=3, num_iterations=20)
+    ], sample_size=1500, dim=3, num_iterations=20)
 
 
 if __name__ == "__main__":
