@@ -304,7 +304,7 @@ class BenchmarkRunner:
                 with tqdm(total=2, desc="Centrality Measures", leave=False) as pbar:
                     positions = np.array(embedder.positions)
                     radii = np.linalg.norm(positions, axis=1)
-                    degree = np.array([d for _, d in G.degree()])
+                    degree = np.array([d for _, d in G_cc.degree()])
                     pbar.update(1)
                     
                     # Try to calculate other centrality measures if graph is small enough
