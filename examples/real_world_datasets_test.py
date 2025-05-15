@@ -327,6 +327,7 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
             G_cc = nx.convert_node_labels_to_integers(G_cc)
 
             # Extract edges from the largest component
+            edges = G_cc.edges
             n_vertices = len(largest_cc)
         
         # Compute average shortest path length if manageable
@@ -349,15 +350,15 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         
         # Create and run embedder
         embedder = GraphEmbedder(
-            edges=G_cc.edges,
-            n_vertices=G_cc.number_of_nodes(),
+            edges=edges,
+            n_vertices=n_vertices,
             dimension=dim,
             L_min=4.0,
             k_attr=0.5,
             k_inter=0.1,
-            knn_k=min(15, G_cc.number_of_nodes() // 10),
-            sample_size=min(512, G_cc.number_of_edges()),
-            batch_size=min(1024, G_cc.number_of_nodes()),
+            knn_k=min(15, n_vertices // 10),
+            sample_size=min(512, len(edges)),
+            batch_size=min(1024, len(edges)),
             verbose=False
         )
         
