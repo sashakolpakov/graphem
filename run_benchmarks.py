@@ -950,7 +950,7 @@ class BenchmarkRunner:
         print(f"Summary report saved to {summary_path}")
 
 
-def main():
+def main(argv=None):
     """Main function to parse arguments and run benchmarks."""
     parser = argparse.ArgumentParser(description="Run Graphem benchmarks")
     
@@ -992,8 +992,12 @@ def main():
         action="store_true",
         help="Run with JAX profiling for GPU operations (requires JAX, outputs to profile_jax directory)"
     )
-    
-    args = parser.parse_args()
+
+    # If imported and called (argv=None & not __main__), use defaults
+    if argv is None and __name__ != "__main__":
+        args = parser.parse_args([])
+    else:
+        args = parser.parse_args(argv)
     
     # Create benchmark runner
     runner = BenchmarkRunner(output_dir=args.output, formats=args.formats, subsample_size=args.subsample)
