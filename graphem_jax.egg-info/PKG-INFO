@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
 Name: graphem-jax
-Version: 0.0.1.post2
+Version: 0.0.2
 Summary: A graph embedding library based on JAX
-Author: Igor Rivin, Alexander Kolpakov
+Author: Alexander Kolpakov, Igor Rivin
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent

@@ -101,8 +101,8 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
         k_attr=k_attr,
         k_inter=k_inter,
         knn_k=knn_k,
-        sample_size=sample_size,
-        batch_size=batch_size,
+        sample_size=min(sample_size, len(edges)),
+        batch_size=min(batch_size, n),
         verbose=True
     )
     

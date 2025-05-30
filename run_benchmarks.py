@@ -173,7 +173,7 @@ class BenchmarkRunner:
                         # All values are the same - correlation is undefined
                         corr_results[f'{measure}_corr'] = np.nan
                         corr_results[f'{measure}_p'] = np.nan
-                        tqdm.write(f"  {measure} centrality is constant - correlation is not applicable")
+                        tqdm.write(f"\n{measure} centrality is constant - correlation is not applicable")
                     else:
                         # Calculate correlation normally
                         corr, p_val = stats.spearmanr(result['radii'], values)
@@ -223,7 +223,7 @@ class BenchmarkRunner:
                 
                 # Sample if needed and if subsample_size is provided
                 if sample_size is not None and n_vertices > sample_size:
-                    tqdm.write(f"Sampling {sample_size} vertices from {n_vertices}...")
+                    tqdm.write(f"\nSampling {sample_size} vertices from {n_vertices}...")
                     sampled_vertices = np.random.choice(vertices, sample_size, replace=False)
                     
                     # Filter edges that contain sampled vertices
@@ -235,10 +235,10 @@ class BenchmarkRunner:
                     vertices = sampled_vertices
                     edges = np.array(sampled_edges)
                     n_vertices = sample_size
-                    tqdm.write(f"After sampling: {n_vertices} vertices, {len(edges)} edges")
+                    tqdm.write(f"\nAfter sampling: {n_vertices} vertices, {len(edges)} edges")
                 else:
                     if sample_size is None:
-                        tqdm.write(f"Using full dataset: {n_vertices} vertices, {len(edges)} edges")
+                        tqdm.write(f"\nUsing full dataset: {n_vertices} vertices, {len(edges)} edges")
 
                 # Create NetworkX graph for analysis
                 G = nx.Graph()
@@ -257,20 +257,34 @@ class BenchmarkRunner:
                 largest_cc = max(nx.connected_components(G), key=len)
                 lcc_size = len(largest_cc)
                 lcc_fraction = lcc_size / n_vertices
+
+                # Analyze largest connected component
+                G_cc = G
+                if len(largest_cc) < n_vertices:
+                    print(f"Extracting largest connected component with {len(largest_cc):,} vertices...")
+                    G_cc = G.subgraph(largest_cc).copy()
+
+                    # Re-index nodes to be consecutive integers
+                    G_cc = nx.convert_node_labels_to_integers(G_cc)
+
+                    # Extract edges from the largest component
+                    edges = G_cc.edges
+                    n_vertices = len(largest_cc)
                 
                 # Run the embedding
-                tqdm.write(f"Running layout for {dataset_name}...")
+                tqdm.write(f"\nRunning layout for {dataset_name}...")
                 start_time = time.time()
+                # Create and run embedder
                 embedder = GraphEmbedder(
                     edges=edges,
                     n_vertices=n_vertices,
                     dimension=3,
-                    L_min=10.0,
+                    L_min=4.0,
                     k_attr=0.5,
                     k_inter=0.1,
-                    knn_k=15,
+                    knn_k=min(15, n_vertices // 10),
                     sample_size=min(512, len(edges)),
-                    batch_size=min(1024, n_vertices),
+                    batch_size=min(1024, len(edges)),
                     verbose=False
                 )
                 
@@ -279,18 +293,18 @@ class BenchmarkRunner:
                 for i in tqdm(range(iterations), desc="Layout Iterations", leave=False):
                     embedder.update_positions()
                     if (i + 1) % 10 == 0:
-                        tqdm.write(f"  Completed {i+1}/{iterations} iterations")
+                        tqdm.write(f"\nCompleted {i+1}/{iterations} iterations")
                 
                 layout_time = time.time() - start_time
                 
                 # Calculate centrality measures
-                tqdm.write("Calculating centrality measures...")
+                tqdm.write("\nCalculating centrality measures...")
                 
                 # Run with progress
                 with tqdm(total=2, desc="Centrality Measures", leave=False) as pbar:
                     positions = np.array(embedder.positions)
                     radii = np.linalg.norm(positions, axis=1)
-                    degree = np.array([d for _, d in G.degree()])
+                    degree = np.array([d for _, d in G_cc.degree()])
                     pbar.update(1)
                     
                     # Try to calculate other centrality measures if graph is small enough
@@ -299,21 +313,21 @@ class BenchmarkRunner:
 
                     if n_vertices < 5000:
                         try:
-                            btw = np.array(list(nx.betweenness_centrality(G).values()))
+                            btw = np.array(list(nx.betweenness_centrality(G_cc).values()))
                             btw_corr, _ = stats.spearmanr(radii, btw)
                         except nx.NetworkXError as e:
                             btw_corr = np.nan
                             print(e)
                             
                         try:
-                            eig = np.array(list(nx.eigenvector_centrality_numpy(G).values()))
+                            eig = np.array(list(nx.eigenvector_centrality_numpy(G_cc).values()))
                             eig_corr, _ = stats.spearmanr(radii, eig)
                         except nx.NetworkXError as e:
                             eig_corr = np.nan
                             print(e)
                             
                         try:
-                            pr = np.array(list(nx.pagerank(G).values()))
+                            pr = np.array(list(nx.pagerank(G_cc).values()))
                             pr_corr, _ = stats.spearmanr(radii, pr)
                         except nx.NetworkXError as e:
                             pr_corr = np.nan
@@ -340,7 +354,7 @@ class BenchmarkRunner:
                 })
                 
             except Exception as e:
-                tqdm.write(f"Error processing {dataset_name}: {str(e)}")
+                tqdm.write(f"\nError processing {dataset_name}: {str(e)}")
                 # Add dummy entry with error
                 results.append({
                     'dataset': dataset_name,
@@ -395,7 +409,7 @@ class BenchmarkRunner:
                 p = 0.1  # Propagation probability
                 
                 # Graphem-based seed selection
-                tqdm.write("Running GraphEm seed selection...")
+                tqdm.write("\nRunning GraphEm seed selection...")
                 embedder = GraphEmbedder(
                     edges=edges,
                     n_vertices=n,
@@ -419,7 +433,7 @@ class BenchmarkRunner:
                 graphem_time = time.time() - graphem_start
                 
                 # Greedy seed selection (just a small subset for benchmark)
-                tqdm.write("Running Greedy seed selection...")
+                tqdm.write("\nRunning Greedy seed selection...")
                 greedy_start = time.time()
                 with tqdm(total=k, desc="Greedy Selection", leave=False) as pbar:
                     # We can't modify the greedy_seed_selection function directly, but we'll update afterward
@@ -429,7 +443,7 @@ class BenchmarkRunner:
                 greedy_time = time.time() - greedy_start
                 
                 # Evaluate influence
-                tqdm.write("Evaluating influence...")
+                tqdm.write("\nEvaluating influence...")
                 
                 # Run with progress
                 with tqdm(total=2, desc="Influence Evaluation", leave=False) as pbar:
@@ -467,7 +481,7 @@ class BenchmarkRunner:
                 })
                 
             except Exception as e:
-                tqdm.write(f"Error in influence maximization for {name}: {str(e)}")
+                tqdm.write(f"\nError in influence maximization for {name}: {str(e)}")
                 results.append({
                     'graph_type': name,
                     'error': str(e)
@@ -950,7 +964,7 @@ class BenchmarkRunner:
         print(f"Summary report saved to {summary_path}")
 
 
-def main():
+def main(argv=None):
     """Main function to parse arguments and run benchmarks."""
     parser = argparse.ArgumentParser(description="Run Graphem benchmarks")
     
@@ -992,8 +1006,12 @@ def main():
         action="store_true",
         help="Run with JAX profiling for GPU operations (requires JAX, outputs to profile_jax directory)"
     )
-    
-    args = parser.parse_args()
+
+    # If imported and called (argv=None & not __main__), use defaults
+    if argv is None and __name__ != "__main__":
+        args = parser.parse_args([])
+    else:
+        args = parser.parse_args(argv)
     
     # Create benchmark runner
     runner = BenchmarkRunner(output_dir=args.output, formats=args.formats, subsample_size=args.subsample)
