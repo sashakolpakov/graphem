@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graphem.visualization &mdash; GraphEm 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GraphEm
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">graphem</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GraphEm</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">graphem.visualization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graphem.visualization</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Visualization utilities for Graphem.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+
+
+<div class="viewcode-block" id="report_corr"><a class="viewcode-back" href="../../graphem.html#graphem.visualization.report_corr">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">report_corr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">centrality</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.025</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate and report the correlation between radial distances and a centrality measure.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Name of the centrality measure</span>
+<span class="sd">        radii: array-like</span>
+<span class="sd">            Radial distances from origin</span>
+<span class="sd">        centrality: array-like</span>
+<span class="sd">            Centrality values</span>
+<span class="sd">        alpha: float</span>
+<span class="sd">            Alpha level for confidence interval</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (correlation coefficient, p-value)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Calculate Spearman&#39;s rank correlation</span>
+    <span class="n">rho</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">centrality</span><span class="p">)</span>
+    
+    <span class="c1"># Calculate bootstrap confidence interval</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
+    <span class="n">reps</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">bootstrap_corrs</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reps</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">r_sample</span> <span class="o">=</span> <span class="n">radii</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="n">c_sample</span> <span class="o">=</span> <span class="n">centrality</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="n">rho_boot</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">r_sample</span><span class="p">,</span> <span class="n">c_sample</span><span class="p">)</span>
+        <span class="n">bootstrap_corrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rho_boot</span><span class="p">)</span>
+    
+    <span class="c1"># Calculate confidence interval</span>
+    <span class="n">ci_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">bootstrap_corrs</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">ci_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">bootstrap_corrs</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">))</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">15s</span><span class="si">}</span><span class="s2">: rho = </span><span class="si">{</span><span class="n">rho</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (95% CI: [</span><span class="si">{</span><span class="n">ci_low</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">ci_high</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]), p = </span><span class="si">{</span><span class="n">p_value</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">rho</span><span class="p">,</span> <span class="n">p_value</span></div>
+
+
+<div class="viewcode-block" id="report_full_correlation_matrix"><a class="viewcode-back" href="../../graphem.html#graphem.visualization.report_full_correlation_matrix">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">report_full_correlation_matrix</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">deg</span><span class="p">,</span> <span class="n">btw</span><span class="p">,</span> <span class="n">eig</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">clo</span><span class="p">,</span> <span class="n">nload</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.025</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate and report correlations between radial distances and various centrality measures.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        radii: array-like</span>
+<span class="sd">            Radial distances from origin</span>
+<span class="sd">        deg, btw, eig, pr, clo, edge_btw: array-like</span>
+<span class="sd">            Various centrality measures</span>
+<span class="sd">        alpha: float</span>
+<span class="sd">            Alpha level for confidence interval</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas.DataFrame: Correlation matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create a DataFrame with all measures</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;Radius&#39;</span><span class="p">:</span> <span class="n">radii</span><span class="p">,</span>
+        <span class="s1">&#39;Degree&#39;</span><span class="p">:</span> <span class="n">deg</span><span class="p">,</span>
+        <span class="s1">&#39;Betweenness&#39;</span><span class="p">:</span> <span class="n">btw</span><span class="p">,</span>
+        <span class="s1">&#39;Eigenvector&#39;</span><span class="p">:</span> <span class="n">eig</span><span class="p">,</span>
+        <span class="s1">&#39;PageRank&#39;</span><span class="p">:</span> <span class="n">pr</span><span class="p">,</span>
+        <span class="s1">&#39;Closeness&#39;</span><span class="p">:</span> <span class="n">clo</span><span class="p">,</span>
+        <span class="s1">&#39;Node Load&#39;</span><span class="p">:</span> <span class="n">nload</span>
+    <span class="p">})</span>
+    
+    <span class="c1"># Calculate correlation matrix</span>
+    <span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;spearman&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Print correlations with radii</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Correlations with radial distance:&quot;</span><span class="p">)</span>
+    <span class="n">report_corr</span><span class="p">(</span><span class="s2">&quot;Degree&quot;</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">deg</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">report_corr</span><span class="p">(</span><span class="s2">&quot;Betweenness&quot;</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">btw</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">report_corr</span><span class="p">(</span><span class="s2">&quot;Eigenvector&quot;</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">eig</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">report_corr</span><span class="p">(</span><span class="s2">&quot;PageRank&quot;</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">report_corr</span><span class="p">(</span><span class="s2">&quot;Closeness&quot;</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">clo</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">report_corr</span><span class="p">(</span><span class="s2">&quot;Node Load&quot;</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">nload</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">corr_matrix</span></div>
+
+
+<div class="viewcode-block" id="plot_radial_vs_centrality"><a class="viewcode-back" href="../../graphem.html#graphem.visualization.plot_radial_vs_centrality">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">plot_radial_vs_centrality</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">centralities</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot scatter plots of radial distances vs. various centrality measures.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        radii: array-like</span>
+<span class="sd">            Radial distances from origin</span>
+<span class="sd">        centralities: list of array-like</span>
+<span class="sd">            List of centrality measures</span>
+<span class="sd">        names: list of str</span>
+<span class="sd">            Names of the centrality measures</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create figure with subplots</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+            <span class="s1">&#39;Radial Distance&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)),</span>
+            <span class="s1">&#39;Centrality Value&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">centralities</span><span class="p">),</span>
+            <span class="s1">&#39;Centrality Measure&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">radii</span><span class="p">))</span>
+        <span class="p">}),</span>
+        <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Radial Distance&#39;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Centrality Value&#39;</span><span class="p">,</span>
+        <span class="n">facet_col</span><span class="o">=</span><span class="s1">&#39;Centrality Measure&#39;</span><span class="p">,</span>
+        <span class="n">facet_col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">trendline</span><span class="o">=</span><span class="s1">&#39;ols&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Correlation between Radial Distance and Centrality Measures&#39;</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># Update layout</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">1000</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># Show figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="display_benchmark_results"><a class="viewcode-back" href="../../graphem.html#graphem.visualization.display_benchmark_results">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">display_benchmark_results</span><span class="p">(</span><span class="n">benchmark_results</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Display benchmark results in a nicely formatted table.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        benchmark_results: list of dict</span>
+<span class="sd">            List of benchmark result dictionaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert to DataFrame</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">benchmark_results</span><span class="p">)</span>
+    
+    <span class="c1"># Reorder columns for better readability</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;graph_type&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;dim&#39;</span><span class="p">,</span> <span class="s1">&#39;seed_method&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;influence&#39;</span><span class="p">,</span> <span class="s1">&#39;normalized_influence&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;layout_time&#39;</span><span class="p">,</span> <span class="s1">&#39;selection_time&#39;</span><span class="p">,</span> <span class="s1">&#39;evaluation_time&#39;</span>
+    <span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]]</span>
+    
+    <span class="c1"># Display the DataFrame</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Alexander Kolpakov (UATX), Igor Rivin (Temple University).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

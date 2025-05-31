@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to GraphEm’s documentation! &mdash; GraphEm 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="graphem" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            GraphEm
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">graphem</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">GraphEm</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to GraphEm’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-graphem-s-documentation">
+<h1>Welcome to GraphEm’s documentation!<a class="headerlink" href="#welcome-to-graphem-s-documentation" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">graphem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="graphem.html">graphem package</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>GraphEm is a graph embedding library based on JAX for efficient centrality measures approximation and influence maximization in networks.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>Graphem is a Python library for graph visualization and analysis, with a focus on efficient embedding of large networks. It uses JAX for accelerated computation and provides tools for influence maximization in networks.</p>
+<p>Key features:</p>
+<ul class="simple">
+<li><p>Fast graph embedding using Laplacian embedding</p></li>
+<li><p>Efficient k-nearest neighbors search with JAX</p></li>
+<li><p>Various graph generation models</p></li>
+<li><p>Tools for influence maximization</p></li>
+<li><p>Graph visualization with Plotly</p></li>
+<li><p>Benchmarking tools for comparing graph metrics</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>To install from PyPI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">graphem</span><span class="o">-</span><span class="n">jax</span>
+</pre></div>
+</div>
+<p>To install from the GitHub repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">sashakolpakov</span><span class="o">/</span><span class="n">graphem</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading"></a></h2>
+<section id="basic-graph-embedding">
+<h3>Basic Graph Embedding<a class="headerlink" href="#basic-graph-embedding" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graphem.generators</span><span class="w"> </span><span class="kn">import</span> <span class="n">erdos_renyi_graph</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graphem.embedder</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphEmbedder</span>
+
+<span class="c1"># Generate a random graph</span>
+<span class="n">n_vertices</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+
+<span class="c1"># Create an embedder</span>
+<span class="n">embedder</span> <span class="o">=</span> <span class="n">GraphEmbedder</span><span class="p">(</span>
+    <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">,</span>
+    <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>  <span class="c1"># 3D embedding</span>
+    <span class="n">L_min</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>   <span class="c1"># Minimum edge length</span>
+    <span class="n">k_attr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>   <span class="c1"># Attraction force constant</span>
+    <span class="n">k_inter</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># Repulsion force constant</span>
+    <span class="n">knn_k</span><span class="o">=</span><span class="mi">15</span>      <span class="c1"># Number of nearest neighbors</span>
+<span class="p">)</span>
+
+<span class="c1"># Run the layout algorithm</span>
+<span class="n">embedder</span><span class="o">.</span><span class="n">run_layout</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="c1"># Visualize the graph</span>
+<span class="n">embedder</span><span class="o">.</span><span class="n">display_layout</span><span class="p">(</span><span class="n">edge_width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="influence-maximization">
+<h3>Influence Maximization<a class="headerlink" href="#influence-maximization" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graphem.influence</span><span class="w"> </span><span class="kn">import</span> <span class="n">graphem_seed_selection</span><span class="p">,</span> <span class="n">ndlib_estimated_influence</span>
+
+<span class="c1"># Convert edges to NetworkX graph</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">))</span>
+<span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+
+<span class="c1"># Select seed nodes using the Graphem method</span>
+<span class="n">seeds</span> <span class="o">=</span> <span class="n">graphem_seed_selection</span><span class="p">(</span><span class="n">embedder</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Estimate influence</span>
+<span class="n">influence</span><span class="p">,</span> <span class="n">iterations</span> <span class="o">=</span> <span class="n">ndlib_estimated_influence</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">iterations_count</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated influence: </span><span class="si">{</span><span class="n">influence</span><span class="si">}</span><span class="s2"> nodes (</span><span class="si">{</span><span class="n">influence</span><span class="o">/</span><span class="n">n_vertices</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2"> of the graph)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="module-graphem">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-graphem" title="Permalink to this heading"></a></h1>
+<p>Graphem: A graph embedding library based on JAX for efficient k-nearest neighbors.</p>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-right" title="graphem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Alexander Kolpakov (UATX), Igor Rivin (Temple University).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

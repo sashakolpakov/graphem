@@ -1,5 +1,14 @@
 # GraphEm
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![PyPI](https://img.shields.io/pypi/v/graphem.svg)](https://pypi.org/project/graphem/)
+
+<!-- CI status from GitHub Actions -->
+[![CI](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml) <!-- Docs status from GitHub Actions -->
+[![Docs](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/deploy_docs.yml) <!-- Docs health via HTTP ping -->
+[![Docs](https://img.shields.io/website-up-down-green-red/https/sashakolpakov.github.io/graphem?label=API%20Documentation)](https://sashakolpakov.github.io/graphem/)
+
 A graph embedding library based on JAX for efficient centrality measures approximation and influence maximization in networks.
 
 ## Overview
@@ -110,6 +119,10 @@ corr_matrix = report_full_correlation_matrix(
 
 The root directory contain `run_benchmarks.py` that runs all available tests and benchmarks in the library and
 generates nicely formatted result tables in Markdown and LaTeX.
+
+## Documentation
+
+Full API documentation is available at: **[https://sashakolpakov.github.io/graphem/](https://sashakolpakov.github.io/graphem/)**
 
 ## Example Scripts
 

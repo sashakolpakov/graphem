@@ -29,13 +29,21 @@ required = ["jax>=0.3.0",
             "pyinstrument>=5.0.0",
             "tabulate>=0.9.0"]
 
+# Documentation requirements
+docs_required = ["sphinx>=4.0.0",
+                "sphinx_rtd_theme>=1.0.0",
+                "sphinx-autodoc-typehints>=1.12.0"]
+
 setup(
     name="graphem-jax",
-    version="0.0.2",
+    version="0.1.0",
     description="A graph embedding library based on JAX",
-    author="Alexander Kolpakov, Igor Rivin",
+    author="Alexander Kolpakov (UATX), Igor Rivin (Temple University)",
     packages=find_packages(),
     install_requires=required,
+    extras_require={
+        "docs": docs_required,
+    },
     python_requires=">=3.8",
     classifiers=[
         "Programming Language :: Python :: 3",
