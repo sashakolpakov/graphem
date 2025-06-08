@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to GraphEm’s documentation! &mdash; GraphEm 0.1.0 documentation</title>
+  <title>GraphEm: Graph Embedding &amp; Influence Maximization &mdash; GraphEm 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="graphem" href="modules.html" /> 
+    <link rel="next" title="Installation Guide" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,9 +41,16 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">graphem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to GraphEm</a></li>
 </ul>
 
         </div>
@@ -60,7 +67,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to GraphEm’s documentation!</li>
+      <li class="breadcrumb-item active">GraphEm: Graph Embedding &amp; Influence Maximization</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -70,99 +77,240 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-graphem-s-documentation">
-<h1>Welcome to GraphEm’s documentation!<a class="headerlink" href="#welcome-to-graphem-s-documentation" title="Permalink to this heading"></a></h1>
+  <section id="graphem-graph-embedding-influence-maximization">
+<h1>GraphEm: Graph Embedding &amp; Influence Maximization<a class="headerlink" href="#graphem-graph-embedding-influence-maximization" title="Permalink to this heading"></a></h1>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg" /></a>
+<a class="reference external image-reference" href="https://www.python.org/downloads/"><img alt="Python 3.8+" src="https://img.shields.io/badge/python-3.8+-blue.svg" /></a>
+<a class="reference external image-reference" href="https://pypi.org/project/graphem-jax/"><img alt="PyPI" src="https://img.shields.io/pypi/v/graphem-jax.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml"><img alt="CI Status" src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&amp;label=CI&amp;logo=github" /></a>
+<p>A high-performance graph embedding and influence maximization library powered by JAX, designed for scalable network analysis and research.</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">graphem</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="graphem.html">graphem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pypi-installation-recommended">PyPI Installation (Recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#development-installation">Development Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#gpu-tpu-support">GPU/TPU Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#documentation-dependencies">Documentation Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#system-requirements">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#your-first-graph-embedding">Your First Graph Embedding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#graph-generation">Graph Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#working-with-real-data">Working with Real Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#influence-maximization">Influence Maximization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#benchmarking-and-analysis">Benchmarking and Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#performance-tips">Performance Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#graph-embedding-deep-dive">Graph Embedding Deep Dive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#working-with-large-networks">Working with Large Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#influence-maximization-applications">Influence Maximization Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#centrality-analysis">Centrality Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#custom-graph-generators">Custom Graph Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#next-steps">Next Steps</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>GraphEm is a graph embedding library based on JAX for efficient centrality measures approximation and influence maximization in networks.</p>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>Graphem is a Python library for graph visualization and analysis, with a focus on efficient embedding of large networks. It uses JAX for accelerated computation and provides tools for influence maximization in networks.</p>
-<p>Key features:</p>
-<ul class="simple">
-<li><p>Fast graph embedding using Laplacian embedding</p></li>
-<li><p>Efficient k-nearest neighbors search with JAX</p></li>
-<li><p>Various graph generation models</p></li>
-<li><p>Tools for influence maximization</p></li>
-<li><p>Graph visualization with Plotly</p></li>
-<li><p>Benchmarking tools for comparing graph metrics</p></li>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#core-classes">Core Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#module-graphem.generators">Graph Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#module-graphem.influence">Influence Maximization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#module-graphem.datasets">Dataset Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#module-graphem.visualization">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#module-graphem.benchmark">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#complete-module-reference">Complete Module Reference</a></li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to GraphEm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#development-environment-setup">Development Environment Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-style-and-quality">Code Style and Quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#documentation-guidelines">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="what-is-graphem">
+<h2>What is GraphEm?<a class="headerlink" href="#what-is-graphem" title="Permalink to this heading"></a></h2>
+<p>GraphEm is a comprehensive Python library that combines cutting-edge graph embedding techniques with influence maximization algorithms. Built on JAX for high-performance computation, it enables researchers and practitioners to analyze large-scale networks efficiently.</p>
+<section id="key-features">
+<h3>Key Features<a class="headerlink" href="#key-features" title="Permalink to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>High-Performance Computing</strong></dt><dd><ul class="simple">
+<li><p>JAX-accelerated computations with GPU/TPU support</p></li>
+<li><p>JIT compilation for optimized performance</p></li>
+<li><p>Memory-efficient algorithms for large networks</p></li>
+<li><p>Batch processing capabilities</p></li>
+</ul>
+</dd>
+<dt><strong>Advanced Graph Embedding</strong></dt><dd><ul class="simple">
+<li><p>Spectral initialization using graph Laplacian</p></li>
+<li><p>Force-directed layout refinement with customizable forces</p></li>
+<li><p>2D and 3D embedding support</p></li>
+<li><p>Hierarchical position indexing for efficient k-NN search</p></li>
+</ul>
+</dd>
+<dt><strong>Influence Maximization</strong></dt><dd><ul class="simple">
+<li><p>Novel embedding-based seed selection algorithm</p></li>
+<li><p>Traditional greedy algorithm for comparison</p></li>
+<li><p>NDlib integration for influence spread simulation</p></li>
+<li><p>Comprehensive benchmarking tools</p></li>
+</ul>
+</dd>
+<dt><strong>Graph Generation &amp; Datasets</strong></dt><dd><ul class="simple">
+<li><p>12+ standard graph models (Erdős–Rényi, Barabási–Albert, Watts–Strogatz, etc.)</p></li>
+<li><p>Built-in loaders for real-world datasets (SNAP, Network Repository)</p></li>
+<li><p>Custom graph generators for domain-specific networks</p></li>
+</ul>
+</dd>
+<dt><strong>Visualization &amp; Analysis</strong></dt><dd><ul class="simple">
+<li><p>Interactive 2D/3D plots with Plotly</p></li>
+<li><p>Centrality correlation analysis</p></li>
+<li><p>Performance benchmarking tools</p></li>
+<li><p>Comprehensive reporting utilities</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="quick-start-example">
+<h3>Quick Start Example<a class="headerlink" href="#quick-start-example" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">graphem</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ge</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+
+<span class="c1"># Generate a scale-free network</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">generate_ba</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Create and run embedding</span>
+<span class="n">embedder</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">GraphEmbedder</span><span class="p">(</span>
+    <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+<span class="n">embedder</span><span class="o">.</span><span class="n">run_layout</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Find influential nodes</span>
+<span class="n">seeds</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">graphem_seed_selection</span><span class="p">(</span><span class="n">embedder</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Estimate influence spread</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+<span class="n">influence</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">ndlib_estimated_influence</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Influence spread: </span><span class="si">{</span><span class="n">influence</span><span class="si">}</span><span class="s2"> nodes (</span><span class="si">{</span><span class="n">influence</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visualize results</span>
+<span class="n">embedder</span><span class="o">.</span><span class="n">display_layout</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
-<p>To install from PyPI:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">graphem</span><span class="o">-</span><span class="n">jax</span>
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h3>
+<p>Install GraphEm using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>graphem-jax
 </pre></div>
 </div>
-<p>To install from the GitHub repository:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">sashakolpakov</span><span class="o">/</span><span class="n">graphem</span><span class="o">.</span><span class="n">git</span>
-</pre></div>
-</div>
+<p>For GPU/TPU support, see the <a class="reference external" href="https://github.com/google/jax#installation">JAX installation guide</a>.</p>
 </section>
-<section id="quick-start">
-<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading"></a></h2>
-<section id="basic-graph-embedding">
-<h3>Basic Graph Embedding<a class="headerlink" href="#basic-graph-embedding" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graphem.generators</span><span class="w"> </span><span class="kn">import</span> <span class="n">erdos_renyi_graph</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">graphem.embedder</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphEmbedder</span>
-
-<span class="c1"># Generate a random graph</span>
-<span class="n">n_vertices</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-
-<span class="c1"># Create an embedder</span>
-<span class="n">embedder</span> <span class="o">=</span> <span class="n">GraphEmbedder</span><span class="p">(</span>
-    <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
-    <span class="n">n_vertices</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">,</span>
-    <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>  <span class="c1"># 3D embedding</span>
-    <span class="n">L_min</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>   <span class="c1"># Minimum edge length</span>
-    <span class="n">k_attr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>   <span class="c1"># Attraction force constant</span>
-    <span class="n">k_inter</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># Repulsion force constant</span>
-    <span class="n">knn_k</span><span class="o">=</span><span class="mi">15</span>      <span class="c1"># Number of nearest neighbors</span>
-<span class="p">)</span>
-
-<span class="c1"># Run the layout algorithm</span>
-<span class="n">embedder</span><span class="o">.</span><span class="n">run_layout</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-
-<span class="c1"># Visualize the graph</span>
-<span class="n">embedder</span><span class="o">.</span><span class="n">display_layout</span><span class="p">(</span><span class="n">edge_width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
+</section>
+<section id="core-components">
+<h2>Core Components<a class="headerlink" href="#core-components" title="Permalink to this heading"></a></h2>
+<section id="graphembedder">
+<h3>GraphEmbedder<a class="headerlink" href="#graphembedder" title="Permalink to this heading"></a></h3>
+<p>The main embedding engine that combines spectral initialization with iterative force-directed refinement:</p>
+<ul class="simple">
+<li><p><strong>Spectral Initialization</strong>: Uses graph Laplacian eigenvectors for initial positioning</p></li>
+<li><p><strong>Force-Directed Layout</strong>: Applies spring forces between connected nodes and repulsion between all nodes</p></li>
+<li><p><strong>Intersection Avoidance</strong>: Prevents node overlap for cleaner visualizations</p></li>
+<li><p><strong>Adaptive Parameters</strong>: Automatically adjusts forces based on graph structure</p></li>
+</ul>
+</section>
+<section id="hpindex">
+<h3>HPIndex<a class="headerlink" href="#hpindex" title="Permalink to this heading"></a></h3>
+<p>High performance index for efficient k-nearest neighbor search in high-dimensional embeddings:</p>
+<ul class="simple">
+<li><p><strong>Memory Efficient</strong>: Memory tiling for large point sets</p></li>
+<li><p><strong>Batch Processing</strong>: Vectorized nearest neighbor queries</p></li>
+</ul>
 </section>
 <section id="influence-maximization">
 <h3>Influence Maximization<a class="headerlink" href="#influence-maximization" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">graphem.influence</span><span class="w"> </span><span class="kn">import</span> <span class="n">graphem_seed_selection</span><span class="p">,</span> <span class="n">ndlib_estimated_influence</span>
+<p>Advanced algorithms for identifying influential nodes in networks:</p>
+<ul class="simple">
+<li><p><strong>GraphEm Method</strong>: Uses embedding radial distances to select diverse, influential seeds</p></li>
+<li><p><strong>Greedy Baseline</strong>: Traditional greedy algorithm for comparison</p></li>
+<li><p><strong>Spread Simulation</strong>: NDlib integration for accurate influence estimation</p></li>
+</ul>
+</section>
+<section id="graph-generators">
+<h3>Graph Generators<a class="headerlink" href="#graph-generators" title="Permalink to this heading"></a></h3>
+<p>Comprehensive collection of standard and custom graph models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Classic models</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">generate_ba</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Scale-free</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">generate_ws</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># Small-world</span>
 
-<span class="c1"># Convert edges to NetworkX graph</span>
-<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">))</span>
-<span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+<span class="c1"># Community structures</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">generate_sbm</span><span class="p">(</span><span class="n">sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="n">p_in</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">p_out</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">generate_caveman</span><span class="p">(</span><span class="n">clique_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">num_cliques</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
-<span class="c1"># Select seed nodes using the Graphem method</span>
-<span class="n">seeds</span> <span class="o">=</span> <span class="n">graphem_seed_selection</span><span class="p">(</span><span class="n">embedder</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="c1"># Estimate influence</span>
-<span class="n">influence</span><span class="p">,</span> <span class="n">iterations</span> <span class="o">=</span> <span class="n">ndlib_estimated_influence</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">iterations_count</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated influence: </span><span class="si">{</span><span class="n">influence</span><span class="si">}</span><span class="s2"> nodes (</span><span class="si">{</span><span class="n">influence</span><span class="o">/</span><span class="n">n_vertices</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2"> of the graph)&quot;</span><span class="p">)</span>
+<span class="c1"># Specialized networks</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">generate_geometric</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">generate_road_network</span><span class="p">(</span><span class="n">grid_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">connection_prob</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 </section>
+<section id="performance-characteristics">
+<h2>Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Permalink to this heading"></a></h2>
+<p>GraphEm is designed for high performance across different scales:</p>
+<dl class="simple">
+<dt><strong>Small Networks (&lt; 1K nodes)</strong></dt><dd><ul class="simple">
+<li><p>Real-time embedding and visualization</p></li>
+<li><p>Interactive parameter tuning</p></li>
+<li><p>Comprehensive analysis possible</p></li>
+</ul>
+</dd>
+<dt><strong>Medium Networks (1K - 10K nodes)</strong></dt><dd><ul class="simple">
+<li><p>Efficient embedding with optimized parameters</p></li>
+<li><p>Batch processing for multiple analyses</p></li>
+<li><p>GPU acceleration recommended</p></li>
+</ul>
+</dd>
+<dt><strong>Large Networks (10K+ nodes)</strong></dt><dd><ul class="simple">
+<li><p>Memory-efficient algorithms</p></li>
+<li><p>Progressive refinement strategies</p></li>
+<li><p>Distributed processing capabilities</p></li>
+</ul>
+</dd>
+</dl>
+<section id="benchmarking-results">
+<h3>Benchmarking Results<a class="headerlink" href="#benchmarking-results" title="Permalink to this heading"></a></h3>
+<p>GraphEm shows promising performance:</p>
+<ul class="simple">
+<li><p><strong>Speed</strong>: Much faster than the greedy algorithm for node influence maximization</p></li>
+<li><p><strong>Memory</strong>: Memory tiling for efficiency, can process large datasets</p></li>
+<li><p><strong>Accuracy</strong>: Strong correlation with ground-truth centrality measures</p></li>
+</ul>
 </section>
-<section id="module-graphem">
-<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-graphem" title="Permalink to this heading"></a></h1>
-<p>Graphem: A graph embedding library based on JAX for efficient k-nearest neighbors.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<p>MIT</p>
+</section>
 </section>
 <section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
+<h1>Indices and Tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
@@ -174,7 +322,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="modules.html" class="btn btn-neutral float-right" title="graphem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

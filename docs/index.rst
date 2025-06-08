@@ -128,11 +128,10 @@ The main embedding engine that combines spectral initialization with iterative f
 HPIndex
 ~~~~~~~
 
-Hierarchical position index for efficient k-nearest neighbor search in high-dimensional embeddings:
+High performance index for efficient k-nearest neighbor search in high-dimensional embeddings:
 
-* **Fast kNN Queries**: Logarithmic time complexity for neighbor searches
-* **Memory Efficient**: Compact data structure for large point sets
-* **Batch Processing**: Vectorized operations for multiple queries
+* **Memory Efficient**: Memory tiling for large point sets
+* **Batch Processing**: Vectorized nearest neighbor queries
 
 Influence Maximization
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -142,7 +141,6 @@ Advanced algorithms for identifying influential nodes in networks:
 * **GraphEm Method**: Uses embedding radial distances to select diverse, influential seeds
 * **Greedy Baseline**: Traditional greedy algorithm for comparison
 * **Spread Simulation**: NDlib integration for accurate influence estimation
-* **Multi-Model Support**: Works with various diffusion models (IC, LT, etc.)
 
 Graph Generators
 ~~~~~~~~~~~~~~~~
@@ -187,122 +185,18 @@ GraphEm is designed for high performance across different scales:
 Benchmarking Results
 ~~~~~~~~~~~~~~~~~~~~
 
-GraphEm consistently outperforms traditional methods:
+GraphEm shows promising performance:
 
-* **Speed**: 5-10x faster than NetworkX for equivalent operations
-* **Memory**: 2-3x more memory efficient than similar libraries
-* **Accuracy**: Superior correlation with ground-truth centrality measures
-* **Scalability**: Linear scaling with GPU acceleration
+* **Speed**: Much faster than the greedy algorithm for node influence maximization
+* **Memory**: Memory tiling for efficiency, can process large datasets
+* **Accuracy**: Strong correlation with ground-truth centrality measures
 
-Use Cases & Applications
-------------------------
 
-Academic Research
-~~~~~~~~~~~~~~~~~
+License
+-------
 
-* **Network Science**: Analyze structural properties of complex networks
-* **Social Media**: Study information diffusion and influence patterns
-* **Computational Biology**: Understand protein interaction networks
-* **Transportation**: Optimize infrastructure and routing networks
+MIT
 
-Industry Applications
-~~~~~~~~~~~~~~~~~~~~~
-
-* **Marketing**: Identify key influencers for viral campaigns
-* **Fraud Detection**: Discover suspicious patterns in transaction networks
-* **Recommendation Systems**: Build user-item relationship embeddings
-* **Supply Chain**: Optimize network resilience and efficiency
-
-Comparison with Other Libraries
--------------------------------
-
-.. list-table:: Library Comparison
-   :header-rows: 1
-   :widths: 20 15 15 15 15 20
-
-   * - Feature
-     - GraphEm
-     - NetworkX
-     - graph-tool
-     - igraph
-     - PyTorch Geometric
-   * - Performance
-     - ⭐⭐⭐⭐⭐
-     - ⭐⭐
-     - ⭐⭐⭐⭐
-     - ⭐⭐⭐
-     - ⭐⭐⭐⭐
-   * - GPU Support
-     - ✅
-     - ❌
-     - ❌
-     - ❌
-     - ✅
-   * - Influence Max
-     - ✅
-     - ⭐
-     - ⭐
-     - ⭐
-     - ❌
-   * - Ease of Use
-     - ⭐⭐⭐⭐⭐
-     - ⭐⭐⭐⭐⭐
-     - ⭐⭐⭐
-     - ⭐⭐⭐⭐
-     - ⭐⭐⭐
-   * - Documentation
-     - ⭐⭐⭐⭐⭐
-     - ⭐⭐⭐⭐⭐
-     - ⭐⭐⭐
-     - ⭐⭐⭐⭐
-     - ⭐⭐⭐⭐
-
-Community & Support
--------------------
-
-**Getting Help**
-
-* 📖 Comprehensive documentation with examples
-* 💡 Tutorial notebooks for hands-on learning
-* 🐛 GitHub Issues for bug reports and feature requests
-* 📧 Community discussions and Q&A
-
-**Contributing**
-
-GraphEm is open source and welcomes contributions:
-
-* 🔧 Code contributions and improvements
-* 📝 Documentation enhancements
-* 🧪 New algorithms and benchmarks
-* 🎯 Real-world use case examples
-
-See our :doc:`contributing` guide for detailed information.
-
-**Citation**
-
-If you use GraphEm in your research, please cite our work:
-
-.. code-block:: bibtex
-
-   @software{graphem2024,
-     title={GraphEm: High-Performance Graph Embedding and Influence Maximization},
-     author={Kolpakov, Sasha and Contributors},
-     year={2024},
-     url={https://github.com/sashakolpakov/graphem},
-     version={0.1.0}
-   }
-
-License & Acknowledgments
--------------------------
-
-GraphEm is released under the MIT License, ensuring freedom for both academic and commercial use.
-
-**Acknowledgments:**
-
-* JAX team for the high-performance computing framework
-* NetworkX community for inspiration and best practices
-* SNAP project for providing real-world datasets
-* Our contributors and users for feedback and improvements
 
 Indices and Tables
 ==================

@@ -25,7 +25,7 @@ Graph embedding and influence maximization library using JAX.
 pip install graphem-jax
 ```
 
-For GPU/TPU acceleration, see the [JAX installation guide](https://github.com/google/jax#installation).
+> **Note**: For GPU or TPU acceleration, JAX needs to be specifically installed with hardware support. See the [JAX documentation](https://github.com/google/jax#installation) for more details on enabling GPU/TPU support.
 
 From source:
 ```bash

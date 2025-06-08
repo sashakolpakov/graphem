@@ -120,5 +120,4 @@ Getting Help
 If you encounter installation issues:
 
 1. Check our `GitHub Issues <https://github.com/sashakolpakov/graphem/issues>`_
-2. Review the troubleshooting section
-3. Create a new issue with your system details and error messages
+2. Create a new issue with your system details and error messages
