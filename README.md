@@ -3,137 +3,144 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/graphem-jax.svg)](https://pypi.org/project/graphem-jax/)
+[![CI](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml)
+[![Docs](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/deploy_docs.yml)
+[![API Documentation](https://img.shields.io/website-up-down-green-red/https/sashakolpakov.github.io/graphem?label=API%20Documentation)](https://sashakolpakov.github.io/graphem/)
 
-<!-- CI status from GitHub Actions -->
-[![CI](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml) <!-- Docs status from GitHub Actions -->
-[![Docs](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/deploy_docs.yml) <!-- Docs health via HTTP ping -->
-[![Docs](https://img.shields.io/website-up-down-green-red/https/sashakolpakov.github.io/graphem?label=API%20Documentation)](https://sashakolpakov.github.io/graphem/)
+Graph embedding and influence maximization library using JAX.
 
+## Features
 
-
-A graph embedding library based on JAX for efficient centrality measures approximation and influence maximization in networks.
-
-## Overview
-
-Graphem is a Python library for graph visualization and analysis, with a focus on efficient embedding of large networks. It uses JAX for accelerated computation and provides tools for influence maximization in networks.
-
-Key features:
-- Fast graph embedding using Laplacian embedding
-- Efficient k-nearest neighbors search with JAX
-- Various graph generation models
-- Tools for influence maximization
-- Graph visualization with Plotly
-- Benchmarking tools for comparing graph metrics
+- **Graph Embedding**: Laplacian-based layout with force-directed refinement
+- **JAX Backend**: GPU/TPU acceleration for large graphs
+- **Influence Maximization**: Novel embedding-based seed selection algorithm
+- **Graph Generators**: Standard models (Erdős–Rényi, Barabási–Albert, Watts-Strogatz, etc.)
+- **Visualization**: Interactive 2D/3D plots with Plotly
+- **Benchmarking**: Centrality correlation analysis and performance testing
+- **Datasets**: Built-in loaders for SNAP and Network Repository datasets
 
 ## Installation
 
-To install from PyPI:
 ```bash
 pip install graphem-jax
-``` 
+```
 
-To install from the GitHub repository:
+For GPU/TPU acceleration, see the [JAX installation guide](https://github.com/google/jax#installation).
+
+From source:
 ```bash
 pip install git+https://github.com/sashakolpakov/graphem.git
 ```
 
+## Quick Start
 
-## Usage
-
-### Basic Graph Embedding
+### Graph Embedding
 
 ```python
-from graphem.generators import erdos_renyi_graph
-from graphem.embedder import GraphEmbedder
+import graphem as ge
 
-# Generate a random graph
-n_vertices = 200
-edges = erdos_renyi_graph(n=n_vertices, p=0.05)
+# Generate graph
+edges = ge.erdos_renyi_graph(n=500, p=0.01)
 
-
-# Create an embedder
-embedder = GraphEmbedder(
+# Create embedder
+embedder = ge.GraphEmbedder(
     edges=edges,
-    n_vertices=n_vertices,
-    dimension=3,  # 3D embedding
-    L_min=10.0,   # Minimum edge length
-    k_attr=0.5,   # Attraction force constant
-    k_inter=0.1,  # Repulsion force constant
-    knn_k=15      # Number of nearest neighbors
+    n_vertices=500,
+    dimension=3
 )
 
-# Run the layout algorithm
-embedder.run_layout(num_iterations=40)
+# Compute layout
+embedder.run_layout(num_iterations=50)
 
-# Visualize the graph
-embedder.display_layout(edge_width=0.5, node_size=5)
+# Visualize
+embedder.display_layout()
 ```
 
 ### Influence Maximization
 
 ```python
+# Select influential nodes
+seeds = ge.graphem_seed_selection(embedder, k=10)
+
+# Estimate influence spread
 import networkx as nx
-from graphem.influence import graphem_seed_selection, ndlib_estimated_influence
-
-# This is supposed to be added to the previous code (like the above example) ...
-
-# Convert edges to NetworkX graph
-G = nx.Graph()
-G.add_nodes_from(range(n_vertices))
-G.add_edges_from(edges)
-
-# Select seed nodes using the Graphem method
-seeds = graphem_seed_selection(embedder, k=10, num_iterations=20)
-
-# Estimate influence
-influence, iterations = ndlib_estimated_influence(G, seeds, p=0.1, iterations_count=200)
-print(f"Estimated influence: {influence} nodes ({influence/n_vertices:.2%} of the graph)")
+G = nx.Graph(edges)
+influence, _ = ge.ndlib_estimated_influence(G, seeds, p=0.1)
+print(f"Influence: {influence} nodes ({influence/500:.1%})")
 ```
 
 ### Benchmarking
 
 ```python
-from graphem.generators import erdos_renyi_graph
 from graphem.benchmark import benchmark_correlations
-from graphem.visualization import report_full_correlation_matrix
 
-# Run benchmark to calculate correlations
+# Compare embedding radii with centrality measures
 results = benchmark_correlations(
-    erdos_renyi_graph,
+    ge.erdos_renyi_graph,
     {'n': 200, 'p': 0.05},
     dim=3,
     num_iterations=40
 )
 
 # Display correlation matrix
-corr_matrix = report_full_correlation_matrix(
+ge.report_full_correlation_matrix(
     results['radii'],
     results['degree'],
     results['betweenness'],
-    results['eigenvector'],
-    results['pagerank'],
-    results['closeness'],
-    results['edge_betweenness']
+    results['pagerank']
 )
 ```
 
-## Benchmarking Script
+## Key Components
 
-The root directory contain `run_benchmarks.py` that runs all available tests and benchmarks in the library and
-generates nicely formatted result tables in Markdown and LaTeX.
+### Core Classes
+
+- **`GraphEmbedder`**: Main embedding engine with Laplacian initialization and force-directed layout
+- **`HPIndex`**: Hierarchical position index for efficient k-nearest neighbor search
+
+### Algorithms
+
+- **Embedding**: Spectral initialization + spring forces + intersection avoidance
+- **Influence**: Radial distance-based seed selection vs traditional greedy
+- **Generators**: 12+ graph models including SBM, small-world, scale-free
+
+### Datasets
+
+Built-in access to standard network datasets:
+- Social networks (Facebook, email)
+- Collaboration networks (arXiv)
+- Citation networks (papers)
+- Web graphs and P2P networks
+
+## Examples
+
+The `examples/` directory contains:
+- `graph_generator_test.py` - Test all graph generators
+- `random_regular_test.py` - Random regular graph analysis
+- `real_world_datasets_test.py` - Work with real datasets
+- `graphem_notebook.ipynb` - Complete tutorial notebook
+
+## Benchmarking
+
+Run comprehensive benchmarks:
+```bash
+python run_benchmarks.py
+```
+
+Generates performance tables and correlation analysis in Markdown and LaTeX formats.
 
 ## Documentation
 
-Full API documentation is available at: **[https://sashakolpakov.github.io/graphem/](https://sashakolpakov.github.io/graphem/)**
+Full API documentation: **[https://sashakolpakov.github.io/graphem/](https://sashakolpakov.github.io/graphem/)**
 
-## Example Scripts
+## Contributing
 
-The `examples/` directory contains sample scripts demonstrating different use cases:
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing, and contribution guidelines.
 
-- `graph_generator_test.py`: Test script for various graph generators
-- `random_regular_test.py`: Focused test script for random regular graphs
-- `real_world_datasets_test.py`: Test script for working with real-world datasets
+## Citation
+
+If you use GraphEm in research, please cite our work (paper forthcoming).
 
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE) for details.
