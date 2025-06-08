@@ -2,7 +2,7 @@
   <img src="docs/logo.png" alt="graphem logo" height="240"/>
 </p>
 
-<h1 align="center">Graph embedding and influence maximization library using JAX</h1>
+<h1 align="center">Graph embedding and node influence maximization</h1>
 
 <p align="center">
   <a href="https://opensource.org/licenses/MIT">
@@ -147,11 +147,11 @@ Generates performance tables and correlation analysis in Markdown and LaTeX form
 
 ## Documentation
 
-Full API documentation is available [here](https://sashakolpakov.github.io/graphem/)
+Full API documentation is available [here](https://sashakolpakov.github.io/graphem/).
 
 ## Contributing
 
-See [docs/contributing.rst](docs/contributing.rst) for development setup, testing, and contribution guidelines.
+See [contributing guide](https://sashakolpakov.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
 
 ## Citation
 
@@ -159,4 +159,4 @@ If you use GraphEm in research, please cite our work (paper forthcoming).
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT
