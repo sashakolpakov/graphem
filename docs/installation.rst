@@ -30,18 +30,19 @@ GPU/TPU Support
 
 GraphEm leverages JAX for acceleration. For GPU and TPU installation instructions, please refer to the `official JAX installation guide <https://github.com/google/jax#installation>`_.
 
-Optional Dependencies
----------------------
+Dependencies
+------------
 
-For additional visualization and profiling features:
+GraphEm automatically installs all required dependencies:
 
-.. code-block:: bash
-
-    # Enhanced visualization
-    pip install kaleido
-    
-    # Profiling tools
-    pip install line_profiler snakeviz pyinstrument
+* JAX & JAXLib (≥0.3.0) - Core computation backend
+* NumPy (≥1.21.0) - Array operations
+* NetworkX (≥2.6.0) - Graph algorithms
+* Plotly (≥5.5.0) - Interactive visualization
+* SciPy (≥1.7.0) - Scientific computing
+* NDlib (≥5.1.0) - Network diffusion models
+* Pandas (≥1.3.0) - Data structures
+* And others for logging, profiling, and utilities
 
 Documentation Dependencies
 --------------------------
@@ -107,10 +108,11 @@ For large graphs, consider:
 
 **Import Errors**
 
-If you see import errors for optional dependencies:
+If you see import errors:
 
-1. Install missing packages: ``pip install networkx matplotlib plotly``
+1. Reinstall GraphEm: ``pip uninstall graphem-jax && pip install graphem-jax``
 2. Check that all dependencies are compatible versions
+3. Try installing in a fresh virtual environment
 
 Getting Help
 ------------

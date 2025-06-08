@@ -67,10 +67,10 @@ GraphEm provides various graph generators:
     edges = ge.generate_ws(n=500, k=6, p=0.1)
     
     # Stochastic block model
-    edges = ge.generate_sbm(sizes=[100, 100, 100], p_in=0.1, p_out=0.01)
+    edges = ge.generate_sbm(n_per_block=100, num_blocks=3, p_in=0.1, p_out=0.01)
     
     # Random regular graph
-    edges = ge.generate_random_regular(n=300, degree=4)
+    edges = ge.generate_random_regular(n=300, d=4)
 
 Working with Real Data
 ----------------------
@@ -80,8 +80,8 @@ Load and analyze real-world networks:
 .. code-block:: python
 
     # Load a dataset (includes several network datasets)
-    edges = ge.load_dataset('ca-GrQc')  # Collaboration network
-    n_vertices = edges.max() + 1
+    vertices, edges = ge.load_dataset('snap-ca-GrQc')  # Collaboration network
+    n_vertices = len(vertices)
     
     # Create embedder for larger networks
     embedder = ge.GraphEmbedder(
@@ -136,7 +136,7 @@ Compare different centrality measures:
     # Run comprehensive benchmark
     results = benchmark_correlations(
         graph_generator=ge.generate_ba,
-        generator_params={'n': 300, 'm': 3},
+        graph_params={'n': 300, 'm': 3},
         dim=3,
         num_iterations=50
     )

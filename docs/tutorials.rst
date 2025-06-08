@@ -18,7 +18,7 @@ GraphEm combines spectral methods with force-directed layout for high-quality em
     import matplotlib.pyplot as plt
 
     # Create a graph with known structure
-    edges = ge.generate_sbm(sizes=[50, 50, 50], p_in=0.15, p_out=0.02)
+    edges = ge.generate_sbm(n_per_block=50, num_blocks=3, p_in=0.15, p_out=0.02)
     n_vertices = 150
 
     # Create embedder with detailed parameters
@@ -39,7 +39,7 @@ GraphEm combines spectral methods with force-directed layout for high-quality em
         positions_history.append(np.array(embedder.positions))
 
     # Final visualization
-    embedder.display_layout(title="Stochastic Block Model Embedding")
+    embedder.display_layout()
 
 Parameter Tuning Guide
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -335,7 +335,7 @@ Comparing Embedding-Based and Traditional Centralities
         ('Erdős–Rényi', ge.erdos_renyi_graph, {'n': 300, 'p': 0.02}),
         ('Scale-Free', ge.generate_ba, {'n': 300, 'm': 2}),
         ('Small-World', ge.generate_ws, {'n': 300, 'k': 4, 'p': 0.1}),
-        ('Community', ge.generate_sbm, {'sizes': [100, 100, 100], 'p_in': 0.1, 'p_out': 0.01})
+        ('Community', ge.generate_sbm, {'n_per_block': 100, 'num_blocks': 3, 'p_in': 0.1, 'p_out': 0.01})
     ]
 
     correlation_results = {}
@@ -346,7 +346,7 @@ Comparing Embedding-Based and Traditional Centralities
         # Run benchmark
         results = benchmark_correlations(
             graph_generator=generator,
-            generator_params=params,
+            graph_params=params,
             dim=2,
             num_iterations=50
         )
@@ -366,7 +366,7 @@ Comparing Embedding-Based and Traditional Centralities
 
     # Compare radial centrality correlations across network types
     radial_correlations = pd.DataFrame({
-        net_name: corr_matrix.loc['radii']
+        net_name: corr_matrix.loc['Radius']
         for net_name, corr_matrix in correlation_results.items()
     })
     
@@ -432,7 +432,7 @@ Creating Domain-Specific Networks
         k_inter=0.1
     )
     embedder.run_layout(num_iterations=80)
-    embedder.display_layout(title="Hierarchical Network Structure")
+    embedder.display_layout()
 
 Performance Optimization
 ------------------------

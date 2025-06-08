@@ -77,7 +77,7 @@ from graphem.benchmark import benchmark_correlations
 # Compare embedding radii with centrality measures
 results = benchmark_correlations(
     ge.erdos_renyi_graph,
-    {'n': 200, 'p': 0.05},
+    graph_params={'n': 200, 'p': 0.05},
     dim=3,
     num_iterations=40
 )
@@ -87,30 +87,30 @@ ge.report_full_correlation_matrix(
     results['radii'],
     results['degree'],
     results['betweenness'],
-    results['pagerank']
+    results['eigenvector'],
+    results['pagerank'],
+    results['closeness'],
+    results['node_load']
 )
 ```
 
 ## Key Components
 
-### Core Classes
+### Core Class
 
 - **`GraphEmbedder`**: Main embedding engine with Laplacian initialization and force-directed layout
-- **`HPIndex`**: Hierarchical position index for efficient k-nearest neighbor search
 
 ### Algorithms
 
-- **Embedding**: Spectral initialization + spring forces + intersection avoidance
-- **Influence**: Radial distance-based seed selection vs traditional greedy
+- **Graph embedding**: Spectral initialization + spring forces + intersection avoidance
+- **Influence maximization**: Radial distance-based seed selection vs traditional greedy
 - **Generators**: 12+ graph models including SBM, small-world, scale-free
 
 ### Datasets
 
 Built-in access to standard network datasets:
-- Social networks (Facebook, email)
-- Collaboration networks (arXiv)
-- Citation networks (papers)
-- Web graphs and P2P networks
+- Stanford Network Analysis Project
+- Network Repository
 
 ## Examples
 
@@ -118,7 +118,7 @@ The `examples/` directory contains:
 - `graph_generator_test.py` - Test all graph generators
 - `random_regular_test.py` - Random regular graph analysis
 - `real_world_datasets_test.py` - Work with real datasets
-- `graphem_notebook.ipynb` - Complete tutorial notebook
+- `graphem_notebook.ipynb` - Interactive Jupyter notebook
 
 ## Benchmarking
 
@@ -135,7 +135,7 @@ Full API documentation: **[https://sashakolpakov.github.io/graphem/](https://sas
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing, and contribution guidelines.
+See [docs/contributing.rst](docs/contributing.rst) for development setup, testing, and contribution guidelines.
 
 ## Citation
 

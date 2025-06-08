@@ -42,30 +42,30 @@ GraphEm is a comprehensive Python library that combines cutting-edge graph embed
 Key Features
 ~~~~~~~~~~~~
 
-🚀 **High-Performance Computing**
+**High-Performance Computing**
    * JAX-accelerated computations with GPU/TPU support
    * JIT compilation for optimized performance
    * Memory-efficient algorithms for large networks
    * Batch processing capabilities
 
-📊 **Advanced Graph Embedding**
+**Advanced Graph Embedding**
    * Spectral initialization using graph Laplacian
    * Force-directed layout refinement with customizable forces
    * 2D and 3D embedding support
    * Hierarchical position indexing for efficient k-NN search
 
-🎯 **Influence Maximization**
+**Influence Maximization**
    * Novel embedding-based seed selection algorithm
    * Traditional greedy algorithm for comparison
    * NDlib integration for influence spread simulation
    * Comprehensive benchmarking tools
 
-🔧 **Graph Generation & Datasets**
+**Graph Generation & Datasets**
    * 12+ standard graph models (Erdős–Rényi, Barabási–Albert, Watts–Strogatz, etc.)
    * Built-in loaders for real-world datasets (SNAP, Network Repository)
    * Custom graph generators for domain-specific networks
 
-📈 **Visualization & Analysis**
+**Visualization & Analysis**
    * Interactive 2D/3D plots with Plotly
    * Centrality correlation analysis
    * Performance benchmarking tools
@@ -99,7 +99,7 @@ Quick Start Example
    print(f"Influence spread: {influence} nodes ({influence/1000:.1%})")
    
    # Visualize results
-   embedder.display_layout(highlight_nodes=seeds)
+   embedder.display_layout()
 
 Installation
 ~~~~~~~~~~~~
