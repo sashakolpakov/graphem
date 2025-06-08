@@ -1,13 +1,29 @@
-# GraphEm
+<p align="center">
+  <img src="docs/logo.png" alt="graphem logo" height="240"/>
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![PyPI](https://img.shields.io/pypi/v/graphem-jax.svg)](https://pypi.org/project/graphem-jax/)
-[![CI](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml)
-[![Docs](https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github)](https://github.com/sashakolpakov/graphem/actions/workflows/deploy_docs.yml)
-[![API Documentation](https://img.shields.io/website-up-down-green-red/https/sashakolpakov.github.io/graphem?label=API%20Documentation)](https://sashakolpakov.github.io/graphem/)
+<h1 align="center">Graph embedding and node influence maximization</h1>
 
-Graph embedding and influence maximization library using JAX.
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"/>
+  </a>
+  <a href="https://www.python.org/downloads/">
+    <img src="https://img.shields.io/badge/python-3.7+-blue.svg" alt="Python 3.7+"/>
+  </a>
+  <a href="https://pypi.org/project/graphem-jax/">
+    <img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI"/>
+  </a>
+  <a href="https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github" alt="CI"/>
+  </a>
+  <a href="https://github.com/sashakolpakov/graphem/actions/workflows/deploy_docs.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github" alt="Docs"/>
+  </a>
+  <a href="https://sashakolpakov.github.io/graphem/">
+    <img src="https://img.shields.io/website-up-down-green-red/https/sashakolpakov.github.io/graphem?label=API%20Documentation" alt="Docs Status"/>
+  </a>
+</p>
 
 ## Features
 
@@ -131,11 +147,11 @@ Generates performance tables and correlation analysis in Markdown and LaTeX form
 
 ## Documentation
 
-Full API documentation: **[https://sashakolpakov.github.io/graphem/](https://sashakolpakov.github.io/graphem/)**
+Full API documentation is available [here](https://sashakolpakov.github.io/graphem/).
 
 ## Contributing
 
-See [docs/contributing.rst](docs/contributing.rst) for development setup, testing, and contribution guidelines.
+See [contributing guide](https://sashakolpakov.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
 
 ## Citation
 
@@ -143,4 +159,4 @@ If you use GraphEm in research, please cite our work (paper forthcoming).
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT
