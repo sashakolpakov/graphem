@@ -20,29 +20,8 @@ import os
 # Add the project root to the Python path
 sys.path.insert(0, os.path.abspath('..'))
 
-# Mock imports for optional dependencies
-autodoc_mock_imports = [
-    'ndlib',
-    'ndlib.models',
-    'ndlib.models.ModelConfig',
-    'ndlib.models.epidemics',
-    'ndlib.models.epidemics.IndependentCascadesModel',
-    'jax',
-    'jaxlib',
-    'networkx',
-    'matplotlib',
-    'plotly',
-    'pandas',
-    'scipy',
-    'loguru',
-    'kaleido',
-    'line_profiler',
-    'snakeviz',
-    'tensorboard',
-    'tqdm',
-    'pyinstrument',
-    'tabulate'
-]
+# Mock imports for optional dependencies (only mock if not available)
+autodoc_mock_imports = []
 
 extensions = [
     'sphinx.ext.autodoc',

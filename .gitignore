@@ -67,6 +67,9 @@ wheels/
 *.egg
 MANIFEST
 
+# Documentation
+docs/_build/
+
 # Project specific
 results/
 data/raw/
