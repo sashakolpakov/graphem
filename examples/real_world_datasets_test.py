@@ -24,9 +24,9 @@ def print_available_datasets():
     """
     Print information about all available datasets.
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print("Available Real-World Datasets")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     datasets = list_available_datasets()
     
@@ -40,8 +40,9 @@ def print_available_datasets():
     
     # Print by source
     for source, dataset_list in by_source.items():
+        print(f"{'-'*25}")
         print(f"\n{source} Datasets:")
-        print("{'-'*60}")
+        print(f"{'-'*25}")
         
         for dataset_id, info in dataset_list:
             nodes = info.get('nodes', 'Unknown')
@@ -67,14 +68,15 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print(f"Analyzing dataset: {dataset_name}")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     # Load the dataset
     print(f"Loading dataset {dataset_name}...")
     start_time = time.time()
-    edges, n_vertices = load_dataset(dataset_name)
+    vertices, edges = load_dataset(dataset_name)
+    n_vertices = len(vertices)
     load_time = time.time() - start_time
     
     print(f"Loaded dataset with {n_vertices:,} vertices and {len(edges):,} edges in {load_time:.2f}s")
@@ -82,15 +84,15 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     # Sample the graph if needed
     if sample_size is not None and sample_size < n_vertices:
         print(f"Sampling {sample_size:,} vertices from the graph...")
-        sampled_vertices = np.random.choice(n_vertices, sample_size, replace=False)
-        vertex_map = {old_idx: new_idx for new_idx, old_idx in enumerate(sampled_vertices)}
+        sampled_vertices = np.random.choice(vertices, sample_size, replace=False)
         
         # Filter edges that contain sampled vertices
         sampled_edges = []
         for u, v in edges:
-            if u in vertex_map and v in vertex_map:
-                sampled_edges.append((vertex_map[u], vertex_map[v]))
+            if u in sampled_vertices and v in sampled_vertices:
+                sampled_edges.append((u, v))
         
+        vertices = sampled_vertices
         edges = np.array(sampled_edges)
         n_vertices = sample_size
         
@@ -98,8 +100,12 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     
     # Create NetworkX graph for analysis
     G = nx.Graph()
-    G.add_nodes_from(range(n_vertices))
+    G.add_nodes_from(vertices)
     G.add_edges_from(edges)
+    G = nx.convert_node_labels_to_integers(G,
+                                           first_label=0,
+                                           ordering='default',
+                                           label_attribute=None)
     
     # Analyze graph properties
     density = 2 * len(edges) / (n_vertices * (n_vertices - 1))
@@ -115,6 +121,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     print(f"- Largest component size: {len(max(components, key=len)):,} vertices")
     
     # Analyze largest connected component
+    G_cc = G
     largest_cc = max(components, key=len)
     if len(largest_cc) < n_vertices:
         print(f"Extracting largest connected component with {len(largest_cc):,} vertices...")
@@ -124,13 +131,12 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         G_cc = nx.convert_node_labels_to_integers(G_cc)
         
         # Extract edges from the largest component
-        edges = np.array(list(G_cc.edges()))
         n_vertices = len(largest_cc)
     
     # Compute diameter if manageable
     if n_vertices < 10000:
         try:
-            diameter = nx.diameter(G)
+            diameter = nx.diameter(G_cc)
             print(f"- Diameter: {diameter}")
         except nx.NetworkXError as e:
             print("- Diameter: N/A")
@@ -141,7 +147,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     # Compute average shortest path length if manageable
     if n_vertices < 10000:
         try:
-            avg_path_length = nx.average_shortest_path_length(G)
+            avg_path_length = nx.average_shortest_path_length(G_cc)
             print(f"- Average shortest path length: {avg_path_length:.2f}")
         except nx.NetworkXError as e:
             print("- Average shortest path length: N/A")
@@ -150,22 +156,23 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         print("- Average shortest path length: Skipped (Graph too large)")
     
     # Compute clustering coefficient
-    avg_clustering = nx.average_clustering(G)
+    avg_clustering = nx.average_clustering(G_cc)
     print(f"- Average clustering coefficient: {avg_clustering:.4f}")
     
     # Create and run embedder
     print(f"Creating embedding in dimension {dim}...")
+    # Create and run embedder
     embedder = GraphEmbedder(
-        edges=edges,
-        n_vertices=n_vertices,
+        edges=G_cc.edges,
+        n_vertices=G_cc.number_of_nodes(),
         dimension=dim,
-        L_min=10.0,
+        L_min=4.0,
         k_attr=0.5,
         k_inter=0.1,
-        knn_k=min(15, n_vertices // 10),
-        sample_size=min(512, len(edges)),
-        batch_size=min(1024, n_vertices),
-        verbose=True
+        knn_k=min(15, G_cc.number_of_nodes() // 10),
+        sample_size=min(512, G_cc.number_of_edges()),
+        batch_size=min(1024, G_cc.number_of_nodes()),
+        verbose=False
     )
     
     print(f"Running layout for {num_iterations} iterations...")
@@ -182,33 +189,41 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     radii = np.linalg.norm(positions, axis=1)
     
     # Calculate centrality measures
-    degree = np.array([d for _, d in G.degree()])
+    degree = np.array([d for _, d in G_cc.degree()])
     
     # Only calculate betweenness for smaller graphs
     if n_vertices < 5000:
         print("Calculating betweenness centrality...")
-        betweenness = np.array(list(nx.betweenness_centrality(G).values()))
+        betweenness = np.array(list(nx.betweenness_centrality(G_cc).values()))
     else:
         print("Skipping betweenness centrality (graph too large)")
         betweenness = np.zeros(n_vertices)
     
     print("Calculating eigenvector centrality...")
     try:
-        eigenvector = np.array(list(nx.eigenvector_centrality_numpy(G).values()))
+        eigenvector = np.array(list(nx.eigenvector_centrality_numpy(G_cc).values()))
     except nx.NetworkXError as e:
         print("Error calculating eigenvector centrality, using zeros")
         print(e)
         eigenvector = np.zeros(n_vertices)
     
     print("Calculating PageRank...")
-    pagerank = np.array(list(nx.pagerank(G).values()))
+    pagerank = np.array(list(nx.pagerank(G_cc).values()))
     
     print("Calculating closeness centrality...")
     if n_vertices < 5000:
-        closeness = np.array(list(nx.closeness_centrality(G).values()))
+        closeness = np.array(list(nx.closeness_centrality(G_cc).values()))
     else:
         print("Skipping closeness centrality (graph too large)")
         closeness = np.zeros(n_vertices)
+
+    # Only calculate node load for smaller graphs
+    if n_vertices < 5000:
+        print("Calculating node load centrality...")
+        node_load = np.array(list(nx.load_centrality(G_cc).values()))
+    else:
+        print("Skipping node load centrality (graph too large)")
+        node_load = np.zeros(n_vertices)
     
     # Display correlation with radial distances
     print("\nCorrelation between embedding radii and centrality measures:")
@@ -219,7 +234,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
         eigenvector,
         pagerank,
         closeness,
-        np.zeros_like(radii)  # placeholder for edge betweenness
+        node_load
     )
     
     # Display the graph
@@ -231,7 +246,7 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     normalized_degree = (degree - np.min(degree)) / (np.max(degree) - np.min(degree) + 1e-10)
     embedder.display_layout(edge_width=1, node_size=5, node_colors=normalized_degree)
     
-    return embedder, G
+    return embedder, G_cc
 
 
 def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
@@ -248,36 +263,37 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         num_iterations: int
             Number of layout iterations
     """
-    print("\n{'='*80}")
+    print(f"\n{'='*75}")
     print("Comparing Multiple Datasets")
-    print("{'='*80}")
+    print(f"{'='*75}")
     
     results = []
     
     for dataset_name in dataset_names:
-        print("\n{'-'*60}")
+        print(f"\n{'-'*25}")
         print(f"Dataset: {dataset_name}")
-        print("{'-'*60}")
+        print(f"{'-'*25}")
         
         # Load the dataset
         print(f"Loading dataset {dataset_name}...")
         start_time = time.time()
-        edges, n_vertices = load_dataset(dataset_name)
+        vertices, edges = load_dataset(dataset_name)
+        n_vertices = len(vertices)
         load_time = time.time() - start_time
         
         print(f"Loaded dataset with {n_vertices:,} vertices and {len(edges):,} edges in {load_time:.2f}s")
         
         # Sample the graph
         print(f"Sampling {sample_size:,} vertices from the graph...")
-        sampled_vertices = np.random.choice(n_vertices, sample_size, replace=False)
-        vertex_map = {old_idx: new_idx for new_idx, old_idx in enumerate(sampled_vertices)}
+        sampled_vertices = np.random.choice(vertices, sample_size, replace=False)
         
         # Filter edges that contain sampled vertices
         sampled_edges = []
         for u, v in edges:
-            if u in vertex_map and v in vertex_map:
-                sampled_edges.append((vertex_map[u], vertex_map[v]))
-        
+            if u in sampled_vertices and v in sampled_vertices:
+                sampled_edges.append((u, v))
+
+        vertices = sampled_vertices
         edges = np.array(sampled_edges)
         n_vertices = sample_size
         
@@ -285,8 +301,12 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         
         # Create NetworkX graph for analysis
         G = nx.Graph()
-        G.add_nodes_from(range(n_vertices))
+        G.add_nodes_from(vertices)
         G.add_edges_from(edges)
+        G = nx.convert_node_labels_to_integers(G,
+                                               first_label=0,
+                                               ordering='default',
+                                               label_attribute=None)
         
         # Analyze graph properties
         density = 2 * len(edges) / (n_vertices * (n_vertices - 1))
@@ -296,36 +316,49 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         largest_cc = max(nx.connected_components(G), key=len)
         lcc_size = len(largest_cc)
         lcc_fraction = lcc_size / n_vertices
+
+        # Analyze largest connected component
+        G_cc = G
+        if len(largest_cc) < n_vertices:
+            print(f"Extracting largest connected component with {len(largest_cc):,} vertices...")
+            G_cc = G.subgraph(largest_cc).copy()
+
+            # Re-index nodes to be consecutive integers
+            G_cc = nx.convert_node_labels_to_integers(G_cc)
+
+            # Extract edges from the largest component
+            edges = G_cc.edges
+            n_vertices = len(largest_cc)
         
         # Compute average shortest path length if manageable
         try:
-            diameter = nx.diameter(G)
+            diameter = nx.diameter(G_cc)
         except nx.NetworkXError as e:
             print("- Diameter: N/A")
             print(e)
             diameter = float('nan')
         
         try:
-            avg_path_length = nx.average_shortest_path_length(G)
+            avg_path_length = nx.average_shortest_path_length(G_cc)
         except nx.NetworkXError as e:
             print("- Average shortest path length: N/A")
             print(e)
             avg_path_length = float('nan')
         
         # Compute clustering coefficient
-        avg_clustering = nx.average_clustering(G)
+        avg_clustering = nx.average_clustering(G_cc)
         
         # Create and run embedder
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=n_vertices,
             dimension=dim,
-            L_min=10.0,
+            L_min=4.0,
             k_attr=0.5,
             k_inter=0.1,
             knn_k=min(15, n_vertices // 10),
             sample_size=min(512, len(edges)),
-            batch_size=min(1024, n_vertices),
+            batch_size=min(1024, len(edges)),
             verbose=False
         )
         
@@ -384,10 +417,10 @@ def main():
     print_available_datasets()
     
     # Analyze a small social network dataset
-    analyze_dataset('snap-facebook_combined', dim=3, num_iterations=50)
-    
+    analyze_dataset('snap-facebook_combined', sample_size=None, dim=3, num_iterations=50)
+
     # Analyze a medium-sized dataset with sampling
-    analyze_dataset('snap-ca-GrQc', sample_size=1000, dim=3, num_iterations=30)
+    analyze_dataset('snap-ca-GrQc', sample_size=3500, dim=3, num_iterations=30)
     
     # Compare multiple datasets
     compare_datasets([
@@ -395,7 +428,7 @@ def main():
         'snap-ca-GrQc',
         'snap-ca-HepTh',
         'snap-wiki-vote'
-    ], sample_size=500, dim=3, num_iterations=20)
+    ], sample_size=1500, dim=3, num_iterations=20)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,7 @@
+"""
+A JAX-based implementation of graph embedding.
+"""
+
 import sys
 import os
 import numpy as np
@@ -85,13 +89,26 @@ class GraphEmbedder:
         """
         Locate k nearest neighbors for each midpoint.
         """
-        self.logger.info("Locating knn midpoints")
+        self.logger.info("Locating kNN midpoints")
         E = midpoints.shape[0]
-        idx = jax.random.choice(jax.random.PRNGKey(0), E, shape=(self.sample_size,), replace=False)
-        jax_indices, jax_distances = HPIndex.knn_tiled(midpoints[idx], midpoints, k+1, self.sample_size, self.batch_size)
+
+        key = jax.random.PRNGKey(0)
+        idx = jax.random.choice(key, E, shape=(self.sample_size,), replace=False)
+
+        # Move to numpy for slicing to avoid dynamic tracing overhead
+        idx_np = np.array(idx)
+        sampled_midpoints = midpoints[idx_np]
+
+        jax_indices, jax_distances = HPIndex.knn_tiled(
+            sampled_midpoints,  # batch
+            midpoints,  # full data
+            k + 1,
+            self.sample_size,
+            self.batch_size
+        )
         jax_indices.block_until_ready()
         jax_distances.block_until_ready()
-        self.logger.info("Knn midpoints done")
+        self.logger.info("kNN midpoints done")
         return jax_indices[:, 1:], idx
 
     @staticmethod
@@ -267,7 +284,7 @@ class GraphEmbedder:
                 "colorscale": 'Bluered',
                 "size": node_size,
                 "colorbar": {"title": 'Node Label'},
-                "showscale": True
+                "showscale": node_colors is not None
             },
             hoverinfo='none'
         )
@@ -326,7 +343,7 @@ class GraphEmbedder:
                 "colorscale": 'Bluered',
                 "size": node_size,
                 "colorbar": {"title": 'Node Label'},
-                "showscale": True
+                "showscale": node_colors is not None
             },
             hoverinfo='none'
         )

@@ -86,11 +86,10 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
     for i, val in close_dict.items():
         closeness[i] = val
     
-    edge_betweenness = np.zeros(n)
-    edge_btw_dict = nx.edge_betweenness_centrality(nx_graph)
-    for (u, v), val in edge_btw_dict.items():
-        edge_betweenness[u] += val
-        edge_betweenness[v] += val
+    node_load = np.zeros(n)
+    node_load_dict = nx.load_centrality(nx_graph)
+    for i, val in node_load_dict.items():
+        node_load[i] = val
     
     # Create embedder
     logger.info("Creating embedder...")
@@ -102,8 +101,8 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
         k_attr=k_attr,
         k_inter=k_inter,
         knn_k=knn_k,
-        sample_size=sample_size,
-        batch_size=batch_size,
+        sample_size=min(sample_size, len(edges)),
+        batch_size=min(batch_size, n),
         verbose=True
     )
     
@@ -133,7 +132,7 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
         'eigenvector': eigenvector,
         'pagerank': pagerank,
         'closeness': closeness,
-        'edge_betweenness': edge_betweenness
+        'node_load': node_load
     }
     
     total_time = time.time() - start_time
@@ -196,9 +195,9 @@ def benchmark_correlations(graph_generator, graph_params, dim=2, L_min=10.0, k_a
     rho, p = stats.spearmanr(radii, results['closeness'])
     correlations['closeness'] = {'rho': rho, 'p': p}
     
-    # Edge betweenness correlation
-    rho, p = stats.spearmanr(radii, results['edge_betweenness'])
-    correlations['edge_betweenness'] = {'rho': rho, 'p': p}
+    # Node load correlation
+    rho, p = stats.spearmanr(radii, results['node_load'])
+    correlations['node_load'] = {'rho': rho, 'p': p}
     
     # Add correlations to results
     results['correlations'] = correlations
