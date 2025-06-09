@@ -14,6 +14,9 @@
   <a href="https://pypi.org/project/graphem-jax/">
     <img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI"/>
   </a>
+  <a href="https://pypi.org/project/graphem-jax/">
+    <img src="https://img.shields.io/pypi/dm/graphem-jax" alt="PyPI Downloads">
+  </a>
   <a href="https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github" alt="CI"/>
   </a>
