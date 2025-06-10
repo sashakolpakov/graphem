@@ -158,7 +158,8 @@ See [contributing guide](https://sashakolpakov.github.io/graphem/contributing.ht
 
 ## Citation
 
-If you use GraphEm in research, please cite our work (paper forthcoming).
+If you use GraphEm in research, please cite our work [![arXiv](https://img.shields.io/badge/arXiv-2506.07435-b31b1b.svg)](https://arxiv.org/abs/2506.07435)
+
 
 ## License
 
