@@ -14,7 +14,7 @@
   <a href="https://pypi.org/project/graphem-jax/">
     <img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI"/>
   </a>
-  <a href="https://pepy.tech/projects/graphem">
+  <a href="https://pepy.tech/projects/graphem-jax">
     <img src="https://static.pepy.tech/badge/graphem-jax" alt="PyPI Downloads">
   </a>
   <a href="https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml">
@@ -112,6 +112,10 @@ ge.report_full_correlation_matrix(
     results['node_load']
 )
 ```
+### Google Colab Notebook
+
+You can check out most of the graphem features in Google Colab by running the demo notebook [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sashakolpakov/graphem/blob/main/examples/graphem_notebook.ipynb)
+
 
 ## Key Components
 
@@ -159,7 +163,6 @@ See [contributing guide](https://sashakolpakov.github.io/graphem/contributing.ht
 ## Citation
 
 If you use GraphEm in research, please cite our work [![arXiv](https://img.shields.io/badge/arXiv-2506.07435-b31b1b.svg)](https://arxiv.org/abs/2506.07435)
-
 
 ## License
 
