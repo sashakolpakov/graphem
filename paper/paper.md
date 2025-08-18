@@ -43,6 +43,8 @@ We use Spearman's $\rho$ correlation instead of Pearson's correlation as the rel
 
 Confidence intervals and $p$-values are obtained by boostrapping with $N=1000$ replicates. More benchmarks for other graph families and embedding dimensions are available in the whitepaper [@graphem-arxiv].
 
+\newpage
+
 ## Synthetic datasets
 
 | **Centrality Measure** | **ρ**   | **95% CI**        | **p-value**        |
