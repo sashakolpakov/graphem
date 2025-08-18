@@ -1,3 +1,7 @@
+# Graphem - JAX
+
+## This is a designated branch for JOSS review only. No new commits will be pushed into it unless they are JOSS-related. 
+
 <p align="center">
   <img src="docs/logo.png" alt="graphem logo" height="240"/>
 </p>
