@@ -1,5 +1,7 @@
 # Graphem - JAX
 
+[![status](https://joss.theoj.org/papers/b3bf183c4924fea63ff29a3fe4100292/status.svg)](https://joss.theoj.org/papers/b3bf183c4924fea63ff29a3fe4100292)
+
 ## This is a designated branch for JOSS review only. No new commits will be pushed into it unless they are JOSS-related. 
 
 <p align="center">
