@@ -27,7 +27,9 @@ bibliography: paper.bib
 
 # Summary
 
-Computing classical centrality measures such as betweenness and closeness is computationally expensive on large graphs. Graphem-JAX provides an efficient force layout algorithm that embeds a graph into a low-dimensional space in such a way that the radial distance from the origin serves as a proxy for various centrality measures. Our method shows strong correlations with degree, PageRank, and paths-based centralities on multiple common graph families such as Erdős–Rényi random graphs, Watts-Strogatz "small world" graphs, and a few other. We also provide benchmarks on real world datasets such as Social Circles (Facebook) and Wikipedia Vote Network. Moreover in practice, Graphem-JAX allows to find high-influence nodes in a network, and provides a fast and scalable alternative to the standard greedy algorithm.
+Computing classical centrality measures such as betweenness and closeness is computationally expensive on large graphs. Graphem-JAX provides an efficient force layout algorithm that embeds a graph into a low-dimensional space in such a way that the radial distance from the origin serves as a proxy for various centrality measures. 
+
+Our method shows strong correlations with degree, PageRank, and paths-based centralities on multiple common graph families such as Erdős–Rényi random graphs, Watts-Strogatz "small world" graphs, and a few other. We also provide benchmarks on real world datasets such as Social Circles (Facebook) and Wikipedia Vote Network. Moreover in practice, Graphem-JAX allows to find high-influence nodes in a network, and provides a fast and scalable alternative to the standard greedy algorithm.
 
 # Statement of need
 
@@ -37,7 +39,9 @@ This paper proposes a force layout algorithm that leverages a Laplacian-based in
 
 # Benchmarks
 
-We use Spearman's $\rho$ correlation instead of Pearson's correlation as the relationship between radial ordering and centrality is not necessarily linear (as the force layout is highly non-linear), and because what matters most is the ordering, not the actual distance or centrality values. Confidence intervals and $p$-values are obtained by boostrapping with $N=1000$ replicates. More benchmarks for other graph families and embedding dimensions are available in the whitepaper [@graphem-arxiv].
+We use Spearman's $\rho$ correlation instead of Pearson's correlation as the relationship between radial ordering and centrality is not necessarily linear (as the force layout is highly non-linear), and because what matters most is the ordering, not the actual distance or centrality values. 
+
+Confidence intervals and $p$-values are obtained by boostrapping with $N=1000$ replicates. More benchmarks for other graph families and embedding dimensions are available in the whitepaper [@graphem-arxiv].
 
 ## Synthetic datasets
 
