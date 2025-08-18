@@ -49,23 +49,23 @@ Confidence intervals and $p$-values are obtained by boostrapping with $N=1000$ r
 
 | **Centrality Measure** | **ρ**   | **95% CI**        | **p-value**        |
 |-------------------------|---------|------------------|--------------|
-| Degree       | 0.829 | [0.803, 0.854] | < 10⁻⁶ |
-| Betweenness  | 0.845 | [0.817, 0.867] | < 10⁻⁶ |
-| Eigenvector  | 0.806 | [0.778, 0.833] | < 10⁻⁶ |
-| PageRank     | 0.835 | [0.807, 0.859] | < 10⁻⁶ |
-| Closeness    | 0.830 | [0.802, 0.855] | < 10⁻⁶ |
-| Node Load    | 0.845 | [0.818, 0.866] | < 10⁻⁶ |
+| Degree       | 0.829 | [0.803, 0.854] | $< 10^{-6}$ |
+| Betweenness  | 0.845 | [0.817, 0.867] | $< 10^{-6}$ |
+| Eigenvector  | 0.806 | [0.778, 0.833] | $< 10^{-6}$ |
+| PageRank     | 0.835 | [0.807, 0.859] | $< 10^{-6}$ |
+| Closeness    | 0.830 | [0.802, 0.855] | $< 10^{-6}$ |
+| Node Load    | 0.845 | [0.818, 0.866] | $< 10^{-6}$ |
 
 **Table:** Spearman correlations of centrality measures with the radial distance in graph embeddings for Erdős–Rényi graphs. Embedding dimension $2$.
 
 | **Centrality Measure** | **ρ**   | **95% CI**        | **p-value**        |
 |-------------------------|---------|------------------|--------------|
-| Degree       | 0.896 | [0.877, 0.912] | < 10⁻⁶ |
-| Betweenness  | 0.748 | [0.718, 0.776] | < 10⁻⁶ |
-| Eigenvector  | 0.646 | [0.605, 0.682] | < 10⁻⁶ |
-| PageRank     | 0.897 | [0.878, 0.912] | < 10⁻⁶ |
-| Closeness    | 0.594 | [0.549, 0.633] | < 10⁻⁶ |
-| Node Load    | 0.743 | [0.711, 0.771] | < 10⁻⁶ |
+| Degree       | 0.896 | [0.877, 0.912] | $< 10^{-6}$ |
+| Betweenness  | 0.748 | [0.718, 0.776] | $< 10^{-6}$ |
+| Eigenvector  | 0.646 | [0.605, 0.682] | $< 10^{-6}$ |
+| PageRank     | 0.897 | [0.878, 0.912] | $< 10^{-6}$ |
+| Closeness    | 0.594 | [0.549, 0.633] | $< 10^{-6}$ |
+| Node Load    | 0.743 | [0.711, 0.771] | $< 10^{-6}$ |
 
 **Table:** Spearman correlations of centrality measures with the radial distance in graph embeddings for Watts–Strogatz graphs. Embedding dimension $2$.
 
@@ -73,23 +73,23 @@ Confidence intervals and $p$-values are obtained by boostrapping with $N=1000$ r
 
 | **Centrality Measure** | **ρ**   | **95% CI**        | **p-value**        |
 |-------------------------|---------|------------------|--------------|
-| Degree       | 0.864 | [0.851, 0.877] | < 10⁻⁵ |
-| Betweenness  | 0.721 | [0.704, 0.740] | < 10⁻⁵ |
-| Eigenvector  | 0.537 | [0.513, 0.560] | < 10⁻⁵ |
-| PageRank     | 0.746 | [0.730, 0.763] | < 10⁻⁵ |
-| Closeness    | 0.592 | [0.571, 0.610] | < 10⁻⁵ |
-| Node Load    | 0.718 | [0.698, 0.736] | < 10⁻⁵ |
+| Degree       | 0.864 | [0.851, 0.877] | $< 10^{-5}$ |
+| Betweenness  | 0.721 | [0.704, 0.740] | $< 10^{-5}$ |
+| Eigenvector  | 0.537 | [0.513, 0.560] | $< 10^{-5}$ |
+| PageRank     | 0.746 | [0.730, 0.763] | $< 10^{-5}$ |
+| Closeness    | 0.592 | [0.571, 0.610] | $< 10^{-5}$ |
+| Node Load    | 0.718 | [0.698, 0.736] | $< 10^{-5}$ |
 
 **Table:** Spearman correlations of centrality measures with the radial distance in a graph embedding for the SNAP *“Social circles: Facebook”* dataset [@snap-facebook]. Embedding dimension $4$.
 
 | **Centrality Measure** | **ρ**   | **95% CI**        | **p-value**        |
 |-------------------------|---------|------------------|--------------|
-| Degree       | 0.955 | [0.950, 0.959] | < 10⁻⁵ |
-| Betweenness  | 0.934 | [0.928, 0.939] | < 10⁻⁵ |
-| Eigenvector  | 0.852 | [0.840, 0.863] | < 10⁻⁵ |
-| PageRank     | 0.952 | [0.947, 0.956] | < 10⁻⁵ |
-| Closeness    | 0.839 | [0.827, 0.850] | < 10⁻⁵ |
-| Node Load    | 0.933 | [0.928, 0.938] | < 10⁻⁵ |
+| Degree       | 0.955 | [0.950, 0.959] | $< 10^{-5}$ |
+| Betweenness  | 0.934 | [0.928, 0.939] | $< 10^{-5}$ |
+| Eigenvector  | 0.852 | [0.840, 0.863] | $< 10^{-5}$ |
+| PageRank     | 0.952 | [0.947, 0.956] | $< 10^{-5}$ |
+| Closeness    | 0.839 | [0.827, 0.850] | $< 10^{-5}$ |
+| Node Load    | 0.933 | [0.928, 0.938] | $< 10^{-5}$ |
 
 **Table:** Spearman correlations of centrality measures with the radial distance in a graph embedding for the SNAP *“Wikipedia vote network”* dataset [@snap-wiki-vote]. Embedding dimension $3$. We subsampled $5 250$ vertices to reduce computational load for combinatorial centrality measures.
 
