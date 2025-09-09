@@ -143,6 +143,38 @@ The `examples/` directory contains:
 - `real_world_datasets_test.py` - Work with real datasets
 - `graphem_notebook.ipynb` - Interactive Jupyter notebook
 
+## Testing
+
+GraphEm includes a comprehensive unit test suite that validates all core functionality using the built-in graph generators.
+
+### Running Tests
+
+To run the full test suite:
+```bash
+python -m pytest tests/
+```
+
+For verbose output:
+```bash
+python -m pytest tests/ -v
+```
+
+### Test Coverage
+
+The test suite covers:
+
+- **Graph Generators** (`test_generators.py`): All 12+ built-in graph generators including Erdős-Rényi, Barabási-Albert, Watts-Strogatz, random regular, geometric, caveman, and stochastic block models
+- **Graph Embedder** (`test_embedder.py`): Core embedding functionality, layout algorithms, different dimensions, and large graph handling  
+- **Influence Maximization** (`test_influence.py`): NDLib integration, seed selection, and influence estimation
+
+### Test Requirements
+
+Tests require the same dependencies as GraphEm plus:
+- `pytest` (for running tests)
+- `ndlib` (for influence maximization tests)
+
+All tests use deterministic seeds for reproducible results.
+
 ## Benchmarking
 
 Run comprehensive benchmarks:
