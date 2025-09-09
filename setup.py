@@ -37,6 +37,10 @@ docs_required = [
     "sphinx-autodoc-typehints>=1.12.0"
 ]
 
+test_required = [
+    "pytest>=6.0.0",
+]
+
 setup(
     name="graphem-jax",
     version="0.2.0",
@@ -48,6 +52,7 @@ setup(
     install_requires=required,
     extras_require={
         "docs": docs_required,
+        "test": test_required,
     },
     python_requires=">=3.8",
     classifiers=[
