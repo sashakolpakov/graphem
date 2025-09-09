@@ -1,9 +1,3 @@
-# Graphem - JAX
-
-[![status](https://joss.theoj.org/papers/b3bf183c4924fea63ff29a3fe4100292/status.svg)](https://joss.theoj.org/papers/b3bf183c4924fea63ff29a3fe4100292)
-
-## This is a designated branch for JOSS review only. No new commits will be pushed into it unless they are JOSS-related. 
-
 <p align="center">
   <img src="docs/logo.png" alt="graphem logo" height="240"/>
 </p>
@@ -144,10 +138,42 @@ Built-in access to standard network datasets:
 ## Examples
 
 The `examples/` directory contains:
-- `graph_generator_test.py` - Test all graph generators
-- `random_regular_test.py` - Random regular graph analysis
-- `real_world_datasets_test.py` - Work with real datasets
-- `graphem_notebook.ipynb` - Interactive Jupyter notebook
+- `graph_generator_example.py` - Generate and visualize various graph embeddings
+- `random_regular_example.py` - Random regular graph analysis with GraphEm
+- `real_world_datasets_example.py` - Work with real world datasets (based on Facebook, arXiv, and Wikipedia data)
+- `graphem_notebook.ipynb` - Interactive Jupyter notebook with examples and visualizations 
+
+## Testing
+
+GraphEm includes a comprehensive unit test suite that validates all core functionality using the built-in graph generators.
+
+### Running Tests
+
+To run the full test suite:
+```bash
+python -m pytest tests/
+```
+
+For verbose output:
+```bash
+python -m pytest tests/ -v
+```
+
+### Test Coverage
+
+The test suite covers:
+
+- **Graph Generators** (`test_generators.py`): All built-in graph generators including Erdős-Rényi, Barabási-Albert, Watts-Strogatz, random regular, geometric, caveman, and stochastic block models
+- **Graph Embedder** (`test_embedder.py`): Core embedding functionality, layout algorithms, different dimensions, and large graph handling  
+- **Influence Maximization** (`test_influence.py`): NDLib integration, seed selection, and influence estimation
+
+### Test Requirements
+
+Tests require the same dependencies as GraphEm plus:
+- `pytest` (for running tests)
+- `ndlib` (for influence maximization tests)
+
+All tests use deterministic seeds for reproducible results.
 
 ## Benchmarking
 
