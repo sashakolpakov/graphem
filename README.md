@@ -83,7 +83,7 @@ seeds = ge.graphem_seed_selection(embedder, k=10)
 
 # Estimate influence spread
 import networkx as nx
-G = nx.Graph(edges)
+G = nx.from_edgelist(edges)
 influence, _ = ge.ndlib_estimated_influence(G, seeds, p=0.1)
 print(f"Influence: {influence} nodes ({influence/500:.1%})")
 ```
