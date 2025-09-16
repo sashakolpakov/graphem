@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"/>
   </a>
   <a href="https://www.python.org/downloads/">
-    <img src="https://img.shields.io/badge/python-3.7+-blue.svg" alt="Python 3.7+"/>
+    <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="Python 3.8+"/>
   </a>
   <a href="https://pypi.org/project/graphem-jax/">
     <img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI"/>
@@ -190,7 +190,9 @@ Full API documentation is available [here](https://sashakolpakov.github.io/graph
 
 ## Contributing
 
-See [contributing guide](https://sashakolpakov.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
+Quick start: See [CONTRIBUTING.md](CONTRIBUTING.md) for essential guidelines.
+
+Detailed guide: [contributing documentation](https://sashakolpakov.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
 
 ## Citation
 
