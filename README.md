@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI"/>
   </a>
   <a href="https://pepy.tech/projects/graphem-jax">
-    <img src="https://static.pepy.tech/badge/graphem-jax" alt="PyPI Downloads">
+    <img src="https://static.pepy.tech/personalized-badge/graphem-jax?period=total&units=ABBREVIATION&left_color=GREY&right_color=BLUE&left_text=downloads" alt="PyPI Downloads">
   </a>
   <a href="https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github" alt="CI"/>
