@@ -48,6 +48,14 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Alexander Kolpakov (UATX), Igor Rivin (Temple University)",
+    author_email="akolpakov@uaustin.org, rivin@temple.edu",
+    url="https://github.com/sashakolpakov/graphem",
+    project_urls={
+        "Documentation": "https://sashakolpakov.github.io/graphem/",
+        "Source": "https://github.com/sashakolpakov/graphem",
+        "Bug Reports": "https://github.com/sashakolpakov/graphem/issues",
+        "Paper": "https://arxiv.org/abs/2506.07435"
+    },
     packages=find_packages(),
     install_requires=required,
     extras_require={
@@ -55,8 +63,17 @@ setup(
         "test": test_required,
     },
     python_requires=">=3.8",
+    keywords=["graph embedding", "node influence", "centrality measures", "network analysis", "force layout", "JAX"],
     classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Information Analysis",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
