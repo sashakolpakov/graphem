@@ -199,7 +199,7 @@ Detailed guide: [contributing documentation](https://sashakolpakov.github.io/gra
 If you use GraphEm in research, please cite our work [![arXiv](https://img.shields.io/badge/arXiv-2506.07435-b31b1b.svg)](https://arxiv.org/abs/2506.07435)
 
 ```bibtex
-@misc{kolpakov2025fast,
+@misc{kolpakov-rivin-2025fast,
   title={Fast Geometric Embedding for Node Influence Maximization},
   author={Kolpakov, Alexander and Rivin, Igor},
   year={2025},
