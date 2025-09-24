@@ -29,11 +29,11 @@ bibliography: paper.bib
 
 Computing classical centrality measures such as betweenness and closeness is computationally expensive on large graphs. Graphem-JAX provides an efficient force layout algorithm that embeds a graph into a low-dimensional space in such a way that the radial distance from the origin serves as a proxy for various centrality measures. 
 
-Our method shows strong correlations with degree, PageRank, and paths-based centralities on multiple common graph families such as Erdős–Rényi random graphs, Watts-Strogatz "small world" graphs, and a few other. We also provide benchmarks on real world datasets such as Social Circles (Facebook) and Wikipedia Vote Network. Moreover in practice, Graphem-JAX allows to find high-influence nodes in a network, and provides a fast and scalable alternative to the standard greedy algorithm.
+Our method shows strong correlations with degree, PageRank, and paths-based centralities on multiple common graph families such as Erdős–Rényi random graphs, Watts-Strogatz "small world" graphs, and a few other. We also provide benchmarks on real world datasets such as Social Circles (Facebook) and Wikipedia Vote Network. Moreover in practice, Graphem-JAX allows one to find high-influence nodes in a network, and provides a fast and scalable alternative to the standard greedy algorithm.
 
 # Statement of need
 
-Graph centrality measures provide crucial insights into network structure and influence. However, the computation of combinatorial measures such as betweenness or closeness is often infeasible for graphs with a large amount of vertices $n$, as it often growth as $O(n^2)$ in practice, and cannot be parallelized. In contrast, spectral and force-directed methods are inherently parallelizable, and thus offer scalable alternatives.
+Graph centrality measures provide crucial insights into network structure and influence. However, the computation of combinatorial measures such as betweenness or closeness is often infeasible for graphs with a large number of vertices $n$, as it often growth as $O(n^2)$ in practice, and cannot be parallelized. In contrast, spectral and force-directed methods are inherently parallelizable, and thus offer scalable alternatives.
 
 This paper proposes a force layout algorithm that leverages a Laplacian-based initialization followed by iterative force updates to produce an embedding where the radial distance reflects node importance. We further explore potential applications of this embedding, in particular to finding high-importance communities, and compare our embedding to the baseline greedy algorithm using random cascades.
 
