@@ -22,7 +22,7 @@ required = [
     "scipy>=1.7.0",
     "ndlib>=5.1.0",
     "loguru>=0.6.0",
-    "kaleido>=0.2.1",
+    "requests>=2.25.0",
     "line_profiler>=4.0.0",
     "snakeviz>=2.2.0",
     "tensorboard>=2.10.0",
@@ -37,6 +37,10 @@ docs_required = [
     "sphinx-autodoc-typehints>=1.12.0"
 ]
 
+test_required = [
+    "pytest>=6.0.0",
+]
+
 setup(
     name="graphem-jax",
     version="0.2.0",
@@ -44,14 +48,32 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Alexander Kolpakov (UATX), Igor Rivin (Temple University)",
+    author_email="akolpakov@uaustin.org, rivin@temple.edu",
+    url="https://github.com/sashakolpakov/graphem",
+    project_urls={
+        "Documentation": "https://sashakolpakov.github.io/graphem/",
+        "Source": "https://github.com/sashakolpakov/graphem",
+        "Bug Reports": "https://github.com/sashakolpakov/graphem/issues",
+        "Paper": "https://arxiv.org/abs/2506.07435"
+    },
     packages=find_packages(),
     install_requires=required,
     extras_require={
         "docs": docs_required,
+        "test": test_required,
     },
     python_requires=">=3.8",
+    keywords=["graph embedding", "node influence", "centrality measures", "network analysis", "force layout", "JAX"],
     classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Information Analysis",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],

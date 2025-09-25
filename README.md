@@ -9,13 +9,13 @@
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"/>
   </a>
   <a href="https://www.python.org/downloads/">
-    <img src="https://img.shields.io/badge/python-3.7+-blue.svg" alt="Python 3.7+"/>
+    <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="Python 3.8+"/>
   </a>
   <a href="https://pypi.org/project/graphem-jax/">
     <img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI"/>
   </a>
   <a href="https://pepy.tech/projects/graphem-jax">
-    <img src="https://static.pepy.tech/badge/graphem-jax" alt="PyPI Downloads">
+    <img src="https://static.pepy.tech/personalized-badge/graphem-jax?period=total&units=ABBREVIATION&left_color=GREY&right_color=BLUE&left_text=downloads" alt="PyPI Downloads">
   </a>
   <a href="https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github" alt="CI"/>
@@ -83,7 +83,7 @@ seeds = ge.graphem_seed_selection(embedder, k=10)
 
 # Estimate influence spread
 import networkx as nx
-G = nx.Graph(edges)
+G = nx.from_edgelist(edges)
 influence, _ = ge.ndlib_estimated_influence(G, seeds, p=0.1)
 print(f"Influence: {influence} nodes ({influence/500:.1%})")
 ```
@@ -138,10 +138,42 @@ Built-in access to standard network datasets:
 ## Examples
 
 The `examples/` directory contains:
-- `graph_generator_test.py` - Test all graph generators
-- `random_regular_test.py` - Random regular graph analysis
-- `real_world_datasets_test.py` - Work with real datasets
-- `graphem_notebook.ipynb` - Interactive Jupyter notebook
+- `graph_generator_example.py` - Generate and visualize various graph embeddings
+- `random_regular_example.py` - Random regular graph analysis with GraphEm
+- `real_world_datasets_example.py` - Work with real world datasets (based on Facebook, arXiv, and Wikipedia data)
+- `graphem_notebook.ipynb` - Interactive Jupyter notebook with examples and visualizations 
+
+## Testing
+
+GraphEm includes a comprehensive unit test suite that validates all core functionality using the built-in graph generators.
+
+### Running Tests
+
+To run the full test suite:
+```bash
+python -m pytest tests/
+```
+
+For verbose output:
+```bash
+python -m pytest tests/ -v
+```
+
+### Test Coverage
+
+The test suite covers:
+
+- **Graph Generators** (`test_generators.py`): All built-in graph generators including Erdős-Rényi, Barabási-Albert, Watts-Strogatz, random regular, geometric, caveman, and stochastic block models
+- **Graph Embedder** (`test_embedder.py`): Core embedding functionality, layout algorithms, different dimensions, and large graph handling  
+- **Influence Maximization** (`test_influence.py`): NDLib integration, seed selection, and influence estimation
+
+### Test Requirements
+
+Tests require the same dependencies as GraphEm plus:
+- `pytest` (for running tests)
+- `ndlib` (for influence maximization tests)
+
+All tests use deterministic seeds for reproducible results.
 
 ## Benchmarking
 
@@ -158,11 +190,31 @@ Full API documentation is available [here](https://sashakolpakov.github.io/graph
 
 ## Contributing
 
-See [contributing guide](https://sashakolpakov.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
+Quick start: See [CONTRIBUTING.md](CONTRIBUTING.md) for essential guidelines.
+
+Detailed guide: [contributing documentation](https://sashakolpakov.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
 
 ## Citation
 
 If you use GraphEm in research, please cite our work [![arXiv](https://img.shields.io/badge/arXiv-2506.07435-b31b1b.svg)](https://arxiv.org/abs/2506.07435)
+
+**BibTeX:**
+```bibtex
+@misc{kolpakov-rivin-2025fast,
+  title={Fast Geometric Embedding for Node Influence Maximization},
+  author={Kolpakov, Alexander and Rivin, Igor},
+  year={2025},
+  eprint={2506.07435},
+  archivePrefix={arXiv},
+  primaryClass={cs.SI},
+  url={https://arxiv.org/abs/2506.07435}
+}
+```
+
+**APA Style:**
+```
+Kolpakov, A., & Rivin, I. (2025). Fast Geometric Embedding for Node Influence Maximization. arXiv preprint arXiv:2506.07435.
+```
 
 ## License
 

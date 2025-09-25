@@ -72,6 +72,36 @@ GraphEm provides various graph generators:
     # Random regular graph
     edges = ge.generate_random_regular(n=300, d=4)
 
+Complete Graph Generator Reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+GraphEm provides 12+ graph generators for different network types:
+
+.. code-block:: python
+
+    # Random graphs
+    edges = ge.erdos_renyi_graph(n=500, p=0.02)  # Random graph
+    edges = ge.generate_random_regular(n=300, d=4)  # Regular degree
+    edges = ge.generate_geometric(n=200, radius=0.2)  # Geometric graph
+
+    # Scale-free and complex networks
+    edges = ge.generate_ba(n=500, m=3)  # Barabási-Albert
+    edges = ge.generate_scale_free(n=400, alpha=0.41, beta=0.54)  # Scale-free
+    edges = ge.generate_power_cluster(n=500, m=3, p=0.5)  # Powerlaw cluster
+
+    # Small-world networks
+    edges = ge.generate_ws(n=500, k=6, p=0.1)  # Watts-Strogatz
+
+    # Community structures
+    edges = ge.generate_sbm(n_per_block=100, num_blocks=3, p_in=0.1, p_out=0.01)
+    edges = ge.generate_caveman(l=10, k=10)  # Connected caveman
+    edges = ge.generate_relaxed_caveman(l=10, k=10, p=0.1)  # Relaxed caveman
+
+    # Specialized networks
+    edges = ge.generate_bipartite_graph(n_top=100, n_bottom=150)  # Bipartite
+    edges = ge.generate_balanced_tree(r=3, h=8)  # Balanced tree
+    edges = ge.generate_road_network(width=20, height=20)  # Grid-like road network
+
 Working with Real Data
 ----------------------
 
