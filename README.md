@@ -17,14 +17,14 @@
   <a href="https://pepy.tech/projects/graphem-jax">
     <img src="https://static.pepy.tech/personalized-badge/graphem-jax?period=total&units=ABBREVIATION&left_color=GREY&right_color=BLUE&left_text=downloads" alt="PyPI Downloads">
   </a>
-  <a href="https://github.com/sashakolpakov/graphem/actions/workflows/pylint.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/pylint.yml?branch=main&label=CI&logo=github" alt="CI"/>
+  <a href="https://github.com/igorrivin/graphem/actions/workflows/pylint.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/igorrivin/graphem/pylint.yml?branch=main&label=CI&logo=github" alt="CI"/>
   </a>
-  <a href="https://github.com/sashakolpakov/graphem/actions/workflows/deploy_docs.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github" alt="Docs"/>
+  <a href="https://github.com/igorrivin/graphem/actions/workflows/deploy_docs.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/igorrivin/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github" alt="Docs"/>
   </a>
-  <a href="https://sashakolpakov.github.io/graphem/">
-    <img src="https://img.shields.io/website-up-down-green-red/https/sashakolpakov.github.io/graphem?label=API%20Documentation" alt="Docs Status"/>
+  <a href="https://igorrivin.github.io/graphem/">
+    <img src="https://img.shields.io/website-up-down-green-red/https/igorrivin.github.io/graphem?label=API%20Documentation" alt="Docs Status"/>
   </a>
 </p>
 
@@ -48,7 +48,7 @@ pip install graphem-jax
 
 From source:
 ```bash
-pip install git+https://github.com/sashakolpakov/graphem.git
+pip install git+https://github.com/igorrivin/graphem.git
 ```
 
 ## Quick Start
@@ -114,7 +114,7 @@ ge.report_full_correlation_matrix(
 ```
 ### Google Colab Notebook
 
-You can check out most of the graphem features in Google Colab by running the demo notebook [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sashakolpakov/graphem/blob/main/examples/graphem_notebook.ipynb)
+You can check out most of the graphem features in Google Colab by running the demo notebook [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/igorrivin/graphem/blob/main/examples/graphem_notebook.ipynb)
 
 
 ## Key Components
@@ -186,13 +186,13 @@ Generates performance tables and correlation analysis in Markdown and LaTeX form
 
 ## Documentation
 
-Full API documentation is available [here](https://sashakolpakov.github.io/graphem/).
+Full API documentation is available [here](https://igorrivin.github.io/graphem/).
 
 ## Contributing
 
 Quick start: See [CONTRIBUTING.md](CONTRIBUTING.md) for essential guidelines.
 
-Detailed guide: [contributing documentation](https://sashakolpakov.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
+Detailed guide: [contributing documentation](https://igorrivin.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
 
 ## Citation
 
