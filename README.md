@@ -71,7 +71,7 @@ edges = ge.erdos_renyi_graph(n=500, p=0.01)
 embedder = ge.GraphEmbedder(
     edges=edges,
     n_vertices=500,
-    dimension=3
+    n_components=3
 )
 
 # Compute layout
@@ -103,7 +103,7 @@ from graphem.benchmark import benchmark_correlations
 results = benchmark_correlations(
     ge.erdos_renyi_graph,
     graph_params={'n': 200, 'p': 0.05},
-    dim=3,
+    n_components=3,
     num_iterations=40
 )
 

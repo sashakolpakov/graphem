@@ -12,8 +12,8 @@ from graphem.embedder import GraphEmbedder
 from graphem.influence import graphem_seed_selection, ndlib_estimated_influence, greedy_seed_selection
 
 
-def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, k_inter=0.1, 
-                 knn_k=15, sample_size=512, batch_size=1024, num_iterations=40):
+def run_benchmark(graph_generator, graph_params, n_components=3, L_min=10.0, k_attr=0.5, k_inter=0.1,
+                 n_neighbors=15, sample_size=512, batch_size=1024, num_iterations=40):
     """
     Run a benchmark on the given graph.
     
@@ -22,9 +22,9 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
             Function to generate a graph
         graph_params: dict
             Parameters for the graph generator
-        dim: int
+        n_components: int
             Embedding dimension
-        L_min, k_attr, k_inter, knn_k: float
+        L_min, k_attr, k_inter, n_neighbors: float
             GraphEmbedder parameters
         sample_size, batch_size: int
             Batch parameters for kNN search
@@ -96,13 +96,13 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
     embedder = GraphEmbedder(
         edges=edges,
         n_vertices=n,
-        dimension=dim,
+        n_components=n_components,
         L_min=L_min,
         k_attr=k_attr,
         k_inter=k_inter,
-        knn_k=knn_k,
-        sample_size=min(sample_size, len(edges)),
-        batch_size=min(batch_size, n),
+        n_neighbors=n_neighbors,
+        sample_size=sample_size,
+        batch_size=batch_size,
         verbose=True
     )
     
@@ -124,7 +124,7 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
         'avg_degree': 2 * m / n,
         'layout_time': layout_time,
         'graph_type': graph_generator.__name__,
-        'dimension': dim,
+        'n_components': n_components,
         'radii': radii,
         'positions': positions,
         'degree': degree,
@@ -142,8 +142,8 @@ def run_benchmark(graph_generator, graph_params, dim=3, L_min=10.0, k_attr=0.5, 
     return result
 
 
-def benchmark_correlations(graph_generator, graph_params, dim=2, L_min=10.0, k_attr=0.5, k_inter=0.1,
-                          knn_k=15, sample_size=512, batch_size=1024, num_iterations=40):
+def benchmark_correlations(graph_generator, graph_params, n_components=2, L_min=10.0, k_attr=0.5, k_inter=0.1,
+                          n_neighbors=15, sample_size=512, batch_size=1024, num_iterations=40):
     """
     Run a benchmark to calculate correlations between embedding radii and centrality measures.
     
@@ -159,13 +159,13 @@ def benchmark_correlations(graph_generator, graph_params, dim=2, L_min=10.0, k_a
     """
     # Run the benchmark to get basic metrics
     results = run_benchmark(
-        graph_generator, 
+        graph_generator,
         graph_params,
-        dim=dim,
+        n_components=n_components,
         L_min=L_min,
         k_attr=k_attr,
         k_inter=k_inter,
-        knn_k=knn_k,
+        n_neighbors=n_neighbors,
         sample_size=sample_size,
         batch_size=batch_size,
         num_iterations=num_iterations
@@ -205,8 +205,8 @@ def benchmark_correlations(graph_generator, graph_params, dim=2, L_min=10.0, k_a
     return results
 
 
-def run_influence_benchmark(graph_generator, graph_params, k=10, p=0.1, iterations=200, 
-                           dim=3, num_layout_iterations=20, layout_params=None):
+def run_influence_benchmark(graph_generator, graph_params, k=10, p=0.1, iterations=200,
+                           n_components=3, num_layout_iterations=20, layout_params=None):
     """
     Run a benchmark comparing influence maximization methods.
     
@@ -221,7 +221,7 @@ def run_influence_benchmark(graph_generator, graph_params, k=10, p=0.1, iteratio
             Propagation probability
         iterations: int
             Number of iterations for influence simulation
-        dim: int
+        n_components: int
             Embedding dimension
         num_layout_iterations: int
             Number of iterations for layout algorithm
@@ -257,7 +257,7 @@ def run_influence_benchmark(graph_generator, graph_params, k=10, p=0.1, iteratio
             'L_min': 10.0,
             'k_attr': 0.5,
             'k_inter': 0.1,
-            'knn_k': 15,
+            'n_neighbors': 15,
             'sample_size': 512,
             'batch_size': 1024
         }
@@ -267,7 +267,7 @@ def run_influence_benchmark(graph_generator, graph_params, k=10, p=0.1, iteratio
     embedder = GraphEmbedder(
         edges=edges,
         n_vertices=n,
-        dimension=dim,
+        n_components=n_components,
         **layout_params,
         verbose=True
     )

@@ -27,7 +27,7 @@ class GraphEmbedder:
                 Array of edge pairs (i, j) with i < j.
             n: int
                 Number of vertices in the graph.
-            dimension: int
+            n_components: int
                 Dimension of the embedding.
             L_min: float
                 Minimum length of the spring.
@@ -35,28 +35,52 @@ class GraphEmbedder:
                 Attraction force constant.
             k_inter: float
                 Repulsion force constant for intersections.
-            knn_k: int
+            n_neighbors: int
                 Number of nearest neighbors to consider.
             sample_size: int
-                Number of samples for kNN search.
+                Number of samples for kNN search (automatically limited to number of edges).
             batch_size: int
-                Batch size for kNN search.
+                Batch size for kNN search (automatically limited to number of vertices).
             my_logger: loguru.logger
                 Logger object to use for logging.
     """
-    def __init__(self, edges, n_vertices, dimension=2, L_min=1.0, k_attr=0.2, k_inter=0.5, knn_k=10, sample_size=256, batch_size=1024, my_logger=None, verbose=True):
+    def __init__(self, edges, n_vertices, n_components=2, L_min=1.0, k_attr=0.2, k_inter=0.5, n_neighbors=10, sample_size=256, batch_size=1024, my_logger=None, verbose=True):
         """
         Initialize the GraphEmbedder.
+
+        Parameters:
+            edges: array-like of shape (num_edges, 2)
+                Array of edge pairs (i, j).
+            n_vertices: int
+                Number of vertices in the graph.
+            n_components: int, default=2
+                Dimension of the embedding.
+            L_min: float, default=1.0
+                Minimum length of the spring.
+            k_attr: float, default=0.2
+                Attraction force constant.
+            k_inter: float, default=0.5
+                Repulsion force constant for intersections.
+            n_neighbors: int, default=10
+                Number of nearest neighbors to consider.
+            sample_size: int, default=256
+                Number of samples for kNN search. Automatically limited to min(sample_size, len(edges)).
+            batch_size: int, default=1024
+                Batch size for kNN search. Automatically limited to min(batch_size, n_vertices).
+            my_logger: loguru.logger, optional
+                Logger object to use for logging.
+            verbose: bool, default=True
+                Whether to display progress information.
         """
         self.edges = jnp.array(edges)
         self.n = n_vertices
-        self.dimension = dimension
+        self.n_components = n_components
         self.L_min = L_min
         self.k_attr = k_attr
         self.k_inter = k_inter
-        self.knn_k = knn_k
-        self.sample_size = sample_size
-        self.batch_size = batch_size
+        self.n_neighbors = n_neighbors
+        self.sample_size = min(sample_size, len(edges))
+        self.batch_size = min(batch_size, n_vertices)
         if my_logger is None:
             logger.remove()
             sink = sys.stdout if verbose else open(os.devnull, 'w', encoding='utf-8')
@@ -79,7 +103,7 @@ class GraphEmbedder:
         data = np.ones(len(edges_np))
         A = sp.csr_matrix((data, (row, col)), shape=(self.n, self.n))
         L = laplacian(A + A.transpose(), normed=True)
-        k = self.dimension + 1
+        k = self.n_components + 1
         _, eigenvectors = spla.eigsh(L, k, which='SM')
         lap_embedding = eigenvectors[:, 1:k]
         self.logger.info("Laplacian embedding done")
@@ -198,7 +222,7 @@ class GraphEmbedder:
         self.logger.info("Updating positions")
         spring_forces = self.compute_spring_forces(self.positions, self.edges, self.L_min, self.k_attr)
         midpoints = (self.positions[self.edges[:, 0]] + self.positions[self.edges[:, 1]]) / 2.0
-        knn_idx, sampled_indices = self.locate_knn_midpoints(midpoints, self.knn_k)
+        knn_idx, sampled_indices = self.locate_knn_midpoints(midpoints, self.n_neighbors)
         inter_forces = self.compute_intersection_forces_with_knn_index(self.positions, self.edges, knn_idx, sampled_indices, self.k_inter)
         forces = spring_forces + inter_forces
         new_positions = self.positions + forces
@@ -234,9 +258,9 @@ class GraphEmbedder:
             Displays the graph embedding using Plotly in the appropriate dimension.
         """
         self.logger.info("Displaying layout")
-        if self.dimension == 2:
+        if self.n_components == 2:
             self._display_layout_2d(edge_width=edge_width, node_size=node_size, node_colors=node_colors)
-        elif self.dimension == 3:
+        elif self.n_components == 3:
             self._display_layout_3d(edge_width=edge_width, node_size=node_size, node_colors=node_colors)
         else:
             raise ValueError("Dimension must be 2 or 3 to display layout")

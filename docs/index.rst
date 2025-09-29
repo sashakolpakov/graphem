@@ -84,9 +84,9 @@ Quick Start Example
    
    # Create and run embedding
    embedder = ge.GraphEmbedder(
-       edges=edges, 
-       n_vertices=1000, 
-       dimension=3
+       edges=edges,
+       n_vertices=1000,
+       n_components=3
    )
    embedder.run_layout(num_iterations=50)
    

@@ -31,11 +31,11 @@ Let's start with a simple example of embedding a random graph:
     embedder = ge.GraphEmbedder(
         edges=edges,
         n_vertices=200,
-        dimension=3,      # 3D embedding
+        n_components=3,   # 3D embedding
         L_min=10.0,       # Minimum edge length
         k_attr=0.5,       # Attraction force
         k_inter=0.1,      # Repulsion force
-        knn_k=15          # Nearest neighbors
+        n_neighbors=15    # Nearest neighbors
     )
     
     # Compute the embedding
@@ -47,11 +47,11 @@ Let's start with a simple example of embedding a random graph:
 Understanding the Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* **dimension**: Embedding space dimension (2D or 3D)
+* **n_components**: Embedding space dimension (2D or 3D)
 * **L_min**: Controls minimum distance between connected nodes
 * **k_attr**: Strength of attractive forces between connected nodes
 * **k_inter**: Strength of repulsive forces between all nodes
-* **knn_k**: Number of nearest neighbors for efficient force computation
+* **n_neighbors**: Number of nearest neighbors for efficient force computation
 
 Graph Generation
 ----------------
@@ -117,8 +117,8 @@ Load and analyze real-world networks:
     embedder = ge.GraphEmbedder(
         edges=edges,
         n_vertices=n_vertices,
-        dimension=2,
-        knn_k=20,           # More neighbors for denser graphs
+        n_components=2,
+        n_neighbors=20,     # More neighbors for denser graphs
         sample_size=512,    # Larger sample for accuracy
         batch_size=2048     # Larger batches for efficiency
     )
@@ -167,7 +167,7 @@ Compare different centrality measures:
     results = benchmark_correlations(
         graph_generator=ge.generate_ba,
         graph_params={'n': 300, 'm': 3},
-        dim=3,
+        n_components=3,
         num_iterations=50
     )
     
@@ -192,10 +192,10 @@ Performance Tips
     embedder = ge.GraphEmbedder(
         edges=edges,
         n_vertices=n_vertices,
-        dimension=2,           # 2D is faster than 3D
-        knn_k=10,             # Fewer neighbors = faster
-        sample_size=256,      # Smaller samples = faster
-        batch_size=4096,      # Larger batches = more efficient
+        n_components=2,       # 2D is faster than 3D
+        n_neighbors=10,       # Fewer neighbors = faster
+        sample_size=256,      # Automatically limited to len(edges)
+        batch_size=4096,      # Automatically limited to n_vertices
         verbose=False         # Disable progress bars
     )
 
@@ -222,9 +222,9 @@ For very large graphs, process in chunks:
     embedder = ge.GraphEmbedder(
         edges=edges,
         n_vertices=n_vertices,
-        knn_k=5,              # Minimum viable k
-        sample_size=128,      # Smaller sample
-        batch_size=1024       # Smaller batches
+        n_neighbors=5,        # Minimum viable k
+        sample_size=128,      # Automatically limited to len(edges)
+        batch_size=1024       # Automatically limited to n_vertices
     )
 
 Next Steps
