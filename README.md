@@ -12,7 +12,8 @@
     <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="Python 3.8+"/>
   </a>
   <a href="https://pepy.tech/projects/graphem-jax">
-    <img src="https://static.pepy.tech/personalized-badge/graphem-jax?period=total&units=ABBREVIATION&left_color=GREY&right_color=BLUE&left_text=downloads" alt="PyPI Downloads">
+    <img alt="Pepy Total Downloads" src="https://img.shields.io/pepy/dt/graphem-jax">
+
   </a>
   <a style="border-width:0" href="https://doi.org/10.21105/joss.08855">
     <img src="https://joss.theoj.org/papers/10.21105/joss.08855/status.svg" alt="DOI badge" >
