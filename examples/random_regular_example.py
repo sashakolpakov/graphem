@@ -100,13 +100,13 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=n,
-            dimension=dim,
+            n_components=dim,
             L_min=10.0,
             k_attr=0.5,
             k_inter=0.1,
-            knn_k=15,
-            sample_size=min(512, len(edges)),
-            batch_size=min(1024, n),
+            n_neighbors=15,
+            sample_size=512,
+            batch_size=1024,
             verbose=True
         )
         
@@ -262,13 +262,13 @@ def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=n,
-            dimension=dim,
+            n_components=dim,
             L_min=10.0,
             k_attr=0.5,
             k_inter=0.1,
-            knn_k=15,
-            sample_size=min(512, len(edges)),
-            batch_size=min(1024, n),
+            n_neighbors=15,
+            sample_size=512,
+            batch_size=1024,
             verbose=True
         )
         

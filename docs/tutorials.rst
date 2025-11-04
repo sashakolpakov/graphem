@@ -25,11 +25,11 @@ GraphEm combines spectral methods with force-directed layout for high-quality em
     embedder = ge.GraphEmbedder(
         edges=edges,
         n_vertices=n_vertices,
-        dimension=2,
+        n_components=2,
         L_min=5.0,        # Shorter edges for tighter layout
-        k_attr=0.8,       # Strong attraction within communities  
+        k_attr=0.8,       # Strong attraction within communities
         k_inter=0.05,     # Weak repulsion between communities
-        knn_k=20          # More neighbors for better structure
+        n_neighbors=20    # More neighbors for better structure
     )
 
     # Monitor convergence
@@ -64,7 +64,7 @@ Understanding how parameters affect the embedding:
 
     for i, params in enumerate(params_to_test, 1):
         embedder = ge.GraphEmbedder(
-            edges=edges, n_vertices=n_vertices, dimension=2,
+            edges=edges, n_vertices=n_vertices, n_components=2,
             L_min=params['L_min'], k_attr=params['k_attr'], k_inter=params['k_inter']
         )
         embedder.run_layout(num_iterations=50)
@@ -93,13 +93,13 @@ For large networks, optimize performance and memory usage:
     large_embedder = ge.GraphEmbedder(
         edges=large_edges,
         n_vertices=n_vertices,
-        dimension=2,           # 2D is faster than 3D
+        n_components=2,       # 2D is faster than 3D
         L_min=2.0,
         k_attr=0.3,
         k_inter=0.1,
-        knn_k=8,              # Fewer neighbors for speed
-        sample_size=512,      # Larger sample for accuracy
-        batch_size=4096,      # Large batches for efficiency
+        n_neighbors=8,        # Fewer neighbors for speed
+        sample_size=512,      # Automatically limited to len(edges)
+        batch_size=4096,      # Automatically limited to n_vertices
         verbose=True          # Monitor progress
     )
 
@@ -189,7 +189,7 @@ Simulate information spread in social networks:
     }
     
     # Compute GraphEm strategy
-    embedder = ge.GraphEmbedder(edges=social_edges, n_vertices=1000, dimension=2)
+    embedder = ge.GraphEmbedder(edges=social_edges, n_vertices=1000, n_components=2)
     strategies['GraphEm'] = ge.graphem_seed_selection(embedder, k=20)
     
     # Simulate influence spread for each strategy
@@ -210,7 +210,7 @@ Simulate information spread in social networks:
         pos = np.array(embedder.positions)
     else:
         # Create embedding for visualization
-        embedder = ge.GraphEmbedder(edges=social_edges, n_vertices=1000, dimension=2)
+        embedder = ge.GraphEmbedder(edges=social_edges, n_vertices=1000, n_components=2)
         embedder.run_layout(num_iterations=50)
         pos = np.array(embedder.positions)
     
@@ -347,7 +347,7 @@ Comparing Embedding-Based and Traditional Centralities
         results = benchmark_correlations(
             graph_generator=generator,
             graph_params=params,
-            dim=2,
+            n_components=2,
             num_iterations=50
         )
         
@@ -424,9 +424,9 @@ Creating Domain-Specific Networks
     
     # Embed and visualize
     embedder = ge.GraphEmbedder(
-        edges=hier_edges, 
+        edges=hier_edges,
         n_vertices=hier_edges.max() + 1,
-        dimension=2,
+        n_components=2,
         L_min=3.0,
         k_attr=0.7,
         k_inter=0.1
@@ -458,8 +458,8 @@ GPU Acceleration Tips
                 embedder = ge.GraphEmbedder(
                     edges=edges,
                     n_vertices=n_vertices,
-                    batch_size=8192,      # Larger batches for GPU
-                    sample_size=1024      # Larger samples for GPU
+                    batch_size=8192,      # Automatically limited to n_vertices
+                    sample_size=1024      # Automatically limited to len(edges)
                 )
                 return embedder
         else:

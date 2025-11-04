@@ -165,13 +165,13 @@ def analyze_dataset(dataset_name, sample_size=None, dim=3, num_iterations=30):
     embedder = GraphEmbedder(
         edges=G_cc.edges,
         n_vertices=G_cc.number_of_nodes(),
-        dimension=dim,
+        n_components=dim,
         L_min=4.0,
         k_attr=0.5,
         k_inter=0.1,
-        knn_k=min(15, G_cc.number_of_nodes() // 10),
-        sample_size=min(512, G_cc.number_of_edges()),
-        batch_size=min(1024, G_cc.number_of_nodes()),
+        n_neighbors=min(15, G_cc.number_of_nodes() // 10),
+        sample_size=512,
+        batch_size=1024,
         verbose=False
     )
     
@@ -352,13 +352,13 @@ def compare_datasets(dataset_names, sample_size=1000, dim=3, num_iterations=30):
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=n_vertices,
-            dimension=dim,
+            n_components=dim,
             L_min=4.0,
             k_attr=0.5,
             k_inter=0.1,
-            knn_k=min(15, n_vertices // 10),
-            sample_size=min(512, len(edges)),
-            batch_size=min(1024, len(edges)),
+            n_neighbors=min(15, n_vertices // 10),
+            sample_size=512,
+            batch_size=1024,
             verbose=False
         )
         

@@ -13,8 +13,10 @@ GraphEmbedder
 
 Main class for creating graph embeddings. Combines Laplacian eigenvectors with force-directed layout optimization to create visually appealing and structurally meaningful embeddings.
 
+Features automatic parameter safeguards: ``sample_size`` is automatically limited to the number of edges, and ``batch_size`` is automatically limited to the number of vertices, eliminating the need for manual size calculations.
+
 Key methods:
-- ``__init__(edges, n_vertices, dimension=2, ...)`` - Initialize embedder with graph structure
+- ``__init__(edges, n_vertices, n_components=2, ...)`` - Initialize embedder with graph structure
 - ``run_layout(num_iterations=100)`` - Execute layout algorithm for specified iterations
 - ``display_layout(edge_width=1, node_size=3, ...)`` - Visualize embedding using Plotly
 

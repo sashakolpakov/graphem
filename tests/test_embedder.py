@@ -16,13 +16,13 @@ class TestEmbedder:
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=50,
-            dimension=2,
-            sample_size=min(256, len(edges)),
+            n_components=2,
+            sample_size=256,
             verbose=False
         )
         
         assert embedder.n == 50
-        assert embedder.dimension == 2
+        assert embedder.n_components == 2
         assert embedder.positions.shape == (50, 2)
         assert embedder.positions is not None
 
@@ -34,12 +34,12 @@ class TestEmbedder:
             embedder = GraphEmbedder(
                 edges=edges,
                 n_vertices=40,
-                dimension=dim,
-                sample_size=min(200, len(edges)),
+                n_components=dim,
+                sample_size=200,
                 verbose=False
             )
             
-            assert embedder.dimension == dim
+            assert embedder.n_components == dim
             assert embedder.positions.shape == (40, dim)
 
     def test_layout_execution(self):
@@ -49,9 +49,9 @@ class TestEmbedder:
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=40,
-            dimension=2,
-            sample_size=min(128, len(edges)),
-            knn_k=10,
+            n_components=2,
+            sample_size=128,
+            n_neighbors=10,
             verbose=False
         )
         
@@ -73,8 +73,8 @@ class TestEmbedder:
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=6,
-            dimension=2,
-            sample_size=min(6, len(edges)),  # Sample size can't exceed edge count
+            n_components=2,
+            sample_size=6,
             verbose=False
         )
         
@@ -88,8 +88,8 @@ class TestEmbedder:
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=30,
-            dimension=2,
-            sample_size=min(64, len(edges)),
+            n_components=2,
+            sample_size=64,
             verbose=False
         )
         
@@ -108,9 +108,9 @@ class TestEmbedder:
         embedder = GraphEmbedder(
             edges=edges,
             n_vertices=200,
-            dimension=2,
-            sample_size=min(512, len(edges)),
-            batch_size=min(1024, 200),
+            n_components=2,
+            sample_size=512,
+            batch_size=1024,
             verbose=False
         )
         
