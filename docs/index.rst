@@ -136,11 +136,11 @@ High performance index for efficient k-nearest neighbor search in high-dimension
 Influence Maximization
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Advanced algorithms for identifying influential nodes in networks:
+Algorithms for identifying influential nodes:
 
-* **GraphEm Method**: Uses embedding radial distances to select diverse, influential seeds
-* **Greedy Baseline**: Traditional greedy algorithm for comparison
-* **Spread Simulation**: NDlib integration for accurate influence estimation
+* **GraphEm Method**: Fast selection using embedding radial distances
+* **Greedy Algorithm**: Iterative marginal gain maximization
+* **Influence Estimation**: Independent Cascades simulation via NDlib
 
 Graph Generators
 ~~~~~~~~~~~~~~~~

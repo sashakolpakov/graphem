@@ -129,29 +129,26 @@ Load and analyze real-world networks:
 Influence Maximization
 -----------------------
 
-Find the most influential nodes in a network:
+Identify influential nodes:
 
 .. code-block:: python
 
     import networkx as nx
-    
-    # Convert to NetworkX for influence analysis
+
     G = nx.Graph()
     G.add_nodes_from(range(n_vertices))
     G.add_edges_from(edges)
-    
-    # Method 1: GraphEm-based selection (uses embedding)
+
+    # Fast: embedding-based selection
     seeds_graphem = ge.graphem_seed_selection(embedder, k=10, num_iterations=20)
-    
-    # Method 2: Greedy selection (traditional approach)
-    seeds_greedy = ge.greedy_seed_selection(G, k=10)
-    
-    # Estimate influence spread
-    influence, iterations = ge.ndlib_estimated_influence(
-        G, seeds_graphem, p=0.1, iterations_count=200
-    )
-    
-    print(f"GraphEm method: {influence} nodes influenced ({influence/n_vertices:.2%})")
+
+    # Accurate: greedy algorithm
+    seeds_greedy, total_iters = ge.greedy_seed_selection(G, k=10, p=0.1, iterations_count=100)
+
+    # Evaluate influence spread (Independent Cascades model)
+    influence, iters = ge.ndlib_estimated_influence(G, seeds_graphem, p=0.1, iterations_count=200)
+
+    print(f"Influenced: {influence}/{n_vertices} nodes ({influence/n_vertices:.1%})")
 
 Benchmarking and Analysis
 -------------------------

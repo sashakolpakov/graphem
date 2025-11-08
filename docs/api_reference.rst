@@ -63,14 +63,14 @@ Key functions:
 Influence Maximization
 ----------------------
 
-**graphem.influence** - Seed selection algorithms for influence maximization in networks.
-
-Implements GraphEm-based seed selection using radial distances from embedding origin, plus traditional greedy methods with NDlib simulation.
+**graphem.influence** - Seed selection and influence estimation for networks.
 
 Key functions:
-- ``graphem_seed_selection(embedder, k)`` - Select seeds based on radial distances
-- ``greedy_seed_selection(G, k, p)`` - Traditional greedy algorithm
-- ``ndlib_estimated_influence(G, seeds, p)`` - Evaluate influence using Independent Cascades
+- ``graphem_seed_selection(embedder, k, num_iterations)`` - Fast seed selection using embedding radial distances
+- ``greedy_seed_selection(G, k, p, iterations_count)`` - Greedy algorithm maximizing marginal influence gain
+- ``ndlib_estimated_influence(G, seeds, p, iterations_count)`` - Estimate influence spread via Independent Cascades simulation
+
+Returns seed node lists and influence spread estimates (node counts).
 
 .. automodule:: graphem.influence
    :members:
