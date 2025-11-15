@@ -24,29 +24,29 @@ Let's start with a simple example of embedding a random graph:
     import graphem as ge
     import numpy as np
 
-    # Generate a random graph
-    edges = ge.erdos_renyi_graph(n=200, p=0.05)
-    
+    # Generate a random graph (returns sparse adjacency matrix)
+    adjacency = ge.generate_er(n=200, p=0.05, seed=42)
+
     # Create an embedder
     embedder = ge.GraphEmbedder(
-        edges=edges,
-        n_vertices=200,
+        adjacency=adjacency,
         n_components=3,   # 3D embedding
         L_min=10.0,       # Minimum edge length
         k_attr=0.5,       # Attraction force
         k_inter=0.1,      # Repulsion force
         n_neighbors=15    # Nearest neighbors
     )
-    
+
     # Compute the embedding
     embedder.run_layout(num_iterations=40)
-    
+
     # Visualize the result
     embedder.display_layout(edge_width=0.5, node_size=5)
 
 Understanding the Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+* **adjacency**: Sparse adjacency matrix (scipy.sparse format)
 * **n_components**: Embedding space dimension (2D or 3D)
 * **L_min**: Controls minimum distance between connected nodes
 * **k_attr**: Strength of attractive forces between connected nodes
@@ -56,51 +56,53 @@ Understanding the Parameters
 Graph Generation
 ----------------
 
-GraphEm provides various graph generators:
+GraphEm provides various graph generators that return sparse adjacency matrices:
 
 .. code-block:: python
 
     # Scale-free network (Barabási–Albert)
-    edges = ge.generate_ba(n=500, m=3)
-    
+    adjacency = ge.generate_ba(n=500, m=3, seed=42)
+
     # Small-world network (Watts–Strogatz)
-    edges = ge.generate_ws(n=500, k=6, p=0.1)
-    
+    adjacency = ge.generate_ws(n=500, k=6, p=0.1, seed=42)
+
     # Stochastic block model
-    edges = ge.generate_sbm(n_per_block=100, num_blocks=3, p_in=0.1, p_out=0.01)
-    
+    adjacency = ge.generate_sbm(n_per_block=100, num_blocks=3, p_in=0.1, p_out=0.01, seed=42)
+
     # Random regular graph
-    edges = ge.generate_random_regular(n=300, d=4)
+    adjacency = ge.generate_random_regular(n=300, d=4, seed=42)
 
 Complete Graph Generator Reference
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-GraphEm provides 12+ graph generators for different network types:
+GraphEm provides 14+ graph generators for different network types:
 
 .. code-block:: python
 
     # Random graphs
-    edges = ge.erdos_renyi_graph(n=500, p=0.02)  # Random graph
-    edges = ge.generate_random_regular(n=300, d=4)  # Regular degree
-    edges = ge.generate_geometric(n=200, radius=0.2)  # Geometric graph
+    adjacency = ge.generate_er(n=500, p=0.02, seed=42)  # Erdős-Rényi random graph
+    adjacency = ge.generate_random_regular(n=300, d=4, seed=42)  # Regular degree
+    adjacency = ge.generate_geometric(n=200, radius=0.2, seed=42)  # Geometric graph
 
     # Scale-free and complex networks
-    edges = ge.generate_ba(n=500, m=3)  # Barabási-Albert
-    edges = ge.generate_scale_free(n=400, alpha=0.41, beta=0.54)  # Scale-free
-    edges = ge.generate_power_cluster(n=500, m=3, p=0.5)  # Powerlaw cluster
+    adjacency = ge.generate_ba(n=500, m=3, seed=42)  # Barabási-Albert
+    adjacency = ge.generate_scale_free(n=400, seed=42)  # Scale-free
+    adjacency = ge.generate_power_cluster(n=500, m=3, p=0.5, seed=42)  # Powerlaw cluster
 
     # Small-world networks
-    edges = ge.generate_ws(n=500, k=6, p=0.1)  # Watts-Strogatz
+    adjacency = ge.generate_ws(n=500, k=6, p=0.1, seed=42)  # Watts-Strogatz
 
     # Community structures
-    edges = ge.generate_sbm(n_per_block=100, num_blocks=3, p_in=0.1, p_out=0.01)
-    edges = ge.generate_caveman(l=10, k=10)  # Connected caveman
-    edges = ge.generate_relaxed_caveman(l=10, k=10, p=0.1)  # Relaxed caveman
+    adjacency = ge.generate_sbm(n_per_block=100, num_blocks=3, p_in=0.1, p_out=0.01, seed=42)
+    adjacency = ge.generate_caveman(l=10, k=10)  # Connected caveman
+    adjacency = ge.generate_relaxed_caveman(l=10, k=10, p=0.1, seed=42)  # Relaxed caveman
 
     # Specialized networks
-    edges = ge.generate_bipartite_graph(n_top=100, n_bottom=150)  # Bipartite
-    edges = ge.generate_balanced_tree(r=3, h=8)  # Balanced tree
-    edges = ge.generate_road_network(width=20, height=20)  # Grid-like road network
+    adjacency = ge.generate_bipartite_graph(n_top=100, n_bottom=150, p=0.1, seed=42)  # Random bipartite
+    adjacency = ge.generate_complete_bipartite_graph(n_top=50, n_bottom=100)  # Complete bipartite
+    adjacency = ge.generate_delaunay_triangulation(n=100, seed=42)  # Planar triangulation
+    adjacency = ge.generate_balanced_tree(r=3, h=8)  # Balanced tree
+    adjacency = ge.generate_road_network(width=20, height=20)  # Grid-like road network
 
 Working with Real Data
 ----------------------
@@ -109,49 +111,53 @@ Load and analyze real-world networks:
 
 .. code-block:: python
 
-    # Load a dataset (includes several network datasets)
+    # Load a dataset (returns edge list)
     vertices, edges = ge.load_dataset('snap-ca-GrQc')  # Collaboration network
-    n_vertices = len(vertices)
-    
+
+    # Convert edges to sparse adjacency matrix
+    import scipy.sparse as sp
+    n = len(vertices)
+    rows = edges[:, 0]
+    cols = edges[:, 1]
+    data = np.ones(len(edges), dtype=int)
+    adjacency = sp.csr_matrix((data, (rows, cols)), shape=(n, n))
+    adjacency = adjacency + adjacency.T  # Make symmetric
+
     # Create embedder for larger networks
     embedder = ge.GraphEmbedder(
-        edges=edges,
-        n_vertices=n_vertices,
+        adjacency=adjacency,
         n_components=2,
         n_neighbors=20,     # More neighbors for denser graphs
         sample_size=512,    # Larger sample for accuracy
         batch_size=2048     # Larger batches for efficiency
     )
-    
+
     embedder.run_layout(num_iterations=100)
     embedder.display_layout()
 
 Influence Maximization
 -----------------------
 
-Find the most influential nodes in a network:
+Identify influential nodes:
 
 .. code-block:: python
 
     import networkx as nx
-    
-    # Convert to NetworkX for influence analysis
-    G = nx.Graph()
-    G.add_nodes_from(range(n_vertices))
-    G.add_edges_from(edges)
-    
-    # Method 1: GraphEm-based selection (uses embedding)
+
+    # Convert adjacency matrix to NetworkX graph
+    G = nx.from_scipy_sparse_array(adjacency)
+
+    # Fast: embedding-based selection
     seeds_graphem = ge.graphem_seed_selection(embedder, k=10, num_iterations=20)
-    
-    # Method 2: Greedy selection (traditional approach)
-    seeds_greedy = ge.greedy_seed_selection(G, k=10)
-    
-    # Estimate influence spread
-    influence, iterations = ge.ndlib_estimated_influence(
-        G, seeds_graphem, p=0.1, iterations_count=200
-    )
-    
-    print(f"GraphEm method: {influence} nodes influenced ({influence/n_vertices:.2%})")
+
+    # Accurate: greedy algorithm
+    seeds_greedy, total_iters = ge.greedy_seed_selection(G, k=10, p=0.1, iterations_count=100)
+
+    # Evaluate influence spread (Independent Cascades model)
+    influence, iters = ge.ndlib_estimated_influence(G, seeds_graphem, p=0.1, iterations_count=200)
+
+    n_vertices = adjacency.shape[0]
+    print(f"Influenced: {influence}/{n_vertices} nodes ({influence/n_vertices:.1%})")
 
 Benchmarking and Analysis
 -------------------------
@@ -162,15 +168,15 @@ Compare different centrality measures:
 
     from graphem.benchmark import benchmark_correlations
     from graphem.visualization import report_full_correlation_matrix
-    
+
     # Run comprehensive benchmark
     results = benchmark_correlations(
         graph_generator=ge.generate_ba,
-        graph_params={'n': 300, 'm': 3},
+        graph_params={'n': 300, 'm': 3, 'seed': 42},
         n_components=3,
         num_iterations=50
     )
-    
+
     # Display correlation matrix
     correlation_matrix = report_full_correlation_matrix(
         results['radii'],           # Embedding-based centrality
@@ -190,8 +196,7 @@ Performance Tips
 .. code-block:: python
 
     embedder = ge.GraphEmbedder(
-        edges=edges,
-        n_vertices=n_vertices,
+        adjacency=adjacency,
         n_components=2,       # 2D is faster than 3D
         n_neighbors=10,       # Fewer neighbors = faster
         sample_size=256,      # Automatically limited to len(edges)
@@ -207,7 +212,7 @@ GraphEm automatically uses GPU if JAX detects CUDA:
 
     import jax
     print("Available devices:", jax.devices())  # Check for GPU
-    
+
     # Force CPU usage if needed
     with jax.default_device(jax.devices('cpu')[0]):
         embedder.run_layout(num_iterations=50)
@@ -220,8 +225,7 @@ For very large graphs, process in chunks:
 
     # For graphs with >100k nodes, consider reducing parameters
     embedder = ge.GraphEmbedder(
-        edges=edges,
-        n_vertices=n_vertices,
+        adjacency=adjacency,
         n_neighbors=5,        # Minimum viable k
         sample_size=128,      # Automatically limited to len(edges)
         batch_size=1024       # Automatically limited to n_vertices

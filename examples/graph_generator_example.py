@@ -11,7 +11,7 @@ import networkx as nx
 
 from graphem.embedder import GraphEmbedder
 from graphem.generators import (
-    erdos_renyi_graph,
+    generate_er,
     generate_random_regular,
     generate_scale_free,
     generate_geometric,
@@ -23,10 +23,10 @@ from graphem.generators import (
 )
 
 
-def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
+def test_graph_generator(generator, params, name, n_components=3, num_iterations=30):
     """
     Test a graph generator function and visualize the resulting embedding.
-    
+
     Parameters:
         generator: function
             Graph generator function
@@ -34,7 +34,7 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
             Parameters for the graph generator
         name: str
             Name of the graph type for display
-        dim: int
+        n_components: int
             Dimension of the embedding
         num_iterations: int
             Number of layout iterations
@@ -42,44 +42,39 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
     print(f"\n{'='*50}")
     print(f"Testing {name} graph")
     print(f"{'='*50}")
-    
-    # Generate graph
-    edges = generator(**params)
-    
-    # Determine number of vertices
-    if len(edges) > 0:
-        n = int(max(np.max(edges) + 1, params.get('n', 0)))
-    else:
-        n = params.get('n', 0)
-    
-    print(f"Generated graph with {n} vertices and {len(edges)} edges")
-    
+
+    # Generate graph (returns sparse adjacency matrix)
+    adjacency = generator(**params)
+
+    # Get graph properties
+    n = adjacency.shape[0]
+    num_edges = adjacency.nnz // 2  # Divide by 2 for undirected graphs
+
+    print(f"Generated graph with {n} vertices and {num_edges} edges")
+
     # Create NetworkX graph for visualization
-    G = nx.Graph()
-    G.add_nodes_from(range(n))
-    G.add_edges_from(edges)
-    
+    G = nx.from_scipy_sparse_array(adjacency)
+
     print("Graph statistics:")
-    print(f"- Density: {2 * len(edges) / (n * (n - 1)):.4f}")
-    print(f"- Average degree: {2 * len(edges) / n:.2f}")
-    
+    print(f"- Density: {2 * num_edges / (n * (n - 1)):.4f}")
+    print(f"- Average degree: {2 * num_edges / n:.2f}")
+
     try:
         print(f"- Average shortest path length: {nx.average_shortest_path_length(G):.2f}")
     except nx.NetworkXError as e:
         print("- Average shortest path length: N/A")
         print(e)
-    
+
     try:
         print(f"- Average clustering coefficient: {nx.average_clustering(G):.4f}")
     except nx.NetworkXError as e:
         print("- Average clustering coefficient: N/A")
         print(e)
-    
+
     # Create and run embedder
     embedder = GraphEmbedder(
-        edges=edges,
-        n_vertices=n,
-        n_components=dim,
+        adjacency=adjacency,
+        n_components=n_components,
         L_min=10.0,
         k_attr=0.5,
         k_inter=0.1,
@@ -88,14 +83,14 @@ def test_graph_generator(generator, params, name, dim=3, num_iterations=30):
         batch_size=1024,
         verbose=True
     )
-    
+
     print(f"Running layout for {num_iterations} iterations...")
     embedder.run_layout(num_iterations=num_iterations)
-    
+
     # Display the graph
     print("Displaying graph layout...")
     embedder.display_layout(edge_width=1, node_size=5)
-    
+
     return embedder
 
 
@@ -109,56 +104,56 @@ def main():
         {'n': 100, 'd': 3, 'seed': 42},
         'Random Regular'
     )
-    
+
     # Test Scale-Free Graph
     test_graph_generator(
         generate_scale_free,
         {'n': 100, 'seed': 42},
         'Scale-Free'
     )
-    
+
     # Test Random Geometric Graph
     test_graph_generator(
         generate_geometric,
         {'n': 100, 'radius': 0.15, 'seed': 42},
         'Random Geometric'
     )
-    
+
     # Test Caveman Graph
     test_graph_generator(
         generate_caveman,
         {'l': 5, 'k': 20},
         'Caveman'
     )
-    
+
     # Test Relaxed Caveman Graph
     test_graph_generator(
         generate_relaxed_caveman,
         {'l': 5, 'k': 20, 'p': 0.1, 'seed': 42},
         'Relaxed Caveman'
     )
-    
+
     # Test Erdős–Rényi Graph
     test_graph_generator(
-        erdos_renyi_graph,
+        generate_er,
         {'n': 100, 'p': 0.05, 'seed': 42},
         'Erdős–Rényi'
     )
-    
+
     # Test Watts-Strogatz Small-World Graph
     test_graph_generator(
         generate_ws,
         {'n': 100, 'k': 4, 'p': 0.1, 'seed': 42},
         'Watts-Strogatz Small-World'
     )
-    
+
     # Test Barabási-Albert Graph
     test_graph_generator(
         generate_ba,
         {'n': 100, 'm': 2, 'seed': 42},
         'Barabási-Albert'
     )
-    
+
     # Test Stochastic Block Model
     test_graph_generator(
         generate_sbm,

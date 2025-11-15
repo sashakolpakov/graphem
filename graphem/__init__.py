@@ -7,7 +7,7 @@ from graphem.index import HPIndex
 from graphem.influence import graphem_seed_selection, ndlib_estimated_influence, greedy_seed_selection
 from graphem.datasets import load_dataset
 from graphem.generators import (
-    erdos_renyi_graph,
+    generate_er,
     generate_sbm,
     generate_ba,
     generate_ws,
@@ -19,7 +19,10 @@ from graphem.generators import (
     generate_power_cluster,
     generate_random_regular,
     generate_bipartite_graph,
-    generate_relaxed_caveman
+    generate_complete_bipartite_graph,
+    generate_delaunay_triangulation,
+    generate_relaxed_caveman,
+    compute_vertex_degrees
 )
 from graphem.visualization import (
     report_corr,

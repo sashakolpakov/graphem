@@ -79,12 +79,12 @@ Test your installation:
 .. code-block:: python
 
     import graphem as ge
-    
-    # Generate a small test graph
-    edges = ge.erdos_renyi_graph(n=100, p=0.1)
-    embedder = ge.GraphEmbedder(edges, n_vertices=100)
+
+    # Generate a small test graph (returns sparse adjacency matrix)
+    adjacency = ge.generate_er(n=100, p=0.1, seed=42)
+    embedder = ge.GraphEmbedder(adjacency=adjacency, n_components=2)
     embedder.run_layout(num_iterations=10)
-    
+
     print("GraphEm installation successful!")
 
 Troubleshooting

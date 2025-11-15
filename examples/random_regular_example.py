@@ -16,7 +16,7 @@ from graphem.embedder import GraphEmbedder
 from graphem.benchmark import run_benchmark
 from graphem.visualization import report_full_correlation_matrix
 from graphem.generators import (
-    erdos_renyi_graph,
+    generate_er,
     generate_random_regular,
     generate_ws,
     generate_ba
@@ -51,21 +51,20 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         print(f"Random Regular Graph with degree d={d}")
         print(f"{'-'*25}")
         
-        # Generate graph
+        # Generate graph (returns sparse adjacency matrix)
         start_time = time.time()
-        edges = generate_random_regular(n=n, d=d, seed=42)
+        adjacency = generate_random_regular(n=n, d=d, seed=42)
         gen_time = time.time() - start_time
-        
-        print(f"Generated graph with {n} vertices, {len(edges)} edges in {gen_time:.2f}s")
-        
+
+        num_edges = adjacency.nnz // 2
+        print(f"Generated graph with {n} vertices, {num_edges} edges in {gen_time:.2f}s")
+
         # Create NetworkX graph for analysis
-        G = nx.Graph()
-        G.add_nodes_from(range(n))
-        G.add_edges_from(edges)
-        
+        G = nx.from_scipy_sparse_array(adjacency)
+
         # Analyze graph properties
-        density = 2 * len(edges) / (n * (n - 1))
-        avg_degree = 2 * len(edges) / n
+        density = 2 * num_edges / (n * (n - 1))
+        avg_degree = 2 * num_edges / n
         
         print("Graph statistics:")
         print(f"- Density: {density:.4f}")
@@ -98,8 +97,7 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         
         # Create and run embedder
         embedder = GraphEmbedder(
-            edges=edges,
-            n_vertices=n,
+            adjacency=adjacency,
             n_components=dim,
             L_min=10.0,
             k_attr=0.5,
@@ -133,7 +131,7 @@ def test_random_regular_varying_degree(n=100, degrees=None, dim=3, num_iteration
         })
         
         # Calculate centrality measures
-        positions = np.array(embedder.positions)
+        positions = embedder.get_positions()
         radii = np.linalg.norm(positions, axis=1)
         
         degree_centrality = np.array([d for _, d in G.degree()])
@@ -214,21 +212,20 @@ def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations
         print(f"Random Regular Graph with size n={n}")
         print(f"{'-'*25}")
         
-        # Generate graph
+        # Generate graph (returns sparse adjacency matrix)
         start_time = time.time()
-        edges = generate_random_regular(n=n, d=degree, seed=42)
+        adjacency = generate_random_regular(n=n, d=degree, seed=42)
         gen_time = time.time() - start_time
-        
-        print(f"Generated graph with {n} vertices, {len(edges)} edges in {gen_time:.2f}s")
-        
+
+        num_edges = adjacency.nnz // 2
+        print(f"Generated graph with {n} vertices, {num_edges} edges in {gen_time:.2f}s")
+
         # Create NetworkX graph for analysis
-        G = nx.Graph()
-        G.add_nodes_from(range(n))
-        G.add_edges_from(edges)
-        
+        G = nx.from_scipy_sparse_array(adjacency)
+
         # Analyze graph properties
-        density = 2 * len(edges) / (n * (n - 1))
-        avg_degree = 2 * len(edges) / n
+        density = 2 * num_edges / (n * (n - 1))
+        avg_degree = 2 * num_edges / n
         
         print("Graph statistics:")
         print(f"- Density: {density:.4f}")
@@ -260,8 +257,7 @@ def test_random_regular_varying_size(degree=3, sizes=None, dim=3, num_iterations
         
         # Create and run embedder
         embedder = GraphEmbedder(
-            edges=edges,
-            n_vertices=n,
+            adjacency=adjacency,
             n_components=dim,
             L_min=10.0,
             k_attr=0.5,
@@ -339,7 +335,7 @@ def compare_with_benchmark():
     graph_configs = [
         (generate_random_regular, {'n': 100, 'd': 3, 'seed': 42}, 'Random Regular (d=3)'),
         (generate_random_regular, {'n': 100, 'd': 5, 'seed': 42}, 'Random Regular (d=5)'),
-        (erdos_renyi_graph, {'n': 100, 'p': 0.03, 'seed': 42}, 'Erdős–Rényi'),
+        (generate_er, {'n': 100, 'p': 0.03, 'seed': 42}, 'Erdős–Rényi'),
         (generate_ws, {'n': 100, 'k': 4, 'p': 0.1, 'seed': 42}, 'Watts-Strogatz'),
         (generate_ba, {'n': 100, 'm': 2, 'seed': 42}, 'Barabási-Albert')
     ]

@@ -17,14 +17,12 @@ GraphEm combines spectral methods with force-directed layout for high-quality em
     import numpy as np
     import matplotlib.pyplot as plt
 
-    # Create a graph with known structure
-    edges = ge.generate_sbm(n_per_block=50, num_blocks=3, p_in=0.15, p_out=0.02)
-    n_vertices = 150
+    # Create a graph with known structure (returns sparse adjacency matrix)
+    adjacency = ge.generate_sbm(n_per_block=50, num_blocks=3, p_in=0.15, p_out=0.02, seed=42)
 
     # Create embedder with detailed parameters
     embedder = ge.GraphEmbedder(
-        edges=edges,
-        n_vertices=n_vertices,
+        adjacency=adjacency,
         n_components=2,
         L_min=5.0,        # Shorter edges for tighter layout
         k_attr=0.8,       # Strong attraction within communities
@@ -36,7 +34,7 @@ GraphEm combines spectral methods with force-directed layout for high-quality em
     positions_history = []
     for i in range(0, 100, 10):
         embedder.run_layout(num_iterations=10)
-        positions_history.append(np.array(embedder.positions))
+        positions_history.append(embedder.get_positions())
 
     # Final visualization
     embedder.display_layout()
@@ -64,12 +62,12 @@ Understanding how parameters affect the embedding:
 
     for i, params in enumerate(params_to_test, 1):
         embedder = ge.GraphEmbedder(
-            edges=edges, n_vertices=n_vertices, n_components=2,
+            adjacency=adjacency, n_components=2,
             L_min=params['L_min'], k_attr=params['k_attr'], k_inter=params['k_inter']
         )
         embedder.run_layout(num_iterations=50)
-        
-        pos = np.array(embedder.positions)
+
+        pos = embedder.get_positions()
         fig.add_trace(go.Scatter(x=pos[:, 0], y=pos[:, 1], mode='markers',
                                 name=params['title']), row=1, col=i)
 
@@ -85,14 +83,12 @@ For large networks, optimize performance and memory usage:
 
 .. code-block:: python
 
-    # Generate a large scale-free network
-    large_edges = ge.generate_ba(n=10000, m=5)
-    n_vertices = 10000
+    # Generate a large scale-free network (returns sparse adjacency matrix)
+    adjacency = ge.generate_ba(n=10000, m=5, seed=42)
 
     # Optimized embedder for large graphs
     large_embedder = ge.GraphEmbedder(
-        edges=large_edges,
-        n_vertices=n_vertices,
+        adjacency=adjacency,
         n_components=2,       # 2D is faster than 3D
         L_min=2.0,
         k_attr=0.3,
@@ -106,13 +102,14 @@ For large networks, optimize performance and memory usage:
     # Progressive refinement
     print("Initial layout...")
     large_embedder.run_layout(num_iterations=20)
-    
+
     print("Refinement...")
     large_embedder.k_attr = 0.5  # Increase attraction for refinement
     large_embedder.run_layout(num_iterations=30)
 
     # Sample visualization (full graph would be too dense)
-    pos = np.array(large_embedder.positions)
+    pos = large_embedder.get_positions()
+    n_vertices = adjacency.shape[0]
     sample_nodes = np.random.choice(n_vertices, 1000, replace=False)
     
     import plotly.graph_objects as go
@@ -132,35 +129,37 @@ For extremely large networks, use chunked processing:
 
 .. code-block:: python
 
-    def embed_large_network_chunked(edges, n_vertices, chunk_size=5000):
+    def embed_large_network_chunked(adjacency, chunk_size=5000):
         """Embed very large networks in chunks."""
-        
+
+        n_vertices = adjacency.shape[0]
+
         if n_vertices <= chunk_size:
             # Small enough to process normally
-            embedder = ge.GraphEmbedder(edges=edges, n_vertices=n_vertices)
+            embedder = ge.GraphEmbedder(adjacency=adjacency)
             embedder.run_layout(num_iterations=50)
-            return embedder.positions
-        
+            return embedder.get_positions()
+
         # For very large networks, use progressive approach
         print(f"Processing {n_vertices} nodes in chunks of {chunk_size}")
-        
-        # Start with a subgraph
-        node_subset = np.random.choice(n_vertices, chunk_size, replace=False)
-        mask = np.isin(edges[:, 0], node_subset) & np.isin(edges[:, 1], node_subset)
-        subset_edges = edges[mask]
-        
-        # Remap node IDs to 0-based consecutive
-        old_to_new = {old: new for new, old in enumerate(node_subset)}
-        remapped_edges = np.array([[old_to_new[e[0]], old_to_new[e[1]]] 
-                                  for e in subset_edges])
-        
+
+        # Start with a subgraph - sample nodes and extract subgraph
+        import networkx as nx
+        G = nx.from_scipy_sparse_array(adjacency)
+        node_subset = np.random.choice(list(G.nodes()), chunk_size, replace=False)
+        G_subset = G.subgraph(node_subset).copy()
+        G_subset = nx.convert_node_labels_to_integers(G_subset)
+
+        # Get adjacency matrix of subset
+        subset_adjacency = nx.adjacency_matrix(G_subset, dtype=int)
+
         # Embed subset
-        embedder = ge.GraphEmbedder(edges=remapped_edges, n_vertices=len(node_subset))
+        embedder = ge.GraphEmbedder(adjacency=subset_adjacency)
         embedder.run_layout(num_iterations=100)
-        
+
         # This is a simplified example - full implementation would
         # gradually add nodes and refine positions
-        return embedder.positions
+        return embedder.get_positions()
 
 Influence Maximization Applications
 -----------------------------------
@@ -173,23 +172,21 @@ Simulate information spread in social networks:
 .. code-block:: python
 
     import networkx as nx
-    
-    # Create a social network-like graph
-    social_edges = ge.generate_ws(n=1000, k=8, p=0.1)  # Small-world
-    G = nx.Graph()
-    G.add_nodes_from(range(1000))
-    G.add_edges_from(social_edges)
-    
+
+    # Create a social network-like graph (returns sparse adjacency matrix)
+    adjacency = ge.generate_ws(n=1000, k=8, p=0.1, seed=42)  # Small-world
+    G = nx.from_scipy_sparse_array(adjacency)
+
     # Compare different seed selection strategies
     strategies = {
         'Random': np.random.choice(1000, 20, replace=False).tolist(),
         'High Degree': sorted(G.nodes(), key=G.degree, reverse=True)[:20],
         'GraphEm': None,  # Will compute below
-        'Greedy': ge.greedy_seed_selection(G, k=20)
+        'Greedy': ge.greedy_seed_selection(G, k=20, p=0.05)
     }
-    
+
     # Compute GraphEm strategy
-    embedder = ge.GraphEmbedder(edges=social_edges, n_vertices=1000, n_components=2)
+    embedder = ge.GraphEmbedder(adjacency=adjacency, n_components=2)
     strategies['GraphEm'] = ge.graphem_seed_selection(embedder, k=20)
     
     # Simulate influence spread for each strategy
@@ -207,12 +204,12 @@ Simulate information spread in social networks:
     
     if best_strategy == 'GraphEm':
         # We already have the embedding
-        pos = np.array(embedder.positions)
+        pos = embedder.get_positions()
     else:
         # Create embedding for visualization
-        embedder = ge.GraphEmbedder(edges=social_edges, n_vertices=1000, n_components=2)
+        embedder = ge.GraphEmbedder(adjacency=adjacency, n_components=2)
         embedder.run_layout(num_iterations=50)
-        pos = np.array(embedder.positions)
+        pos = embedder.get_positions()
     
     # Create visualization highlighting seed nodes
     import plotly.graph_objects as go
@@ -246,39 +243,32 @@ Analyze how network structure affects influence spread:
 
     def analyze_network_robustness(generator, params, attack_strategies):
         """Analyze robustness under different attack strategies."""
-        
-        # Generate base network
-        edges = generator(**params)
-        n_vertices = params['n']
-        G = nx.Graph()
-        G.add_nodes_from(range(n_vertices))
-        G.add_edges_from(edges)
+
+        # Generate base network (returns sparse adjacency matrix)
+        adjacency = generator(**params)
+        G = nx.from_scipy_sparse_array(adjacency)
         
         results = {}
         
         for strategy_name, attack_function in attack_strategies.items():
             # Remove nodes according to strategy
-            nodes_to_remove = attack_function(G, int(0.1 * n_vertices))  # Remove 10%
+            nodes_to_remove = attack_function(G, int(0.1 * G.number_of_nodes()))  # Remove 10%
             G_attacked = G.copy()
             G_attacked.remove_nodes_from(nodes_to_remove)
-            
+
             # Recompute largest connected component
             largest_cc = max(nx.connected_components(G_attacked), key=len)
             G_cc = G_attacked.subgraph(largest_cc).copy()
-            
+            G_cc = nx.convert_node_labels_to_integers(G_cc)
+
             # Test influence spread in remaining network
             if len(G_cc) > 50:  # Only if significant network remains
-                cc_edges = np.array(list(G_cc.edges()))
-                embedder = ge.GraphEmbedder(edges=cc_edges, n_vertices=len(G_cc))
-                
-                # Remap node IDs
-                node_mapping = {old: new for new, old in enumerate(G_cc.nodes())}
-                remapped_edges = np.array([[node_mapping[e[0]], node_mapping[e[1]]] 
-                                         for e in cc_edges])
-                
-                embedder = ge.GraphEmbedder(edges=remapped_edges, n_vertices=len(G_cc))
+                # Get adjacency matrix of remaining network
+                cc_adjacency = nx.adjacency_matrix(G_cc, dtype=int)
+
+                embedder = ge.GraphEmbedder(adjacency=cc_adjacency, n_components=2)
                 seeds = ge.graphem_seed_selection(embedder, k=min(10, len(G_cc)//10))
-                
+
                 influence, _ = ge.ndlib_estimated_influence(G_cc, seeds, p=0.1)
                 results[strategy_name] = {
                     'remaining_nodes': len(G_cc),
@@ -305,9 +295,9 @@ Analyze how network structure affects influence spread:
     
     # Test on different network types
     network_types = [
-        ('Scale-Free', ge.generate_ba, {'n': 500, 'm': 3}),
-        ('Small-World', ge.generate_ws, {'n': 500, 'k': 6, 'p': 0.1}),
-        ('Random', ge.erdos_renyi_graph, {'n': 500, 'p': 0.012})
+        ('Scale-Free', ge.generate_ba, {'n': 500, 'm': 3, 'seed': 42}),
+        ('Small-World', ge.generate_ws, {'n': 500, 'k': 6, 'p': 0.1, 'seed': 42}),
+        ('Random', ge.generate_er, {'n': 500, 'p': 0.012, 'seed': 42})
     ]
     
     for net_name, generator, params in network_types:
@@ -332,10 +322,10 @@ Comparing Embedding-Based and Traditional Centralities
 
     # Generate different network types for comparison
     networks = [
-        ('Erdős–Rényi', ge.erdos_renyi_graph, {'n': 300, 'p': 0.02}),
-        ('Scale-Free', ge.generate_ba, {'n': 300, 'm': 2}),
-        ('Small-World', ge.generate_ws, {'n': 300, 'k': 4, 'p': 0.1}),
-        ('Community', ge.generate_sbm, {'n_per_block': 100, 'num_blocks': 3, 'p_in': 0.1, 'p_out': 0.01})
+        ('Erdős–Rényi', ge.generate_er, {'n': 300, 'p': 0.02, 'seed': 42}),
+        ('Scale-Free', ge.generate_ba, {'n': 300, 'm': 2, 'seed': 42}),
+        ('Small-World', ge.generate_ws, {'n': 300, 'k': 4, 'p': 0.1, 'seed': 42}),
+        ('Community', ge.generate_sbm, {'n_per_block': 100, 'num_blocks': 3, 'p_in': 0.1, 'p_out': 0.01, 'seed': 42})
     ]
 
     correlation_results = {}
@@ -382,20 +372,23 @@ Creating Domain-Specific Networks
 .. code-block:: python
 
     def generate_hierarchical_network(levels=3, branching=3, intra_level_prob=0.1):
-        """Generate a hierarchical network structure."""
+        """Generate a hierarchical network structure, returns sparse adjacency matrix."""
+        import networkx as nx
+        import scipy.sparse as sp
+
         nodes_per_level = [branching ** i for i in range(levels)]
         total_nodes = sum(nodes_per_level)
-        
-        edges = []
-        node_id = 0
+
+        # Create NetworkX graph for easier construction
+        G = nx.Graph()
+        G.add_nodes_from(range(total_nodes))
         level_starts = [0]
-        
+
         # Create hierarchical connections
         for level in range(levels - 1):
             level_start = level_starts[level]
             level_size = nodes_per_level[level]
-            next_level_size = nodes_per_level[level + 1]
-            
+
             # Connect each node in current level to nodes in next level
             for i in range(level_size):
                 current_node = level_start + i
@@ -403,29 +396,28 @@ Creating Domain-Specific Networks
                 start_next = level_starts[level] + level_size + i * branching
                 for j in range(branching):
                     if start_next + j < total_nodes:
-                        edges.append([current_node, start_next + j])
-            
+                        G.add_edge(current_node, start_next + j)
+
             level_starts.append(level_starts[-1] + level_size)
-        
+
         # Add intra-level connections
         for level in range(levels):
             level_start = level_starts[level]
             level_size = nodes_per_level[level]
-            
+
             for i in range(level_size):
                 for j in range(i + 1, level_size):
                     if np.random.random() < intra_level_prob:
-                        edges.append([level_start + i, level_start + j])
-        
-        return np.array(edges)
+                        G.add_edge(level_start + i, level_start + j)
+
+        return nx.adjacency_matrix(G, dtype=int)
 
     # Test the custom generator
-    hier_edges = generate_hierarchical_network(levels=4, branching=2, intra_level_prob=0.2)
-    
+    hier_adjacency = generate_hierarchical_network(levels=4, branching=2, intra_level_prob=0.2)
+
     # Embed and visualize
     embedder = ge.GraphEmbedder(
-        edges=hier_edges,
-        n_vertices=hier_edges.max() + 1,
+        adjacency=hier_adjacency,
         n_components=2,
         L_min=3.0,
         k_attr=0.7,
@@ -446,28 +438,27 @@ GPU Acceleration Tips
     
     # Check available devices
     print("Available devices:", jax.devices())
-    
+
     # For consistent GPU usage across runs
-    def setup_gpu_embedding(edges, n_vertices, device_id=0):
+    def setup_gpu_embedding(adjacency, device_id=0):
         """Setup embedder with specific GPU device."""
-        
+
         # Force specific device if multiple GPUs available
         if len(jax.devices('gpu')) > 1:
             device = jax.devices('gpu')[device_id]
             with jax.default_device(device):
                 embedder = ge.GraphEmbedder(
-                    edges=edges,
-                    n_vertices=n_vertices,
+                    adjacency=adjacency,
                     batch_size=8192,      # Automatically limited to n_vertices
                     sample_size=1024      # Automatically limited to len(edges)
                 )
                 return embedder
         else:
-            return ge.GraphEmbedder(edges=edges, n_vertices=n_vertices)
+            return ge.GraphEmbedder(adjacency=adjacency)
 
     # Example with large graph
-    large_edges = ge.generate_ba(n=20000, m=4)
-    embedder = setup_gpu_embedding(large_edges, 20000)
+    adjacency = ge.generate_ba(n=20000, m=4, seed=42)
+    embedder = setup_gpu_embedding(adjacency)
     
     # Time the embedding
     import time
@@ -483,25 +474,25 @@ Profiling and Optimization
 .. code-block:: python
 
     # Profile memory usage and computation time
-    def profile_embedding(edges, n_vertices, iterations=50):
+    def profile_embedding(adjacency, iterations=50):
         """Profile embedding performance."""
         import psutil
         import os
-        
+
         process = psutil.Process(os.getpid())
-        
+
         # Memory before
         mem_before = process.memory_info().rss / 1024 / 1024  # MB
-        
+
         # Time embedding
         start_time = time.time()
-        embedder = ge.GraphEmbedder(edges=edges, n_vertices=n_vertices)
+        embedder = ge.GraphEmbedder(adjacency=adjacency)
         embedder.run_layout(num_iterations=iterations)
         end_time = time.time()
-        
+
         # Memory after
         mem_after = process.memory_info().rss / 1024 / 1024  # MB
-        
+
         return {
             'time': end_time - start_time,
             'memory_used': mem_after - mem_before,
@@ -511,8 +502,8 @@ Profiling and Optimization
     # Test different graph sizes
     sizes = [500, 1000, 2000, 5000]
     for n in sizes:
-        edges = ge.generate_ba(n=n, m=3)
-        stats = profile_embedding(edges, n, iterations=30)
+        adjacency = ge.generate_ba(n=n, m=3, seed=42)
+        stats = profile_embedding(adjacency, iterations=30)
         print(f"n={n:4d}: {stats['time']:5.2f}s, "
               f"{stats['memory_used']:6.1f}MB used, "
               f"{stats['final_memory']:6.1f}MB total")

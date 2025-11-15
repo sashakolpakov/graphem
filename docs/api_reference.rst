@@ -45,15 +45,16 @@ Graph Generators
 
 **graphem.generators** - Generate various graph types for testing and experimentation.
 
-Provides NetworkX-based generators for standard graph models including random graphs, scale-free networks, small-world graphs, and more.
+Provides NetworkX-based generators for standard graph models including random graphs, scale-free networks, small-world graphs, and more. All generators return sparse adjacency matrices (scipy.sparse.csr_matrix).
 
 Key functions:
-- ``erdos_renyi_graph(n, p)`` - Random graph with edge probability p
-- ``generate_sbm(n_per_block, num_blocks, p_in, p_out)`` - Stochastic block model
-- ``generate_ba(n, m)`` - Barabási-Albert preferential attachment
-- ``generate_ws(n, k, p)`` - Watts-Strogatz small-world
-- ``generate_scale_free(n, ...)`` - Scale-free network
-- ``generate_geometric(n, radius)`` - Random geometric graph
+- ``generate_er(n, p, seed)`` - Erdős–Rényi random graph with edge probability p
+- ``generate_sbm(n_per_block, num_blocks, p_in, p_out, seed)`` - Stochastic block model
+- ``generate_ba(n, m, seed)`` - Barabási-Albert preferential attachment
+- ``generate_ws(n, k, p, seed)`` - Watts-Strogatz small-world
+- ``generate_scale_free(n, seed)`` - Scale-free network
+- ``generate_geometric(n, radius, seed)`` - Random geometric graph
+- ``compute_vertex_degrees(adjacency)`` - Compute vertex degrees from adjacency matrix
 
 .. automodule:: graphem.generators
    :members:
@@ -63,14 +64,14 @@ Key functions:
 Influence Maximization
 ----------------------
 
-**graphem.influence** - Seed selection algorithms for influence maximization in networks.
-
-Implements GraphEm-based seed selection using radial distances from embedding origin, plus traditional greedy methods with NDlib simulation.
+**graphem.influence** - Seed selection and influence estimation for networks.
 
 Key functions:
-- ``graphem_seed_selection(embedder, k)`` - Select seeds based on radial distances
-- ``greedy_seed_selection(G, k, p)`` - Traditional greedy algorithm
-- ``ndlib_estimated_influence(G, seeds, p)`` - Evaluate influence using Independent Cascades
+- ``graphem_seed_selection(embedder, k, num_iterations)`` - Fast seed selection using embedding radial distances
+- ``greedy_seed_selection(G, k, p, iterations_count)`` - Greedy algorithm maximizing marginal influence gain
+- ``ndlib_estimated_influence(G, seeds, p, iterations_count)`` - Estimate influence spread via Independent Cascades simulation
+
+Returns seed node lists and influence spread estimates (node counts).
 
 .. automodule:: graphem.influence
    :members:

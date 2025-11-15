@@ -3,8 +3,9 @@
 import pytest
 import numpy as np
 import networkx as nx
+import scipy.sparse as sp
 from graphem.embedder import GraphEmbedder
-from graphem.generators import erdos_renyi_graph
+from graphem.generators import generate_er
 from graphem.influence import ndlib_estimated_influence
 
 

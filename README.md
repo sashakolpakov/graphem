@@ -65,13 +65,12 @@ pip install git+https://github.com/igorrivin/graphem.git
 ```python
 import graphem as ge
 
-# Generate graph
-edges = ge.erdos_renyi_graph(n=500, p=0.01)
+# Generate graph (returns sparse adjacency matrix)
+adjacency = ge.generate_er(n=500, p=0.01)
 
 # Create embedder
 embedder = ge.GraphEmbedder(
-    edges=edges,
-    n_vertices=500,
+    adjacency=adjacency,
     n_components=3
 )
 
@@ -90,7 +89,7 @@ seeds = ge.graphem_seed_selection(embedder, k=10)
 
 # Estimate influence spread
 import networkx as nx
-G = nx.from_edgelist(edges)
+G = nx.from_scipy_sparse_array(adjacency)
 influence, _ = ge.ndlib_estimated_influence(G, seeds, p=0.1)
 print(f"Influence: {influence} nodes ({influence/500:.1%})")
 ```
@@ -102,7 +101,7 @@ from graphem.benchmark import benchmark_correlations
 
 # Compare embedding radii with centrality measures
 results = benchmark_correlations(
-    ge.erdos_renyi_graph,
+    ge.generate_er,
     graph_params={'n': 200, 'p': 0.05},
     n_components=3,
     num_iterations=40
