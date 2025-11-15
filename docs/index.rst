@@ -79,25 +79,24 @@ Quick Start Example
    import graphem as ge
    import networkx as nx
 
-   # Generate a scale-free network
-   edges = ge.generate_ba(n=1000, m=3)
-   
+   # Generate a scale-free network (returns sparse adjacency matrix)
+   adjacency = ge.generate_ba(n=1000, m=3, seed=42)
+
    # Create and run embedding
    embedder = ge.GraphEmbedder(
-       edges=edges,
-       n_vertices=1000,
+       adjacency=adjacency,
        n_components=3
    )
    embedder.run_layout(num_iterations=50)
-   
+
    # Find influential nodes
    seeds = ge.graphem_seed_selection(embedder, k=20)
-   
+
    # Estimate influence spread
-   G = nx.Graph(edges)
-   influence, _ = ge.ndlib_estimated_influence(G, seeds, p=0.1)
+   G = nx.from_scipy_sparse_array(adjacency)
+   influence, _ = ge.ndlib_estimated_influence(G, seeds, p=0.1, iterations_count=100)
    print(f"Influence spread: {influence} nodes ({influence/1000:.1%})")
-   
+
    # Visualize results
    embedder.display_layout()
 
@@ -149,18 +148,18 @@ Comprehensive collection of standard and custom graph models:
 
 .. code-block:: python
 
-   # Classic models
-   edges = ge.erdos_renyi_graph(n=500, p=0.02)
-   edges = ge.generate_ba(n=500, m=3)  # Scale-free
-   edges = ge.generate_ws(n=500, k=6, p=0.1)  # Small-world
-   
+   # Classic models (all return sparse adjacency matrices)
+   adjacency = ge.generate_er(n=500, p=0.02, seed=42)
+   adjacency = ge.generate_ba(n=500, m=3, seed=42)  # Scale-free
+   adjacency = ge.generate_ws(n=500, k=6, p=0.1, seed=42)  # Small-world
+
    # Community structures
-   edges = ge.generate_sbm(sizes=[100, 150, 100], p_in=0.1, p_out=0.01)
-   edges = ge.generate_caveman(clique_size=10, num_cliques=5)
-   
+   adjacency = ge.generate_sbm(n_per_block=100, num_blocks=3, p_in=0.1, p_out=0.01, seed=42)
+   adjacency = ge.generate_caveman(l=5, k=10)
+
    # Specialized networks
-   edges = ge.generate_geometric(n=300, radius=0.2)
-   edges = ge.generate_road_network(grid_size=20, connection_prob=0.8)
+   adjacency = ge.generate_geometric(n=300, radius=0.2, seed=42)
+   adjacency = ge.generate_road_network(width=20, height=20)
 
 Performance Characteristics
 ---------------------------

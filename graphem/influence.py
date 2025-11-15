@@ -26,9 +26,9 @@ def graphem_seed_selection(embedder, k, num_iterations=20):
     """
     # Run the layout algorithm
     embedder.run_layout(num_iterations=num_iterations)
-    
+
     # Compute radial distances from the origin (0, 0, 0)
-    positions = np.array(embedder.positions)
+    positions = embedder.get_positions()
     radial_distances = np.linalg.norm(positions, axis=1)
     
     # Select the k nodes with the highest radial distances

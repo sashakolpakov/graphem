@@ -23,8 +23,8 @@ class GraphEmbedder:
     A class for embedding graphs using the Laplacian embedding.
 
     Attributes:
-            edges: np.ndarray of shape (num_edges, 2)
-                Array of edge pairs (i, j) with i < j.
+            adjacency: scipy.sparse matrix
+                Sparse adjacency matrix of the graph.
             n: int
                 Number of vertices in the graph.
             n_components: int
@@ -41,18 +41,16 @@ class GraphEmbedder:
                 Number of samples for kNN search (automatically limited to number of edges).
             batch_size: int
                 Batch size for kNN search (automatically limited to number of vertices).
-            my_logger: loguru.logger
+            logger_instance: loguru.logger
                 Logger object to use for logging.
     """
-    def __init__(self, edges, n_vertices, n_components=2, L_min=1.0, k_attr=0.2, k_inter=0.5, n_neighbors=10, sample_size=256, batch_size=1024, my_logger=None, verbose=True):
+    def __init__(self, adjacency, n_components=2, L_min=1.0, k_attr=0.2, k_inter=0.5, n_neighbors=10, sample_size=256, batch_size=1024, logger_instance=None, verbose=True, seed=None):
         """
         Initialize the GraphEmbedder.
 
         Parameters:
-            edges: array-like of shape (num_edges, 2)
-                Array of edge pairs (i, j).
-            n_vertices: int
-                Number of vertices in the graph.
+            adjacency: scipy.sparse matrix
+                Sparse adjacency matrix of the graph.
             n_components: int, default=2
                 Dimension of the embedding.
             L_min: float, default=1.0
@@ -64,45 +62,81 @@ class GraphEmbedder:
             n_neighbors: int, default=10
                 Number of nearest neighbors to consider.
             sample_size: int, default=256
-                Number of samples for kNN search. Automatically limited to min(sample_size, len(edges)).
+                Number of samples for kNN search.
             batch_size: int, default=1024
-                Batch size for kNN search. Automatically limited to min(batch_size, n_vertices).
-            my_logger: loguru.logger, optional
+                Batch size for kNN search.
+            logger_instance: loguru.logger, optional
                 Logger object to use for logging.
             verbose: bool, default=True
                 Whether to display progress information.
+            seed: int, optional
+                Random seed for reproducibility.
         """
+        # Validate and convert adjacency matrix to csr_matrix
+        if sp.issparse(adjacency):
+            # Convert to csr_matrix (not csr_array) for compatibility
+            adjacency = sp.csr_matrix(adjacency)
+        elif isinstance(adjacency, np.ndarray):
+            adjacency = sp.csr_matrix(adjacency)
+        else:
+            adjacency = sp.csr_matrix(np.asarray(adjacency))
+
+        # Check if square
+        if adjacency.shape[0] != adjacency.shape[1]:
+            raise ValueError(f"Adjacency matrix must be square, got shape {adjacency.shape}")
+
+        # Check for empty graph
+        if adjacency.shape[0] == 0:
+            raise ValueError("Adjacency matrix cannot be empty")
+
+        self.adjacency = adjacency
+        self.n = adjacency.shape[0]
+
+        # Extract edges from adjacency matrix for JAX operations
+        edges_coo = sp.triu(self.adjacency, k=1).tocoo()
+        edges = np.column_stack([edges_coo.row, edges_coo.col])
         self.edges = jnp.array(edges)
-        self.n = n_vertices
+
         self.n_components = n_components
         self.L_min = L_min
         self.k_attr = k_attr
         self.k_inter = k_inter
         self.n_neighbors = n_neighbors
         self.sample_size = min(sample_size, len(edges))
-        self.batch_size = min(batch_size, n_vertices)
-        if my_logger is None:
+        self.batch_size = min(batch_size, self.n)
+        self.seed = seed
+
+        if logger_instance is None:
             logger.remove()
             sink = sys.stdout if verbose else open(os.devnull, 'w', encoding='utf-8')
             logger.add(sink, level="INFO")
             self.logger = logger
-            """ System logger """
         else:
-            self.logger = my_logger
+            self.logger = logger_instance
             self.logger.info("Logger initialized")
-        self.positions = self._laplacian_embedding()
+
+        self._positions = self._laplacian_embedding()
+
+    @property
+    def positions(self):
+        """Get the current positions of vertices."""
+        return self._positions
+
+    def get_positions(self):
+        """
+        Get the current positions of vertices.
+
+        Returns:
+            np.ndarray: Array of shape (n, n_components) with vertex positions.
+        """
+        return np.array(self._positions)
 
     def _laplacian_embedding(self):
         """
         Compute the Laplacian embedding of the graph.
         """
         self.logger.info("Computing Laplacian embedding")
-        edges_np = np.array(self.edges)
-        row = edges_np[:, 0]
-        col = edges_np[:, 1]
-        data = np.ones(len(edges_np))
-        A = sp.csr_matrix((data, (row, col)), shape=(self.n, self.n))
-        L = laplacian(A + A.transpose(), normed=True)
+        L = laplacian(self.adjacency, normed=True)
         k = self.n_components + 1
         _, eigenvectors = spla.eigsh(L, k, which='SM')
         lap_embedding = eigenvectors[:, 1:k]
@@ -220,13 +254,13 @@ class GraphEmbedder:
         Update the positions of the vertices based on the spring forces and intersection forces.
         """
         self.logger.info("Updating positions")
-        spring_forces = self.compute_spring_forces(self.positions, self.edges, self.L_min, self.k_attr)
-        midpoints = (self.positions[self.edges[:, 0]] + self.positions[self.edges[:, 1]]) / 2.0
+        spring_forces = self.compute_spring_forces(self._positions, self.edges, self.L_min, self.k_attr)
+        midpoints = (self._positions[self.edges[:, 0]] + self._positions[self.edges[:, 1]]) / 2.0
         knn_idx, sampled_indices = self.locate_knn_midpoints(midpoints, self.n_neighbors)
-        inter_forces = self.compute_intersection_forces_with_knn_index(self.positions, self.edges, knn_idx, sampled_indices, self.k_inter)
+        inter_forces = self.compute_intersection_forces_with_knn_index(self._positions, self.edges, knn_idx, sampled_indices, self.k_inter)
         forces = spring_forces + inter_forces
-        new_positions = self.positions + forces
-        self.positions = (new_positions - jnp.mean(new_positions, axis=0)) / (jnp.std(new_positions, axis=0) + 1e-6)
+        new_positions = self._positions + forces
+        self._positions = (new_positions - jnp.mean(new_positions, axis=0)) / (jnp.std(new_positions, axis=0) + 1e-6)
         self.logger.info("Positions updated")
 
     def run_layout(self, num_iterations=100):
@@ -236,7 +270,7 @@ class GraphEmbedder:
         self.logger.info("Running layout")
         for _ in tqdm(range(num_iterations)):
             self.update_positions()
-        return self.positions
+        return self.get_positions()
 
     def display_layout(self, edge_width=1, node_size=3, node_colors=None):
         """
@@ -284,7 +318,7 @@ class GraphEmbedder:
         None
             Displays a Plotly 2D figure with vertices plotted as red markers and edges as gray lines.
         """
-        pos = np.array(self.positions)
+        pos = np.array(self._positions)
         edges = np.array(self.edges)
 
         x_edges = []
@@ -343,7 +377,7 @@ class GraphEmbedder:
         None
             Displays a Plotly 3D figure with vertices plotted as red markers and edges as gray lines.
         """
-        pos = np.array(self.positions)
+        pos = np.array(self._positions)
         edges = np.array(self.edges)
 
         x_edges, y_edges, z_edges = [], [], []

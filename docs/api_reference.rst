@@ -45,15 +45,16 @@ Graph Generators
 
 **graphem.generators** - Generate various graph types for testing and experimentation.
 
-Provides NetworkX-based generators for standard graph models including random graphs, scale-free networks, small-world graphs, and more.
+Provides NetworkX-based generators for standard graph models including random graphs, scale-free networks, small-world graphs, and more. All generators return sparse adjacency matrices (scipy.sparse.csr_matrix).
 
 Key functions:
-- ``erdos_renyi_graph(n, p)`` - Random graph with edge probability p
-- ``generate_sbm(n_per_block, num_blocks, p_in, p_out)`` - Stochastic block model
-- ``generate_ba(n, m)`` - Barabási-Albert preferential attachment
-- ``generate_ws(n, k, p)`` - Watts-Strogatz small-world
-- ``generate_scale_free(n, ...)`` - Scale-free network
-- ``generate_geometric(n, radius)`` - Random geometric graph
+- ``generate_er(n, p, seed)`` - Erdős–Rényi random graph with edge probability p
+- ``generate_sbm(n_per_block, num_blocks, p_in, p_out, seed)`` - Stochastic block model
+- ``generate_ba(n, m, seed)`` - Barabási-Albert preferential attachment
+- ``generate_ws(n, k, p, seed)`` - Watts-Strogatz small-world
+- ``generate_scale_free(n, seed)`` - Scale-free network
+- ``generate_geometric(n, radius, seed)`` - Random geometric graph
+- ``compute_vertex_degrees(adjacency)`` - Compute vertex degrees from adjacency matrix
 
 .. automodule:: graphem.generators
    :members:
