@@ -1,223 +1,169 @@
 <p align="center">
-  <img src="docs/logo.png" alt="graphem logo" height="240"/>
+  <img src="docs/logo.png" alt="GraphEm logo" height="240">
 </p>
 
-<h1 align="center">Graph embedding and node influence maximization</h1>
+<h1 align="center">GraphEm: geometric graph embedding and radial node ranking</h1>
 
 <p align="center">
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"/>
-  </a>
-  <a href="https://www.python.org/downloads/">
-    <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="Python 3.8+"/>
-  </a>
-  <a href="https://pepy.tech/projects/graphem-jax">
-    <img alt="Pepy Total Downloads" src="https://img.shields.io/pepy/dt/graphem-jax">
-
-  </a>
-  <a style="border-width:0" href="https://doi.org/10.21105/joss.08855">
-    <img src="https://joss.theoj.org/papers/10.21105/joss.08855/status.svg" alt="DOI badge" >
-  </a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT license"></a>
+  <a href="https://pypi.org/project/graphem-jax/"><img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI version"></a>
+  <a href="https://github.com/sashakolpakov/graphem/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/tests.yml?branch=main&label=tests&logo=github" alt="Tests"></a>
+  <a href="https://github.com/sashakolpakov/graphem/actions/workflows/deploy_docs.yml"><img src="https://img.shields.io/github/actions/workflow/status/sashakolpakov/graphem/deploy_docs.yml?branch=main&label=docs&logo=github" alt="Documentation"></a>
+  <a href="https://doi.org/10.21105/joss.08855"><img src="https://joss.theoj.org/papers/10.21105/joss.08855/status.svg" alt="JOSS paper"></a>
 </p>
 
-<p align="center">
-  <a href="https://pypi.org/project/graphem-jax/">
-    <img src="https://img.shields.io/pypi/v/graphem-jax.svg" alt="PyPI"/>
-  </a>
-  <a href="https://github.com/igorrivin/graphem/actions/workflows/pylint.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/igorrivin/graphem/pylint.yml?branch=main&label=CI&logo=github" alt="CI"/>
-  </a>
-  <a href="https://github.com/igorrivin/graphem/actions/workflows/deploy_docs.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/igorrivin/graphem/deploy_docs.yml?branch=main&label=Docs&logo=github" alt="Docs"/>
-  </a>
-  <a href="https://igorrivin.github.io/graphem/">
-    <img src="https://img.shields.io/website-up-down-green-red/https/igorrivin.github.io/graphem?label=API%20Documentation" alt="Docs Status"/>
-  </a>
-</p>
+GraphEm constructs a low-dimensional graph layout and uses each vertex's radial
+distance as a ranking score. This repository contains the portable JAX reference
+package, published as `graphem-jax`. The production CUDA implementation and its
+large-graph benchmark harness live in
+[`graphem-rapids`](https://github.com/sashakolpakov/graphem-rapids).
+
+The radial score is an empirical proxy, not an exact centrality or influence
+oracle. Evaluate it against task-appropriate baselines on the graph family that
+matters to you.
 
 ## Features
 
-- **Graph Embedding**: Laplacian-based layout with force-directed refinement
-- **JAX Backend**: GPU/TPU acceleration for large graphs
-- **Influence Maximization**: Novel embedding-based seed selection algorithm
-- **Graph Generators**: Standard models (Erdős–Rényi, Barabási–Albert, Watts-Strogatz, etc.)
-- **Visualization**: Interactive 2D/3D plots with Plotly
-- **Benchmarking**: Centrality correlation analysis and performance testing
-- **Datasets**: Built-in loaders for SNAP and Network Repository datasets
+- normalized-Laplacian initialization followed by force-directed refinement;
+- sparse-adjacency input and graph-generator helpers;
+- radial node ranking and centrality-correlation reports;
+- optional Independent-Cascade evaluation through NDlib;
+- SNAP and Network Repository dataset helpers;
+- Plotly visualization; and
+- a separate CUDA implementation for production-scale runs.
 
 ## Installation
 
+Install the current `0.2.x` API from its release tag:
+
 ```bash
-pip install graphem-jax
+python -m pip install "graphem-jax @ git+https://github.com/sashakolpakov/graphem.git@graphem-jax-0.2.0"
 ```
 
-> **Note**: For GPU or TPU acceleration, JAX needs to be specifically installed with hardware support. See the [JAX documentation](https://github.com/google/jax#installation) for more details on enabling GPU/TPU support.
+PyPI currently carries the legacy `0.1.0` package. These pages track the
+repository's `0.2.x` adjacency-object API, so a plain `pip install graphem-jax`
+does not yet match the examples below. Check `graphem.__version__` when
+reproducing an older environment.
 
-From source:
+Install a development checkout:
+
 ```bash
-pip install git+https://github.com/igorrivin/graphem.git
+git clone https://github.com/sashakolpakov/graphem.git
+cd graphem
+python -m pip install -e ".[test,docs]"
 ```
 
-## Quick Start [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/igorrivin/graphem/blob/main/examples/graphem_jax_notebook.ipynb)
+JAX accelerator wheels are platform-specific. Follow the
+[official JAX installation guide](https://docs.jax.dev/en/latest/installation.html)
+when using this package on an accelerator. For the H100-qualified CUDA path, use
+[`graphem-rapids`](https://github.com/sashakolpakov/graphem-rapids).
 
-### Graph Embedding
+## Quick start
 
 ```python
 import graphem as ge
 
-# Generate graph (returns sparse adjacency matrix)
-adjacency = ge.generate_er(n=500, p=0.01)
-
-# Create embedder
+adjacency = ge.generate_er(n=500, p=0.01, seed=7)
 embedder = ge.GraphEmbedder(
     adjacency=adjacency,
-    n_components=3
-)
-
-# Compute layout
-embedder.run_layout(num_iterations=50)
-
-# Visualize
-embedder.display_layout()
-```
-
-### Influence Maximization
-
-```python
-# Select influential nodes
-seeds = ge.graphem_seed_selection(embedder, k=10)
-
-# Estimate influence spread
-import networkx as nx
-G = nx.from_scipy_sparse_array(adjacency)
-influence, _ = ge.ndlib_estimated_influence(G, seeds, p=0.1)
-print(f"Influence: {influence} nodes ({influence/500:.1%})")
-```
-
-### Benchmarking
-
-```python
-from graphem.benchmark import benchmark_correlations
-
-# Compare embedding radii with centrality measures
-results = benchmark_correlations(
-    ge.generate_er,
-    graph_params={'n': 200, 'p': 0.05},
     n_components=3,
-    num_iterations=40
+    seed=7,
+    verbose=False,
 )
+positions = embedder.run_layout(num_iterations=50)
+scores = (positions**2).sum(axis=1) ** 0.5
+top_nodes = scores.argsort()[::-1][:10]
+print(top_nodes)
+```
 
-# Display correlation matrix
-ge.report_full_correlation_matrix(
-    results['radii'],
-    results['degree'],
-    results['betweenness'],
-    results['eigenvector'],
-    results['pagerank'],
-    results['closeness'],
-    results['node_load']
+`GraphEmbedder` accepts a square dense or SciPy sparse adjacency object. Graph
+generators in `graphem.generators` return SciPy CSR sparse objects.
+
+## Influence evaluation
+
+`graphem_seed_selection` selects the vertices with the largest radial scores.
+Use `ndlib_estimated_influence` to evaluate a fixed seed set and
+`greedy_seed_selection` as a small-graph baseline:
+
+```python
+import networkx as nx
+import graphem as ge
+
+adjacency = ge.generate_er(n=128, p=0.05, seed=3)
+graph = nx.from_scipy_sparse_array(adjacency)
+embedder = ge.GraphEmbedder(adjacency, seed=3, verbose=False)
+
+radial_seeds = ge.graphem_seed_selection(embedder, k=10, num_iterations=20)
+spread, simulated_steps = ge.ndlib_estimated_influence(
+    graph,
+    radial_seeds,
+    p=0.1,
+    iterations_count=200,
 )
+print(spread, simulated_steps)
 ```
 
-## Key Components
-
-### Core Class
-
-- **`GraphEmbedder`**: Main embedding engine with Laplacian initialization and force-directed layout
-
-### Algorithms
-
-- **Graph embedding**: Spectral initialization + spring forces + intersection avoidance
-- **Influence maximization**: Radial distance-based seed selection vs traditional greedy
-- **Generators**: 12+ graph models including SBM, small-world, scale-free
-
-### Datasets
-
-Built-in access to standard network datasets:
-- Stanford Network Analysis Project
-- Network Repository
-
-## Examples
-
-The `examples/` directory contains:
-- `graph_generator_example.py` - Generate and visualize various graph embeddings
-- `random_regular_example.py` - Random regular graph analysis with GraphEm
-- `real_world_datasets_example.py` - Work with real world datasets (based on Facebook, arXiv, and Wikipedia data)
-- `graphem_jax_notebook.ipynb` - Interactive Jupyter notebook with examples and visualizations 
-
-## Testing
-
-GraphEm includes a comprehensive unit test suite that validates all core functionality using the built-in graph generators.
-
-### Running Tests
-
-To run the full test suite:
-```bash
-python -m pytest tests/
-```
-
-For verbose output:
-```bash
-python -m pytest tests/ -v
-```
-
-### Test Coverage
-
-The test suite covers:
-
-- **Graph Generators** (`test_generators.py`): All built-in graph generators including Erdős-Rényi, Barabási-Albert, Watts-Strogatz, random regular, geometric, caveman, and stochastic block models
-- **Graph Embedder** (`test_embedder.py`): Core embedding functionality, layout algorithms, different dimensions, and large graph handling  
-- **Influence Maximization** (`test_influence.py`): NDLib integration, seed selection, and influence estimation
-
-### Test Requirements
-
-Tests require the same dependencies as GraphEm plus:
-- `pytest` (for running tests)
-- `ndlib` (for influence maximization tests)
-
-All tests use deterministic seeds for reproducible results.
+Influence estimates are stochastic. Compare methods on shared propagation worlds
+or sufficiently large independent samples; do not interpret one NDlib trajectory
+as a method comparison.
 
 ## Benchmarking
 
-Run comprehensive benchmarks:
-```bash
-python run_benchmarks.py
+```python
+from graphem.benchmark import benchmark_correlations
+from graphem.generators import generate_er
+
+result = benchmark_correlations(
+    generate_er,
+    graph_params={"n": 200, "p": 0.05, "seed": 11},
+    n_components=3,
+    num_iterations=40,
+)
+print(result)
 ```
 
-Generates performance tables and correlation analysis in Markdown and LaTeX formats.
+Large CUDA reproduction runs are content-addressed per cell so that a corrected
+or extended cell can be independently rerun and audited without replacing
+unrelated evidence.
+
+## Examples
+
+- `examples/graph_generator_example.py`
+- `examples/real_world_datasets_example.py`
+- `examples/graphem_jax_notebook.ipynb`
+
+## Development
+
+```bash
+python -m pytest tests -v
+python build_docs.py
+```
+
+`build_docs.py` treats every Sphinx warning as an error. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the complete contributor workflow.
 
 ## Documentation
 
-Full API documentation is available [here](https://igorrivin.github.io/graphem/).
-
-## Contributing
-
-Quick start: See [CONTRIBUTING.md](CONTRIBUTING.md) for essential guidelines.
-
-Detailed guide: [contributing documentation](https://igorrivin.github.io/graphem/contributing.html) for development setup, testing, and contribution guidelines.
+The deployed Sphinx documentation is at
+[sashakolpakov.github.io/graphem](https://sashakolpakov.github.io/graphem/).
 
 ## Citation
 
-If you use GraphEm in research, please cite our work [![arXiv](https://img.shields.io/badge/arXiv-2506.07435-b31b1b.svg)](https://arxiv.org/abs/2506.07435)
+The manuscript and its version history are available as
+[arXiv:2506.07435](https://arxiv.org/abs/2506.07435).
 
-**BibTeX:**
 ```bibtex
 @misc{kolpakov-rivin-2025fast,
-  title={Fast Geometric Embedding for Node Influence Maximization},
-  author={Kolpakov, Alexander and Rivin, Igor},
-  year={2025},
-  eprint={2506.07435},
-  archivePrefix={arXiv},
-  primaryClass={cs.SI},
-  url={https://arxiv.org/abs/2506.07435}
+  title        = {Fast Geometric Embedding for Node Influence Maximization},
+  author       = {Kolpakov, Alexander and Rivin, Igor},
+  year         = {2025},
+  eprint       = {2506.07435},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.SI},
+  url          = {https://arxiv.org/abs/2506.07435}
 }
-```
-
-**APA Style:**
-```
-Kolpakov, A., & Rivin, I. (2025). Fast Geometric Embedding for Node Influence Maximization. arXiv preprint arXiv:2506.07435.
 ```
 
 ## License
 
-MIT
+[MIT](LICENSE)

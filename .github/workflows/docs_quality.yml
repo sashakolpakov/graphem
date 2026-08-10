@@ -1,0 +1,43 @@
+name: Documentation Quality
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v24.2.0
+        with:
+          config: .markdownlint-cli2.yaml
+          globs: |
+            **/*.md
+            !docs/_build/**
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Check documentation links
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          args: >-
+            --config .lychee.toml
+            --verbose
+            --no-progress
+            './**/*.md'
+            './docs/**/*.rst'
+          fail: true

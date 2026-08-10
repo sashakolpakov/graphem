@@ -1,62 +1,56 @@
 # Contributing to GraphEm
 
-Thank you for your interest in contributing to GraphEm!
+Contributions to the reference JAX package, the documentation, and the
+reproduction tooling are welcome.
 
-## Quick Start
+## Development setup
 
-1. **Fork & Clone**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/graphem.git
-   cd graphem
-   ```
+```bash
+git clone https://github.com/YOUR_USERNAME/graphem.git
+cd graphem
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[test,docs]"
+```
 
-2. **Setup Development Environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
-   pip install -e ".[test,docs]"
-   ```
+On Windows, activate the environment with `.venv\Scripts\activate`.
 
-3. **Run Tests**
-   ```bash
-   python -m pytest tests/ -v
-   python examples/graph_generator_example.py  # Test examples work
-   ```
+## Required checks
 
-## Development Guidelines
+Run the core Python and Sphinx gates before opening a pull request:
 
-### Code Style
-- Follow **PEP 8**
-- Add **type hints** to all public functions
-- Use **NumPy-style docstrings**
-- Test your changes with `python -m pytest tests/`
+```bash
+python -m pytest tests -v
+pylint --output-format=colorized --rcfile=.github/workflows/.pylintrc $(git ls-files '*.py' ':!:setup.py')
+python -c "import graphem, graphem.benchmark, graphem.datasets, graphem.generators, graphem.influence, graphem.visualization"
+python build_docs.py
+```
 
-### Making Changes
-- Create a feature branch: `git checkout -b feature/your-feature`
-- Make focused commits with clear messages
-- Add tests for new functionality
-- Update documentation if needed
+The real-import smoke runs before the documentation build. Sphinx then treats
+broken references and every other warning as errors.
 
-### Pull Request Checklist
-- [ ] Code follows style guidelines
-- [ ] Tests pass locally
-- [ ] Documentation updated (if needed)
-- [ ] Examples still work
-- [ ] Clear PR description with what/why/how
+## Change guidelines
 
-## Need Help?
+- Keep public APIs typed and documented with NumPy-style docstrings.
+- Add focused tests for behavior changes and failure paths.
+- Update every affected Markdown and Sphinx page with the code change.
+- Use explicit random seeds in examples, but do not claim numerical byte
+  determinism unless a contract actually requires it.
+- Label radial ranking and influence selection as heuristics and compare them
+  against appropriate baselines.
+- Preserve content-addressed benchmark lineage when replacing a reproduction
+  cell; do not overwrite earlier evidence.
 
-- **Detailed guide**: [docs/contributing.rst](docs/contributing.rst)
-- **Report bugs**: [GitHub Issues](https://github.com/sashakolpakov/graphem/issues)
-- **Suggest features**: [GitHub Discussions](https://github.com/sashakolpakov/graphem/discussions)
+## Pull-request checklist
 
-## Types of Contributions
+- [ ] Tests pass locally.
+- [ ] Pylint passes.
+- [ ] Sphinx builds with warnings treated as errors.
+- [ ] Examples and links reference the current API and repository.
+- [ ] User-facing behavior and limitations are documented.
+- [ ] Reproduction artifacts, if any, have independent hashes and audit records.
 
-- **Bug fixes** - Always welcome!
-- **New graph generators** - Expand the collection
-- **Performance improvements** - JAX optimization
-- **Documentation** - Examples, tutorials, API docs
-- **Tests** - Improve coverage and reliability
-
----
-**Questions?** Open an issue or check the detailed [contributing guide](docs/contributing.rst).
+The extended Sphinx guide is in [docs/contributing.rst](docs/contributing.rst).
+Use [GitHub Issues](https://github.com/sashakolpakov/graphem/issues) for bugs and
+design proposals.

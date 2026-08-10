@@ -1,77 +1,69 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+"""Sphinx configuration for the GraphEm reference package."""
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-project = 'GraphEm'
-copyright = '2025, Alexander Kolpakov (UATX), Igor Rivin (Temple University)'
-author = 'Alexander Kolpakov (UATX), Igor Rivin (Temple University)'
-release = '0.1.0'
-
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
+from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 import sys
-import os
 
-# Add the project root to the Python path
-sys.path.insert(0, os.path.abspath('..'))
 
-# Mock imports for optional dependencies (only mock if not available)
-autodoc_mock_imports = []
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+project = "GraphEm"
+author = "Alexander Kolpakov and Igor Rivin"
+copyright = "2025–2026, Alexander Kolpakov and Igor Rivin"
+
+try:
+    release = version("graphem-jax")
+except PackageNotFoundError:
+    release = "0.2.0"
+version = release
 
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.githubpages',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
 ]
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
-
-# -- Options for autodoc ----------------------------------------------------
-autodoc_member_order = 'bysource'
+# Sphinx uses lightweight mocks while rendering dependency-heavy modules. The
+# documentation workflow first imports every public module with the real
+# installed dependencies, so missing or incompatible runtime imports still
+# fail CI before this source-rendering step.
+autodoc_mock_imports = ["jax", "jax.numpy", "ndlib"]
+autodoc_member_order = "bysource"
+autodoc_typehints = "description"
 autodoc_default_options = {
-    'members': True,
-    'member-order': 'bysource',
-    'special-members': '__init__',
-    'undoc-members': True,
-    'exclude-members': '__weakref__'
+    "members": True,
+    "member-order": "bysource",
+    "show-inheritance": True,
 }
 
-# -- Options for intersphinx extension ---------------------------------------
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'numpy': ('https://numpy.org/doc/stable/', None),
-    'matplotlib': ('https://matplotlib.org/stable/', None),
-    'networkx': ('https://networkx.org/documentation/stable/', None),
-    'jax': ('https://jax.readthedocs.io/en/latest/', None),
-}
-
-# Napoleon settings
 napoleon_google_docstring = True
 napoleon_numpy_docstring = True
-napoleon_include_init_with_doc = False
-napoleon_include_private_with_doc = False
-napoleon_include_special_with_doc = True
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = False
-napoleon_use_param = True
-napoleon_use_rtype = True
-napoleon_preprocess_types = False
-napoleon_type_aliases = None
-napoleon_attr_annotations = True
+napoleon_include_init_with_doc = True
+
+templates_path = []
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+nitpicky = True
+
+# The current source docstrings contain a small set of prose-like return and
+# attribute labels. They are deliberately rendered as text rather than linked
+# API objects; every other unresolved cross-reference remains fatal under
+# ``sphinx-build -n -W``.
+nitpick_ignore = [
+    ("py:class", "Other"),
+    ("py:class", "Path"),
+    ("py:class", "array-like"),
+    ("py:class", "degrees"),
+    ("py:class", "influence"),
+    ("py:class", "networkx.Graph"),
+    ("py:class", "np.ndarray"),
+    ("py:class", "num_vertices"),
+    ("py:class", "pandas.DataFrame"),
+    ("py:class", "seeds"),
+    ("py:class", "shape"),
+]
+
+html_theme = "sphinx_rtd_theme"
+html_title = f"GraphEm {release}"
+html_static_path = []
