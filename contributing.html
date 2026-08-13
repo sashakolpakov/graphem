@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing to GraphEm &mdash; GraphEm 0.2.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=938c9ccc"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="API reference" href="api_reference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GraphEm
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to GraphEm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-a-development-environment">Set up a development environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-core-python-and-sphinx-gates">Run the core Python and Sphinx gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation-rules">Documentation rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#benchmark-evidence">Benchmark evidence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submitting-changes">Submitting changes</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GraphEm</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing to GraphEm</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing-to-graphem">
+<h1>Contributing to GraphEm<a class="headerlink" href="#contributing-to-graphem" title="Link to this heading"></a></h1>
+<section id="set-up-a-development-environment">
+<h2>Set up a development environment<a class="headerlink" href="#set-up-a-development-environment" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/YOUR_USERNAME/graphem.git
+<span class="nb">cd</span><span class="w"> </span>graphem
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[test,docs]&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="run-the-core-python-and-sphinx-gates">
+<h2>Run the core Python and Sphinx gates<a class="headerlink" href="#run-the-core-python-and-sphinx-gates" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests<span class="w"> </span>-v
+pylint<span class="w"> </span>--output-format<span class="o">=</span>colorized<span class="w"> </span>--rcfile<span class="o">=</span>.github/workflows/.pylintrc<span class="w"> </span><span class="k">$(</span>git<span class="w"> </span>ls-files<span class="w"> </span><span class="s1">&#39;*.py&#39;</span><span class="w"> </span><span class="s1">&#39;:!:setup.py&#39;</span><span class="k">)</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import graphem, graphem.benchmark, graphem.datasets, graphem.generators, graphem.influence, graphem.visualization&quot;</span>
+python<span class="w"> </span>build_docs.py
+</pre></div>
+</div>
+<p>CI imports the public modules with the real installed dependencies before
+<code class="docutils literal notranslate"><span class="pre">build_docs.py</span></code> runs Sphinx in nitpicky mode with warnings treated as errors.
+CI also checks Markdown style and external links.</p>
+</section>
+<section id="documentation-rules">
+<h2>Documentation rules<a class="headerlink" href="#documentation-rules" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Update every affected Markdown and Sphinx page in the same change.</p></li>
+<li><p>Keep examples executable against the current public API.</p></li>
+<li><p>Distinguish the JAX reference package from the production CUDA package.</p></li>
+<li><p>Report empirical limitations; do not turn a benchmark observation into a
+universal performance, centrality, or influence claim.</p></li>
+<li><p>Link to <code class="docutils literal notranslate"><span class="pre">sashakolpakov</span></code> repository and Pages URLs, not historical mirrors.</p></li>
+</ul>
+</section>
+<section id="benchmark-evidence">
+<h2>Benchmark evidence<a class="headerlink" href="#benchmark-evidence" title="Link to this heading"></a></h2>
+<p>Each reproduction cell is independently replaceable. A replacement must retain
+the parent manifest, reason, old artifact, new artifact, source and environment
+receipts, and an independent cell audit. Never overwrite an accepted result or
+silently recompute unrelated cells.</p>
+</section>
+<section id="submitting-changes">
+<h2>Submitting changes<a class="headerlink" href="#submitting-changes" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Create a focused branch.</p></li>
+<li><p>Add tests and documentation.</p></li>
+<li><p>Run the required checks.</p></li>
+<li><p>Open a pull request describing behavior, evidence, and limitations.</p></li>
+<li><p>Wait for required Actions checks and review before merging.</p></li>
+</ol>
+<p>Report bugs in the <a class="reference external" href="https://github.com/sashakolpakov/graphem/issues">issue tracker</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api_reference.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025–2026, Alexander Kolpakov and Igor Rivin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
