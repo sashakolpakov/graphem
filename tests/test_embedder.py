@@ -2,9 +2,34 @@
 
 import pytest
 import numpy as np
+import jax
+import jax.numpy as jnp
+import networkx as nx
 import scipy.sparse as sp
+from scipy.stats import spearmanr
 from graphem.embedder import GraphEmbedder
-from graphem.generators import generate_er, generate_random_regular
+from graphem.generators import (
+    compute_vertex_degrees,
+    generate_er,
+    generate_random_regular,
+)
+
+
+class _SilentLogger:
+    """Minimal logger used by midpoint-only tests."""
+
+    @staticmethod
+    def info(_message):
+        """Discard an informational message."""
+
+
+def _midpoint_only_embedder(sample_size, batch_size):
+    """Build the part of an embedder needed for midpoint-neighbor tests."""
+    embedder = object.__new__(GraphEmbedder)
+    embedder.sample_size = sample_size
+    embedder.batch_size = batch_size
+    embedder.logger = _SilentLogger()
+    return embedder
 
 
 class TestEmbedder:
@@ -190,3 +215,92 @@ class TestEmbedder:
         )
 
         assert embedder.logger == custom_logger
+
+    def test_midpoint_knn_returns_global_ids_for_sampled_queries(self):
+        """Midpoint queries return exact neighbors in the global edge namespace."""
+        midpoints = jnp.asarray(
+            [[0.0], [0.7], [2.1], [4.8], [8.4], [13.1], [19.7], [28.0], [38.2]],
+            dtype=jnp.float32,
+        )
+        embedder = _midpoint_only_embedder(sample_size=3, batch_size=2)
+
+        actual, sampled_edge_ids = embedder.locate_knn_midpoints(midpoints, 2)
+        actual = np.asarray(actual)
+        sampled_edge_ids = np.asarray(sampled_edge_ids)
+
+        global_edge_ids = np.arange(midpoints.shape[0])
+        host_midpoints = np.asarray(midpoints)
+        expected = []
+        for sampled_edge_id in sampled_edge_ids:
+            delta = host_midpoints - host_midpoints[sampled_edge_id]
+            distances = np.sum(delta * delta, axis=1)
+            order = np.lexsort((global_edge_ids, distances))
+            expected.append(order[order != sampled_edge_id][:2])
+
+        assert actual.shape == (3, 2)
+        np.testing.assert_array_equal(actual, np.asarray(expected))
+        assert np.all((sampled_edge_ids >= 0) & (sampled_edge_ids < 9))
+        assert np.all((actual >= 0) & (actual < 9))
+
+    def test_midpoint_knn_removes_self_by_identity_with_duplicate_midpoints(
+        self, monkeypatch
+    ):
+        """A tied midpoint cannot leave the sampled edge as its own neighbor."""
+        monkeypatch.setattr(
+            jax.random,
+            "choice",
+            lambda *_args, **_kwargs: jnp.asarray([1], dtype=jnp.int32),
+        )
+        midpoints = jnp.asarray(
+            [[0.0, 0.0], [0.0, 0.0], [1.0, 0.0], [3.0, 0.0]],
+            dtype=jnp.float32,
+        )
+        embedder = _midpoint_only_embedder(sample_size=1, batch_size=1)
+
+        actual, sampled_edge_ids = embedder.locate_knn_midpoints(midpoints, 2)
+
+        np.testing.assert_array_equal(sampled_edge_ids, np.asarray([1]))
+        np.testing.assert_array_equal(actual, np.asarray([[0, 2]]))
+        assert not np.any(np.asarray(actual) == np.asarray(sampled_edge_ids)[:, None])
+
+    def test_midpoint_knn_limits_runtime_sample_size_to_edge_count(self):
+        """A midpoint array smaller than the configured sample stays in bounds."""
+        midpoints = jnp.asarray([[0.0], [1.0], [3.0]], dtype=jnp.float32)
+        embedder = _midpoint_only_embedder(sample_size=99, batch_size=8)
+
+        actual, sampled_edge_ids = embedder.locate_knn_midpoints(midpoints, 9)
+
+        assert actual.shape == (3, 2)
+        assert sampled_edge_ids.shape == (3,)
+        assert np.all((actual >= 0) & (actual < 3))
+        assert not np.any(np.asarray(actual) == np.asarray(sampled_edge_ids)[:, None])
+
+    def test_corrected_midpoint_knn_preserves_seeded_er_quality(self):
+        """The repaired intersection term retains the radial degree signal."""
+        adjacency = generate_er(n=160, p=0.07, seed=0)
+        embedder = GraphEmbedder(
+            adjacency=adjacency,
+            n_components=3,
+            sample_size=256,
+            n_neighbors=14,
+            batch_size=128,
+            verbose=False,
+        )
+
+        positions = embedder.run_layout(num_iterations=5)
+        radii = np.linalg.norm(positions, axis=1)
+        degrees = compute_vertex_degrees(adjacency)
+        pagerank = np.fromiter(
+            nx.pagerank(nx.from_scipy_sparse_array(adjacency)).values(),
+            dtype=np.float64,
+        )
+        degree_correlation = spearmanr(radii, degrees).statistic
+        pagerank_correlation = spearmanr(radii, pagerank).statistic
+        radial_top = set(np.argsort(radii)[-20:])
+        degree_top = set(np.argsort(degrees)[-20:])
+        pagerank_top = set(np.argsort(pagerank)[-20:])
+
+        assert degree_correlation >= 0.65
+        assert pagerank_correlation >= 0.65
+        assert len(radial_top & degree_top) >= 10
+        assert len(radial_top & pagerank_top) >= 8

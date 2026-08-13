@@ -65,6 +65,7 @@ class HPIndex:
         # Initialize results
         all_indices = jnp.zeros((n_y, k), dtype=jnp.int32)
         all_distances = jnp.ones((n_y, k)) * jnp.finfo(jnp.float32).max
+        padded_x = jnp.pad(x, ((0, x_tile_size), (0, 0)))
 
         # Define the scan function for processing y batches
         def process_y_batch(carry, y_batch_idx):
@@ -82,12 +83,12 @@ class HPIndex:
             def process_x_tile(carry, x_tile_idx):
                 batch_idx, batch_dist = carry
 
-                # Get current tile of database points - use fixed size slices
+                # Get the current database tile.  Pad the last tile explicitly:
+                # ``dynamic_slice`` otherwise clamps an overhanging start and
+                # silently repeats earlier database rows.
                 x_start = x_tile_idx * x_tile_size
-
-                # Use a fixed size for the slice and then mask invalid values
                 x_tile = jax.lax.dynamic_slice(
-                    x, (x_start, 0), (x_tile_size, d_x)
+                    padded_x, (x_start, 0), (x_tile_size, d_x)
                 )
 
                 # Calculate how many elements are actually valid
@@ -117,12 +118,15 @@ class HPIndex:
                 combined_distances = jnp.concatenate([batch_dist, tile_distances], axis=1)
                 combined_indices = jnp.concatenate([batch_idx, tile_indices], axis=1)
 
-                # Sort and get top k
-                top_k_idx = jnp.argsort(combined_distances)[:, :k]
-
-                # Gather top k distances and indices
-                new_batch_dist = jnp.take_along_axis(combined_distances, top_k_idx, axis=1)
-                new_batch_idx = jnp.take_along_axis(combined_indices, top_k_idx, axis=1)
+                # Sort by squared distance, breaking ties by global database
+                # index so partial tiles cannot change the result ordering.
+                new_batch_dist, new_batch_idx = jax.lax.sort(
+                    (combined_distances, combined_indices),
+                    dimension=1,
+                    num_keys=2,
+                )
+                new_batch_dist = new_batch_dist[:, :k]
+                new_batch_idx = new_batch_idx[:, :k]
 
                 return (new_batch_idx, new_batch_dist), None
 
@@ -166,12 +170,11 @@ class HPIndex:
             def process_x_tile_remainder(carry, x_tile_idx):
                 batch_idx, batch_dist = carry
 
-                # Get current tile of database points - use fixed size slices
+                # Get the current database tile with explicit final-tile
+                # padding; see the full-batch path above.
                 x_start = x_tile_idx * x_tile_size
-
-                # Use fixed size for the slice
                 x_tile = jax.lax.dynamic_slice(
-                    x, (x_start, 0), (x_tile_size, d_x)
+                    padded_x, (x_start, 0), (x_tile_size, d_x)
                 )
 
                 # Calculate actual valid size
@@ -199,12 +202,15 @@ class HPIndex:
                 combined_distances = jnp.concatenate([batch_dist, tile_distances], axis=1)
                 combined_indices = jnp.concatenate([batch_idx, tile_indices], axis=1)
 
-                # Sort and get top k
-                top_k_idx = jnp.argsort(combined_distances)[:, :k]
-
-                # Gather top k distances and indices
-                new_batch_dist = jnp.take_along_axis(combined_distances, top_k_idx, axis=1)
-                new_batch_idx = jnp.take_along_axis(combined_indices, top_k_idx, axis=1)
+                # Keep the same deterministic distance/global-ID ordering as
+                # full query batches.
+                new_batch_dist, new_batch_idx = jax.lax.sort(
+                    (combined_distances, combined_indices),
+                    dimension=1,
+                    num_keys=2,
+                )
+                new_batch_dist = new_batch_dist[:, :k]
+                new_batch_idx = new_batch_idx[:, :k]
 
                 return (new_batch_idx, new_batch_dist), None
 
@@ -217,9 +223,13 @@ class HPIndex:
 
             # Extract valid remainder results and update
             valid_remainder_indices = remainder_indices[:y_remainder]
+            valid_remainder_distances = remainder_distances[:y_remainder]
 
             indices = jax.lax.dynamic_update_slice(
                 indices, valid_remainder_indices, (y_start, 0)
+            )
+            distances = jax.lax.dynamic_update_slice(
+                distances, valid_remainder_distances, (y_start, 0)
             )
 
             return indices, distances
