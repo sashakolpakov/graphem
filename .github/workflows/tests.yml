@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   test:
@@ -34,11 +33,3 @@ jobs:
           python -m pytest tests/ -v
           --cov=graphem
           --cov-report=term-missing
-          --cov-report=xml
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v7
-        with:
-          files: ./coverage.xml
-          fail_ci_if_error: true
-          use_oidc: true
