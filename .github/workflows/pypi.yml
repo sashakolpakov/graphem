@@ -1,35 +1,58 @@
-name: Upload Python Package
+name: Publish Python Package
 
 on:
   push:
     tags:
-      - "pypi-*.*.*"   # e.g. v0.1.0, v1.2.3
+      - "pypi-*.*.*"
+
+permissions:
+  contents: read
 
 jobs:
-  build-and-publish:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
-          python-version: '3.x'
+          python-version: "3.11"
+          cache: pip
 
-      - name: Install build dependencies
+      - name: Install build tooling
         run: |
           python -m pip install --upgrade pip
-          pip install build twine
+          python -m pip install build
 
       - name: Build distributions
-        run: |
-          python -m build --sdist --wheel
+        run: python -m build --sdist --wheel
+
+      - name: Upload distributions
+        uses: actions/upload-artifact@v7
+        with:
+          name: python-distributions
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    environment:
+      name: pypi
+      url: https://pypi.org/project/graphem-jax/
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v8
+        with:
+          name: python-distributions
+          path: dist/
 
       - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          python -m twine upload dist/*
+        uses: pypa/gh-action-pypi-publish@v1.14.2
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}

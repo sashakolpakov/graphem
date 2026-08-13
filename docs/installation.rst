@@ -1,123 +1,87 @@
-Installation Guide
-==================
+Installation
+============
 
-GraphEm supports Python 3.8+ and is available through multiple installation methods.
+Reference JAX package
+---------------------
 
-PyPI Installation (Recommended)
--------------------------------
-
-The easiest way to install GraphEm is via pip:
-
-.. code-block:: bash
-
-    pip install graphem-jax
-
-This will install GraphEm with all required dependencies.
-
-Development Installation
-------------------------
-
-For development or to get the latest features:
+GraphEm supports Python 3.8 or newer. Install the current ``0.2.x`` API from
+its release tag:
 
 .. code-block:: bash
 
-    git clone https://github.com/sashakolpakov/graphem.git
-    cd graphem
-    pip install -e .
+   python -m pip install "graphem-jax @ git+https://github.com/sashakolpakov/graphem.git@graphem-jax-0.2.0"
 
-GPU/TPU Support
----------------
+PyPI currently carries the legacy ``0.1.0`` package. A plain
+``pip install graphem-jax`` therefore does not yet match the adjacency-object
+examples on this site. Verify ``graphem.__version__`` when reproducing an older
+environment.
 
-GraphEm leverages JAX for acceleration. For GPU and TPU installation instructions, please refer to the `official JAX installation guide <https://github.com/google/jax#installation>`_.
-
-Dependencies
-------------
-
-GraphEm automatically installs all required dependencies:
-
-* JAX & JAXLib (≥0.3.0) - Core computation backend
-* NumPy (≥1.21.0) - Array operations
-* NetworkX (≥2.6.0) - Graph algorithms
-* Plotly (≥5.5.0) - Interactive visualization
-* SciPy (≥1.7.0) - Scientific computing
-* NDlib (≥5.1.0) - Network diffusion models
-* Pandas (≥1.3.0) - Data structures
-* And others for logging, profiling, and utilities
-
-Documentation Dependencies
---------------------------
-
-To build documentation locally:
+For a development checkout:
 
 .. code-block:: bash
 
-    pip install "graphem-jax[docs]"
-    cd docs
-    make html
+   git clone https://github.com/sashakolpakov/graphem.git
+   cd graphem
+   python -m venv .venv
+   source .venv/bin/activate
+   python -m pip install --upgrade pip
+   python -m pip install -e ".[test,docs]"
 
-System Requirements
--------------------
+JAX accelerator installation
+----------------------------
 
-**Minimum Requirements:**
+The default PyPI installation is portable and may use the CPU. Accelerator
+wheels depend on the operating system, accelerator, and driver. Follow the
+`official JAX installation guide <https://docs.jax.dev/en/latest/installation.html>`_
+instead of guessing a CUDA wheel URL.
 
-* Python 3.8+
-* 4GB RAM
-* Modern CPU with AVX support
+Verify the selected JAX backend explicitly:
 
-**Recommended for Large Graphs:**
+.. code-block:: python
 
-* Python 3.9+
-* 16GB+ RAM
-* NVIDIA GPU with CUDA support
-* SSD storage for large datasets
+   import jax
+
+   print(jax.default_backend())
+   print(jax.devices())
+
+The reference implementation still uses SciPy for normalized-Laplacian
+initialization. For an end-to-end production CUDA path and the large-scale
+reproduction suite, install
+`graphem-rapids <https://github.com/sashakolpakov/graphem-rapids>`_.
 
 Verification
 ------------
 
-Test your installation:
+.. code-block:: bash
 
-.. code-block:: python
-
-    import graphem as ge
-
-    # Generate a small test graph (returns sparse adjacency matrix)
-    adjacency = ge.generate_er(n=100, p=0.1, seed=42)
-    embedder = ge.GraphEmbedder(adjacency=adjacency, n_components=2)
-    embedder.run_layout(num_iterations=10)
-
-    print("GraphEm installation successful!")
+   python -c "import graphem; print(graphem.__version__)"
+   python -m pytest tests -q
+   python build_docs.py
 
 Troubleshooting
 ---------------
 
-**JAX Installation Issues**
+``ModuleNotFoundError``
+~~~~~~~~~~~~~~~~~~~~~~~
 
-If you encounter JAX installation problems:
+Confirm that the active interpreter and installer belong to the same virtual
+environment:
 
-1. Ensure you have a compatible Python version (3.8-3.11)
-2. Update pip: ``pip install --upgrade pip``
-3. Try installing JAX separately first: ``pip install jax jaxlib``
+.. code-block:: bash
 
-**Memory Issues**
+   python -c "import sys; print(sys.executable)"
+   python -m pip show graphem-jax
 
-For large graphs, consider:
+JAX device mismatch
+~~~~~~~~~~~~~~~~~~~
 
-1. Reducing ``batch_size`` and ``sample_size`` parameters
-2. Using smaller embedding dimensions
-3. Processing graphs in chunks
+Inspect ``jax.devices()`` and consult the JAX installation guide. GraphEm does
+not silently convert a CPU-only JAX installation into a CUDA installation.
 
-**Import Errors**
+Out-of-memory errors
+~~~~~~~~~~~~~~~~~~~~
 
-If you see import errors:
-
-1. Reinstall GraphEm: ``pip uninstall graphem-jax && pip install graphem-jax``
-2. Check that all dependencies are compatible versions
-3. Try installing in a fresh virtual environment
-
-Getting Help
-------------
-
-If you encounter installation issues:
-
-1. Check our `GitHub Issues <https://github.com/sashakolpakov/graphem/issues>`_
-2. Create a new issue with your system details and error messages
+Reduce ``sample_size``, ``batch_size``, or the graph size for the reference
+package. Production-scale CUDA failures must be reported with the full graph,
+configuration, backend, and memory receipt rather than silently changing the
+algorithm.

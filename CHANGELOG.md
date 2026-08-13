@@ -5,15 +5,32 @@ All notable changes to GraphEm will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Reworked every Markdown and Sphinx page around the current adjacency-matrix
+  API and separated the portable JAX reference package from the production CUDA
+  implementation.
+- Removed unsupported performance and influence-superiority claims from the
+  user documentation.
+- Made the Sphinx build fail on warnings and migrated documentation deployment
+  to the official GitHub Pages actions.
+- Added Markdown and link validation to GitHub Actions.
+
 ## [0.2.0] - 2025-11-15
 
 ### Added
+
 - **New graph generators** (`graphem/generators.py`):
+
   - `generate_delaunay_triangulation()`: Generate planar graphs with triangular faces based on Delaunay triangulation
   - `generate_complete_bipartite_graph()`: Generate complete bipartite graphs
 
 ### Changed
+
 - **BREAKING: API aligned with CUDA version** - Major API changes for consistency:
+
   - **All generators now return sparse adjacency matrices** (scipy.sparse.csr_matrix) instead of edge lists
   - Renamed `erdos_renyi_graph()` → `generate_er()` for consistency with other generators
   - `GraphEmbedder` now accepts `adjacency` (sparse matrix) instead of `edges` + `n_vertices`
@@ -22,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `compute_vertex_degrees()` now accepts adjacency matrix instead of edge list
 
 - **GraphEmbedder improvements**:
+
   - Added `seed` parameter for reproducibility
   - Added `get_positions()` method that returns numpy array
   - Made `positions` a property (internally uses `_positions`)
@@ -29,7 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Improved adjacency matrix validation
 
 ### Fixed
+
 - **Critical bug fix in influence maximization** (`graphem/influence.py`): Fixed `ndlib_estimated_influence()` function to correctly initialize seed nodes using NDlib's proper API. Previously, the function was using an incorrect configuration method that resulted in seeds not being properly set, leading to inaccurate influence estimations. The fix ensures:
+
   - Seeds are now correctly initialized using `config.add_model_initial_configuration("Infected", seeds)` instead of the incorrect `config.add_node_configuration("status", seed, 1)`
   - Influenced node counts are now correctly retrieved from `iterations[-1]['node_count'].get(2, 0)` instead of manually iterating through status values
   - All influence maximization benchmarks and comparisons now produce accurate results
@@ -38,9 +58,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 This bug affected all influence maximization functionality including `graphem_seed_selection()`, `greedy_seed_selection()`, and benchmark comparisons. Users should re-run any influence maximization experiments performed with previous versions.
 
 ### Migration Guide
+
 To upgrade from 0.1.x to 0.2.0:
 
 **Generators:**
+
 ```python
 # OLD (0.1.x)
 edges = ge.erdos_renyi_graph(n=100, p=0.1)  # Returns edge list
@@ -52,6 +74,7 @@ n = adj.shape[0]  # Infer from matrix
 ```
 
 **GraphEmbedder:**
+
 ```python
 # OLD (0.1.x)
 embedder = ge.GraphEmbedder(edges=edges, n_vertices=n, n_components=2, my_logger=logger)
@@ -61,6 +84,7 @@ embedder = ge.GraphEmbedder(adjacency=adj, n_components=2, logger_instance=logge
 ```
 
 **compute_vertex_degrees:**
+
 ```python
 # OLD (0.1.x)
 degrees = ge.compute_vertex_degrees(n, edges)
@@ -71,4 +95,5 @@ degrees = ge.compute_vertex_degrees(adj)
 
 ## [Previous Releases]
 
-For release history before this changelog was established, see the [GitHub Releases](https://github.com/igorrivin/graphem/releases) page.
+For release history before this changelog was established, see the
+[GitHub Releases](https://github.com/sashakolpakov/graphem/releases) page.

@@ -1,7 +1,7 @@
-graphem
-=======
+:orphan:
 
-.. toctree::
-   :maxdepth: 4
+Module index
+============
 
-   graphem
+The consolidated module and class index is available in
+:doc:`api_reference`.

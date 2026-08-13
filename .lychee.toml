@@ -1,0 +1,16 @@
+accept = [200, 206, 429]
+cache = true
+max_concurrency = 8
+max_retries = 3
+retry_wait_time = 2
+timeout = 20
+
+exclude = [
+  '^http://localhost',
+  '^https://localhost',
+  '^https://github\.com/YOUR_USERNAME/',
+]
+
+exclude_path = [
+  'docs/_build',
+]
