@@ -130,7 +130,8 @@ unrelated evidence.
 
 - `examples/graph_generator_example.py`
 - `examples/real_world_datasets_example.py`
-- `examples/graphem_jax_notebook.ipynb`
+- `examples/graphem_jax_notebook.ipynb` — an output-free, CPU-safe walkthrough
+  of the current adjacency-object API and full-ranking Spearman evaluation
 
 ## Development
 
