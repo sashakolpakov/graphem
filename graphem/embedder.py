@@ -145,29 +145,65 @@ class GraphEmbedder:
 
     def locate_knn_midpoints(self, midpoints, k):
         """
-        Locate k nearest neighbors for each midpoint.
+        Locate global edge IDs for each sampled midpoint's nearest neighbors.
+
+        ``HPIndex.knn_tiled`` takes the database first and the queries second.
+        The full midpoint array is therefore the database, while the sampled
+        midpoint array supplies the query rows.  Each returned row belongs to
+        the sampled global edge ID at the same position.
         """
         self.logger.info("Locating kNN midpoints")
         E = midpoints.shape[0]
 
+        if E < 2:
+            raise ValueError("at least two edges are required for midpoint kNN")
+        if k < 1:
+            raise ValueError(f"k must be positive; got {k}")
+        k = min(k, E - 1)
+        sample_size = min(self.sample_size, E)
+
         key = jax.random.PRNGKey(0)
-        idx = jax.random.choice(key, E, shape=(self.sample_size,), replace=False)
+        sampled_edge_ids = jax.random.choice(
+            key,
+            E,
+            shape=(sample_size,),
+            replace=False,
+        )
 
         # Move to numpy for slicing to avoid dynamic tracing overhead
-        idx_np = np.array(idx)
-        sampled_midpoints = midpoints[idx_np]
+        sampled_edge_ids_np = np.asarray(sampled_edge_ids)
+        sampled_midpoints = midpoints[sampled_edge_ids_np]
 
         jax_indices, jax_distances = HPIndex.knn_tiled(
-            sampled_midpoints,  # batch
-            midpoints,  # full data
+            midpoints,  # database: all global edge IDs
+            sampled_midpoints,  # queries: sampled global edge IDs
             k + 1,
-            self.sample_size,
-            self.batch_size
+            min(self.batch_size, E),
+            min(self.batch_size, sample_size),
         )
         jax_indices.block_until_ready()
         jax_distances.block_until_ready()
+
+        # Equal midpoints can put another zero-distance edge before the query
+        # itself.  Remove self by global identity rather than discarding a
+        # presumed first column, then retain the requested number of neighbors.
+        nonself_mask = jax_indices != sampled_edge_ids[:, None]
+        nonself_rank = jnp.cumsum(nonself_mask, axis=1) - 1
+        flattened_nonself = nonself_mask.reshape(-1)
+        neighbor_rows = jnp.repeat(
+            jnp.arange(sample_size, dtype=jnp.int32),
+            k + 1,
+        )[flattened_nonself]
+        neighbor_columns = nonself_rank.reshape(-1)[flattened_nonself]
+        neighbor_values = jax_indices.reshape(-1)[flattened_nonself]
+        keep = neighbor_columns < k
+        neighbors = jnp.zeros((sample_size, k), dtype=jax_indices.dtype)
+        neighbors = neighbors.at[
+            neighbor_rows[keep], neighbor_columns[keep]
+        ].set(neighbor_values[keep])
+
         self.logger.info("kNN midpoints done")
-        return jax_indices[:, 1:], idx
+        return neighbors, sampled_edge_ids
 
     @staticmethod
     @jit
